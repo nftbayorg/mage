@@ -51,6 +51,7 @@ model Lot {
   id           String     @id @default(cuid())
   reservePrice Decimal
   sold         Boolean
+  views        Int       @default(0)
   nftEditionId String    
   nftEdition   NFTEdition @relation(fields: [nftEditionId], references: [id])
   auctionId    String

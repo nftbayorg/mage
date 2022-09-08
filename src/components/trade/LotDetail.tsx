@@ -1,12 +1,19 @@
 import NextError from 'next/error';
 import Image from 'next/image';
 import { trpc } from "../../utils/trpc";
-import { FaEthereum, FaRegHeart, FaRegClock, FaTag, FaAlignLeft, FaWallet } from "react-icons/fa";
+import { FaEye, FaEthereum, FaRegHeart, FaRegClock, FaTag, FaAlignLeft, FaWallet } from "react-icons/fa";
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 const LotDetail = ({ id }: { id: string }) => {
 
+  const mutation = trpc.useMutation('lot.update');
   const lotQuery = trpc.useQuery(['lot.get', { id }]);
+
+  useEffect(() => {
+    console.log('Mutate');
+    mutation.mutate({ id });
+  }, [id])
 
   if (lotQuery.error) {
     return (
@@ -65,22 +72,30 @@ const LotDetail = ({ id }: { id: string }) => {
         </section>
       </div>
       <section className="w-3/5">
-        <div className="flex-col space-y-6">
+        <div className="flex-col space-y-6 mb-4">
           <div className="text-1xl text-blue-500 mb-3">
             {lot.nftEdition.nftSet.collection.name}
           </div>
           <div className="text-3xl font-semibold mb-5 text-gray-700 dark:text-gray-400">
             {lot.nftEdition.name}
           </div>
-          <div className="flex space-x-2">
-            <div className="text-1xl mb-5 text-gray-700 dark:text-gray-400">
-              Owned by 
-            </div>
-            <Link href="/">
-              <div className="text-blue-500">
-                {lot.nftEdition.owner.userId}
+          <div className="flex space-x-10 items-center">
+            <div className="flex space-x-2 items-center">
+              <div className="text-1xl text-gray-700 dark:text-gray-400">
+                Owned by 
               </div>
-            </Link>
+              <Link href="/">
+                <div className="text-blue-500">
+                  {lot.nftEdition.owner.userId}
+                </div>
+              </Link>
+            </div>
+            <div className="flex space-x-2 items-center">
+              <FaEye className="fill-gray-700 dark:fill-gray-400" size={20}/>
+              <div className="text-1xl text-gray-700 dark:text-gray-400">
+                {lot.views} 
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex p-3 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center">
