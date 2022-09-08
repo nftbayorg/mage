@@ -6,7 +6,6 @@ const Sidebar = () => {
 
   const salesTypes = ["Fixed Price", "Auction"];
   const categories = ["Premium", "Art", "Sports", "Entertainment", "Gaming", "Collectables", "Esports", ""];
-  const colors = ["yellow", "blue", "cyan", "red", "green", "purple", "orange", "pink", "amber", "brown"];
 
   const collections = trpc.proxy.collection.getAll.useQuery();
 
@@ -20,7 +19,7 @@ const Sidebar = () => {
           {collections.data && collections.data.map(item => {
             return (
               <a className="flex items-center text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5" key={item.id}>
-                <GiAbstract116 color={colors[Math.floor(Math.random() * 10)]}/>
+                <GiAbstract116 color={item.color || "white"}/>
                 <div className="ml-2">
                     {item.name}
                 </div>

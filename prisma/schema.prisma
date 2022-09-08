@@ -14,47 +14,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id String @id @default(cuid())
-}
-
 model Collection {
-  id     String @id @default(cuid())
-  name   String
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items  Item[]
+  id            String @id @default(cuid())
+  name          String
+  description   String
+  userId        String
+  color         String?
+  user          User   @relation(fields: [userId], references: [id])
+  nftSets       NFTSet[]
 }
 
-model Item {
+model NFTSet {
+  id            String @id @default(cuid())
+  collectionId  String
+  collection    Collection @relation(fields: [collectionId], references: [id])
+  nftEditions   NFTEdition[]
+}
+
+model NFTEdition {
+  id            String     @id @default(cuid())
+  name          String
+  minted        Boolean
+  url           String
+  blockchainId  String
+  tokenAddress  String?
+  nftSetId      String
+  nftSet        NFTSet     @relation(fields: [nftSetId], references: [id])
+  ownerId       String
+  owner         Wallet     @relation(fields: [ownerId], references: [id])
+  lots          Lot[]
+  adminWalletId String?
+  adminWallet   AdminWallet? @relation(fields: [adminWalletId], references: [id])
+}
+
+model Lot {
   id           String     @id @default(cuid())
-  name         String
-  ownerId      String
-  owner        User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  collectionId String
-  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  auctions     AuctionItems[]
+  reservePrice Decimal
+  sold         Boolean
+  nftEditionId String    
+  nftEdition   NFTEdition @relation(fields: [nftEditionId], references: [id])
+  auctionId    String
+  auction      Auction    @relation(fields: [auctionId], references: [id])
 }
 
 model Auction {
-  id           String     @id @default(cuid())
+  id          String     @id @default(cuid())
   fixed       Boolean
   start       DateTime
   end         DateTime
   userId      String
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items       AuctionItems[]
+  user        User        @relation(fields: [userId], references: [id])
+  lots        Lot[]
 }
 
-model AuctionItems {
-  auction       Auction     @relation(fields: [auctionId], references: [id])
-  auctionId     String // relation scalar field (used in the `@relation` attribute above)
-  item          Item     @relation(fields: [itemId], references: [id])
-  itemId        String // relation scalar field (used in the `@relation` attribute above)
-  assignedAt    DateTime @default(now())
-  assignedBy    String
+model Wallet {
+  id          String          @id @default(cuid())
+  virtual     Boolean
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  nftEditions NFTEdition[]
+  adminWallet AdminWallet?
+}
 
-  @@id([auctionId, itemId])
+model AdminWallet {
+  id            String        @id @default(cuid())
+  nftEditions   NFTEdition[]
+  userWalletId  String        @unique
+  userWallet    Wallet        @relation(fields: [userWalletId], references: [id])
 }
 
 // Necessary for Next auth
@@ -90,11 +116,11 @@ model User {
   email         String?      @unique
   emailVerified DateTime?
   image         String?
+  wallets       Wallet[]
   auctions      Auction[]
   accounts      Account[]
   sessions      Session[]
   collections   Collection[]
-  items         Item[]
 }
 
 model VerificationToken {

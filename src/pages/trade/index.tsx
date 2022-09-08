@@ -3,15 +3,17 @@ import type {
   GetServerSidePropsContext,
   NextPage,
 } from "next";
-import { getMageAuthSession } from "../server/common/get-server-session";
-import { trpc } from "../utils/trpc";
+import { getMageAuthSession } from "../../server/common/get-server-session";
+import { trpc } from "../../utils/trpc";
 
-import Sidebar from "../components/Sidebar";
-import TradeItem from "../components/TradeItem";
+import Sidebar from "../../components/Sidebar";
+import LotSummary from "../../components/trade/LotSummary";
 
 const Trade: NextPage = () => {
 
-  const items = trpc.proxy.item.getAll.useQuery();
+  const results = trpc.proxy.auction.getAll.useQuery();
+  if (!results.data) return <div>Loading...</div>
+  const auctions = results.data; 
 
   return (
     <div className="flex">
@@ -19,8 +21,12 @@ const Trade: NextPage = () => {
       <div className="p-4 text-2xl flex-1 h-screen overflow-scroll text-gray-700 font-medium dark:text-gray-300">
         Trade
         <div className="p-10 grid grid-cols-4">
-          {items.data && items.data.map(item => {
-            return <TradeItem item={item} key={item.id}/>
+          {auctions.map(auction => {
+            if (auction.lots) {
+              return auction.lots.map(lot => {
+                return (<LotSummary lotId={lot.id} key={lot.id}/>)
+              })
+            }
           })}
         </div>
       </div>
