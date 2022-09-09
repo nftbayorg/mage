@@ -10,7 +10,7 @@ const Sidebar = () => {
   const collections = trpc.proxy.collection.getAll.useQuery();
 
   return (
-    <nav className="hidden md:flex p-5 w-72 h-screen overflow-scroll border-r border-gray-200 dark:border-gray-600">
+    <nav className="hidden lg:flex p-5 w-72 h-screen overflow-scroll border-r border-gray-200 dark:border-gray-600">
       <div className="flex-col w-full">
         <div className="text-2xl text-gray-700 font-semibold dark:text-gray-300">
           Collections

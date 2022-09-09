@@ -11,9 +11,9 @@ const LotSummary = ({ lotId }: { lotId: string }) => {
 
   return (
     <Link href={`/lot/${lot.id}`}>
-      <div className="hover:shadow-lg hover:shadow-gray-500/50 flex-col m-10 pt-0 rounded border border-gray-200 dark:border-gray-600 w-72 cursor-pointer">
-        <div className="pr-10 pl-10">
-          <Image src={lot.nftEdition.url} alt={lot.nftEdition.name} width={200} height={274}/>
+      <div className="flex-col hover:shadow-lg hover:shadow-gray-500/50 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
+        <div className="relative flex items-center justify-center">
+          <Image src={lot.nftEdition.url} alt={lot.nftEdition.name} height={400} width={300} objectFit="contain"/>
         </div>
         <div className="border-t border-gray-200 dark:border-gray-600 p-4">
           <div className="text-md">
