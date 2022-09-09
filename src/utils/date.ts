@@ -1,40 +1,43 @@
-export const DateAsWord = (date : Date): string => {
-
-    const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
-      year:  'numeric',
-      month: 'long',
-      day:   'numeric',
+export const DateAsWord = (date: Date): string => {
+  const longEnUSFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
-  
-  const pluralRules = new Intl.PluralRules('en-US', {
-      type: 'ordinal'
-  })
-  
+
+  const pluralRules = new Intl.PluralRules("en-US", {
+    type: "ordinal",
+  });
+
   interface Suffixes {
-    [key: string]: string | undefined
+    [key: string]: string | undefined;
   }
-  
+
   const suffixes: Suffixes = {
-      'one': 'st',
-      'two': 'nd',
-      'few': 'rd',
-      'other': 'th'
-  }
-  const convertToOrdinal = (number: number) => `${number}${suffixes[pluralRules.select(number)]}`
-  // At this point:
-  // convertToOrdinal("1") === "1st"
-  // convertToOrdinal("2") === "2nd"
-  // etc.
-  
-  const extractValueAndCustomizeDayOfMonth = (part: Intl.DateTimeFormatPart) => {
-      if (part.type === "day") {
-          return convertToOrdinal(+part.value);
-      }
-      return part.value;
+    one: "st",
+    two: "nd",
+    few: "rd",
+    other: "th",
   };
-  
-  return `${longEnUSFormatter.formatToParts(date)
-      .map(extractValueAndCustomizeDayOfMonth)
-      .join("")} ${date.toLocaleString('en-US', { hour: "2-digit", minute: '2-digit', hour12: true, timeZoneName: "short" })}`
-  }
-  
+  const convertToOrdinal = (number: number) =>
+    `${number}${suffixes[pluralRules.select(number)]}`;
+
+    const extractValueAndCustomizeDayOfMonth = (
+    part: Intl.DateTimeFormatPart
+  ) => {
+    if (part.type === "day") {
+      return convertToOrdinal(+part.value);
+    }
+    return part.value;
+  };
+
+  return `${longEnUSFormatter
+    .formatToParts(date)
+    .map(extractValueAndCustomizeDayOfMonth)
+    .join("")} ${date.toLocaleString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZoneName: "short",
+  })}`;
+};
