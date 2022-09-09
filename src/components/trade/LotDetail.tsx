@@ -1,6 +1,7 @@
 import NextError from "next/error";
 import Image from "next/image";
 import { trpc } from "../../utils/trpc";
+import { DateAsWord } from "../../utils/date";
 import {
   FaEye,
   FaEthereum,
@@ -141,7 +142,7 @@ const LotDetail = ({ id }: { id: string }) => {
         <div className="flex p-3 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center">
           <FaRegClock className="fill-gray-700 dark:fill-gray-400" />
           <div className="ml-2 text-md text-gray-500">
-            Sale ends {lot.auction.end.toISOString()}
+            Sale ends {DateAsWord(lot.auction.end)}
           </div>
         </div>
         <div className="flex-col p-10 border border-t-0 border-gray-200 dark:border-gray-600 rounded-b-xl items-start justify-start space-x-4">
