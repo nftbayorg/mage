@@ -29,6 +29,15 @@ model NFTSet {
   collectionId  String
   collection    Collection @relation(fields: [collectionId], references: [id])
   nftEditions   NFTEdition[]
+  properties    NFTSetProperties[]
+}
+
+model NFTSetProperties {
+  id            String @id @default(cuid())
+  type          String
+  name          String  
+  nftSetId      String
+  nftSet        NFTSet @relation(fields: [nftSetId], references: [id])
 }
 
 model NFTEdition {
