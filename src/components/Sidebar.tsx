@@ -19,7 +19,7 @@ const Sidebar = () => {
           {collections.data && collections.data.map(item => {
             return (
               <a className="flex items-center text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5" key={item.id}>
-                <GiAbstract116 color={item.color || "white"}/>
+                {/* <GiAbstract116 color={item.color || "white"}/> */}
                 <div className="ml-2">
                     {item.name}
                 </div>

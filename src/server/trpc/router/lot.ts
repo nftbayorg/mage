@@ -17,6 +17,7 @@ export const lotRouter = t.router({
                 collection: {
                   select: {
                     name: true,
+                    description: true
                   },
                 },
               },
@@ -42,6 +43,7 @@ export const lotRouter = t.router({
                   collection: {
                     select: {
                       name: true,
+                      description: true
                     },
                   },
                 },

@@ -101,12 +101,12 @@ const LotDetail = ({ id }: { id: string }) => {
               <FaRegHeart />
             </button>
           </div>
-          <div className="flex items-center justify-center rounded border border-gray-200 dark:border-gray-600 cursor-pointer w-auto relative">
+          <div className="flex items-center justify-center rounded cursor-pointer w-auto relative">
             <Image
               src={lot.nftEdition.url}
               alt={lot.nftEdition.name}
-              width="500"
-              height="600"
+              width="800"
+              height="800"
               objectFit="contain"
               className="rounded-b-xl"
             />
@@ -122,9 +122,7 @@ const LotDetail = ({ id }: { id: string }) => {
           </div>
           <div className="flex border border-gray-200 dark:border-gray-600 rounded-b-xl items-center">
             <div className="m-5 text-md text-gray-700 dark:text-white">
-              ABC - Abracadabra A collection of 10K immutable NFTs, 0%
-              royalties. Made to remind you of how fun things were when we were
-              kids, before growing up - let’s never stop having fun!
+              {lot.nftEdition.nftSet.collection.description}
             </div>
           </div>
         </section>
