@@ -11,7 +11,6 @@ import dynamic from "next/dynamic";
 const SetTheme = dynamic(() => import("../components/SetTheme"), { ssr: false });
 
 const Home: NextPage = () => {
-  // const hello = trpc.proxy.example.hello.useQuery({ text: "from tRPC" });
 
   const { data } = useSession();
 
