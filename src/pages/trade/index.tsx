@@ -9,27 +9,47 @@ import { trpc } from "../../utils/trpc";
 import Sidebar from "../../components/Sidebar";
 import LotSummary from "../../components/trade/LotSummary";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { useScrollPosition } from "../../hooks/useScrollPosition";
+import { useCallback, useEffect, useRef } from "react";
 
 const Trade: NextPage = () => {
 
-
+  const setScrollPosition = useScrollPosition(state => state.setScrollPosition);
+  const { scrollPosition } = useScrollPosition();
+  const listRef = useRef<HTMLDivElement>(null);
+ 
   const results = trpc.proxy.auction.getInfiniteAuctions.useInfiniteQuery({ 
-    limit: 1
+    limit: 3
   }, {
     getNextPageParam: (lastPage) => lastPage.nextCursor
   });
 
   const { lastItemRef } = useInfiniteScroll(results.isLoading, results.hasNextPage, results.fetchNextPage)
 
+  const handleScroll = (e: any) => {
+    setScrollPosition(e.currentTarget.scrollTop);
+  }
+
+  useEffect(() => {
+    listRef.current?.scrollTo({
+      behavior: "smooth",
+      top: scrollPosition
+    });
+
+  }, []);
+
   if (results.isLoading || !results.data) return <div>Loading...</div>
 
-  console.log('results', results);
   const pages = results.data.pages; 
 
   return (
     <div className="flex">
       <Sidebar />
-      <div className="md:p-4 text-2xl flex-1 h-screen overflow-scroll text-gray-700 font-medium dark:text-gray-300">
+      <div 
+        onScroll={handleScroll}
+        ref={listRef} 
+        className="md:p-4 text-2xl flex-1 h-screen text-gray-700 font-medium dark:text-gray-300 overflow-y-scroll"
+      >
         Trade
         <div className="p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
           {pages.map(page => {
