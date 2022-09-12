@@ -17,7 +17,7 @@ export const lotRouter = t.router({
                 collection: {
                   select: {
                     name: true,
-                    description: true
+                    description: true,
                   },
                 },
               },
@@ -43,7 +43,7 @@ export const lotRouter = t.router({
                   collection: {
                     select: {
                       name: true,
-                      description: true
+                      description: true,
                     },
                   },
                 },
@@ -61,6 +61,33 @@ export const lotRouter = t.router({
       },
     });
   }),
+  getInfiniteLots: t.procedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+      const items = await ctx.prisma.lot.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          id: "asc",
+        },
+      });
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        items,
+        nextCursor,
+      };
+    }),
   update: t.procedure
     .input(
       z.object({
@@ -76,7 +103,7 @@ export const lotRouter = t.router({
         },
         where: { id: input.id },
       });
-      console.log('Lot', lot);
+      console.log("Lot", lot);
       return lot;
     }),
 });

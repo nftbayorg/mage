@@ -8,12 +8,23 @@ import { trpc } from "../../utils/trpc";
 
 import Sidebar from "../../components/Sidebar";
 import LotSummary from "../../components/trade/LotSummary";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const Trade: NextPage = () => {
 
-  const results = trpc.proxy.auction.getAll.useQuery();
-  if (!results.data) return <div>Loading...</div>
-  const auctions = results.data; 
+
+  const results = trpc.proxy.auction.getInfiniteAuctions.useInfiniteQuery({ 
+    limit: 1
+  }, {
+    getNextPageParam: (lastPage) => lastPage.nextCursor
+  });
+
+  const { lastItemRef } = useInfiniteScroll(results.isLoading, results.hasNextPage, results.fetchNextPage)
+
+  if (results.isLoading || !results.data) return <div>Loading...</div>
+
+  console.log('results', results);
+  const pages = results.data.pages; 
 
   return (
     <div className="flex">
@@ -21,11 +32,25 @@ const Trade: NextPage = () => {
       <div className="md:p-4 text-2xl flex-1 h-screen overflow-scroll text-gray-700 font-medium dark:text-gray-300">
         Trade
         <div className="p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
-          {auctions.map(auction => {
-            if (auction.lots) {
-              return auction.lots.map(lot => {
-                return (<LotSummary lotId={lot.id} key={lot.id}/>)
-              })
+          {pages.map(page => {
+            if (page.items) {
+              const auctions = page.items;
+              let lastAuction = false;
+              let lastLot = false;
+            
+              return (auctions.map((auction, auctionIndex) => {
+                lastAuction = auctions.length === auctionIndex + 1;
+                if (!auction.lots) return;
+            
+                return auction.lots.map((lot, lotIndex) => {
+                  lastLot = auction.lots.length === lotIndex + 1;
+            
+                  if (lastAuction && lastLot) return <LotSummary ref={lastItemRef} lotId={lot.id} key={lot.id}/>
+            
+                  return (<LotSummary lotId={lot.id} key={lot.id}/>)
+                })
+              }))
+            
             }
           })}
         </div>

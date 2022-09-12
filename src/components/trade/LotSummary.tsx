@@ -1,17 +1,18 @@
+import React, { Ref } from "react";
 import Image from 'next/image';
 import { trpc } from "../../utils/trpc";
 import { timeRemaining } from '../../utils/time';
 import Link from 'next/link';
 
-const LotSummary = ({ lotId }: { lotId: string }) => {
-
+const LotSummary = React.forwardRef<HTMLDivElement, { lotId: string}>(( props: { lotId: string }, ref) => {
+  const { lotId } = props;
   const result = trpc.proxy.lot.get.useQuery({ id: lotId })
   if (!result.data) return <div>Loading...</div>;
   const lot = result.data;
 
   return (
     <Link href={`/lot/${lot.id}`}>
-      <div className="flex-col hover:shadow-lg hover:shadow-gray-500/50 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
+      <div ref={ref} className="flex-col hover:shadow-lg hover:shadow-gray-500/50 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
         <div className="relative flex items-center justify-center">
           <Image src={lot.nftEdition.url} alt={lot.nftEdition.name} height={500} width={500} objectFit="contain"/>
         </div>
@@ -32,6 +33,8 @@ const LotSummary = ({ lotId }: { lotId: string }) => {
       </div>
     </Link>
   )
-}
+})
+
+LotSummary.displayName = 'LotSummary'
 
 export default LotSummary;

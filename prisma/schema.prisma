@@ -65,6 +65,8 @@ model Lot {
   nftEdition   NFTEdition @relation(fields: [nftEditionId], references: [id])
   auctionId    String
   auction      Auction    @relation(fields: [auctionId], references: [id])
+
+  @@unique([id], name: "lot_constraint")
 }
 
 model Auction {
