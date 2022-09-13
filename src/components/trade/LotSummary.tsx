@@ -1,4 +1,4 @@
-import React, { Ref } from "react";
+import React from "react";
 import Image from 'next/image';
 import { trpc } from "../../utils/trpc";
 import { timeRemaining } from '../../utils/time';
