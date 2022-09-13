@@ -22,11 +22,16 @@ const NavBar = () => {
               Trade
             </a>
           </Link>
-          <Link href="#fees">
+          <Link href="/stake">
             <a className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
               Earn
             </a>
           </Link>
+          {data && <Link href="/create">
+            <a className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
+              Create
+            </a>
+          </Link>}
         </div>
         <div className="hidden md:flex">
           {data && (
