@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import Input from "../components/form/Input";
+import TextArea from "../components/form/TextArea";
 
 const CreateItem = () => {
   const {
@@ -16,8 +17,21 @@ const CreateItem = () => {
         required
         label="Name"
         placeholder="Item name"
-        caption="Some other text about the input to make the user understand"
         {...register("name", { required: true })}
+      />
+
+      <Input
+        label="External link"
+        placeholder="https://yoursite.io/item/123"
+        caption="Mage will include a link on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
+        {...register("link")}
+      />
+
+      <TextArea        
+        label="Description"
+        placeholder="Provide a detailed description of your item."
+        caption="The description will be included on your item's detail page underneath its image."
+        {...register("link")}
       />
 
       <button className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold">

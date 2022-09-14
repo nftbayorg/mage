@@ -9,12 +9,10 @@ import CreateItem from "../../components/CreateItem";
   const Create: NextPage = () => {
   
     return (
-      <div className="flex">
-        <div className="md:p-4 text-2xl flex-1 h-screen text-gray-700 font-medium dark:text-gray-300 overflow-y-scroll">
-          Create
-          <div className="p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
-            <CreateItem/>
-          </div>
+      <div className="p-5 flex items-center justify-center w-full">
+        <div className="md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 overflow-y-scroll">
+          <h1 className="text-4xl my-5">Create New Item</h1>
+          <CreateItem/>
         </div>
       </div>
     );
