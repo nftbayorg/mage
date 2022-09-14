@@ -16,6 +16,7 @@ const CreateItem = () => {
         required
         label="Name"
         placeholder="Item name"
+        caption="Some other text about the input to make the user understand"
         {...register("name", { required: true })}
       />
 
