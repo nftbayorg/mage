@@ -3,7 +3,7 @@ import Input from "../components/form/Input";
 import TextArea from "../components/form/TextArea";
 import { DropZone } from "../components/form/DropZone";
 import { FileList } from "../components/form/FileList";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { FaImage, FaAsterisk, FaTimes } from "react-icons/fa";
 
 interface FilePreview {
@@ -12,6 +12,8 @@ interface FilePreview {
 }
 
 const CreateItem = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const {
     register,
     handleSubmit,
@@ -32,7 +34,29 @@ const CreateItem = () => {
     }
   }, [])
 
-  console.log("files", file);
+  const removeFile = () => {
+    if (file) {
+      URL.revokeObjectURL(file?.url);
+    }
+
+    setFile(undefined);
+  }
+
+  const onFileSelected = (event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+    const file = event?.target?.files[0];
+
+    if (file) {
+      setFile({ url: URL.createObjectURL(file), file: file })
+    }
+  }
+
+  const onOpenFileDialog = () => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.click();
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -51,15 +75,16 @@ const CreateItem = () => {
       >
         {!file && 
           <div className="flex items-center justify-center p-2 w-full h-96 md:w-96 border-4 border-dashed rounded-lg">
-            <div className="flex items-center justify-center bg-gray-300 w-full h-full rounded-lg">
+            <button onClick={onOpenFileDialog} className="flex items-center justify-center bg-gray-300 w-full h-full rounded-lg">
+              <input type="file" id="file" ref={inputRef} className="hidden" onChange={onFileSelected}/>
               <FaImage className="fill-gray-700" size={80}/>
-            </div>
+            </button>
           </div>
         }
 
         {file && 
           <div className="rounded-lg border-4 border-dashed p-2 flex items-center justify-center h-auto w-auto relative">
-            <button className="absolute top-3 right-3">
+            <button className="absolute top-3 right-3" onClick={removeFile}>
               <FaTimes className="fill-slate-400" />
             </button>
             <div className="h-auto w-auto p-8">
@@ -93,7 +118,7 @@ const CreateItem = () => {
       <button className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold">
         <div className="text-white">Create Item</div>
       </button>
-      {errors.name && <span>This field is required</span>}
+      {/* {errors.name && <span>This field is required</span>} */}
     </form>
   );
 };
