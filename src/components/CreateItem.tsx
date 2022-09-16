@@ -18,8 +18,12 @@ const CreateItem = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange" 
+  });
+
   const onSubmit = (data: Object) => console.log(data);
 
   const [isDropActive, setIsDropActive] = useState(false)
@@ -96,36 +100,36 @@ const CreateItem = () => {
             </div>
           }
         </button>
-
       </DropZone>      
 
       <form onSubmit={handleSubmit(onSubmit)}>
-
         <Input
-          required
           label="Name"
+          name="name"
           placeholder="Item name"
-          {...register("name", { required: true })}
+          register={register}
+          required
         />
 
         <Input
-          label="External link"
-          placeholder="https://yoursite.io/item/123"
           caption="Mage will include a link on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
-          {...register("link")}
+          label="External link"
+          name="link"
+          placeholder="https://yoursite.io/item/123"
+          register={register}
         />
 
-        <TextArea        
-          label="Description"
-          placeholder="Provide a detailed description of your item."
+        <TextArea    
           caption="The description will be included on your item's detail page underneath its image."
-          {...register("link")}
+          label="Description"
+          name="descrioption"    
+          placeholder="Provide a detailed description of your item."
+          register={register}
         />
 
-        <button className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold">
+        <button type="submit" disabled={!isValid} className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200">
           <div className="text-white">Create Item</div>
         </button>
-        {/* {errors.name && <span>This field is required</span>} */}
       </form>
     </>
   );
