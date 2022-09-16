@@ -47,7 +47,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
 
   // Create handler for dragenter event:
   const handleDragIn = React.useCallback(
-    (event) => {
+    (event: any) => {
       event.preventDefault()
       event.stopPropagation()
       onDragIn?.()
@@ -61,7 +61,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
 
   // Create handler for dragleave event:
   const handleDragOut = React.useCallback(
-    (event) => {
+    (event: Event) => {
       event.preventDefault()
       event.stopPropagation()
       onDragOut?.()
@@ -73,7 +73,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
 
   // Create handler for dragover event:
   const handleDrag = React.useCallback(
-    (event) => {
+    (event: Event) => {
       event.preventDefault()
       event.stopPropagation()
 
@@ -87,7 +87,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
 
   // Create handler for drop event:
   const handleDrop = React.useCallback(
-    (event) => {
+    (event: any) => {
       event.preventDefault()
       event.stopPropagation()
 
@@ -107,7 +107,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
   // Obser active state and emit changes:
   React.useEffect(() => {
     onDragStateChange?.(isDragActive)
-  }, [isDragActive])
+  }, [isDragActive, onDragStateChange])
 
   // Attach listeners to dropzone on mount:
   React.useEffect(() => {
@@ -119,16 +119,14 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
       tempZoneRef.addEventListener('drop', handleDrop)
     }
 
-    // Remove listeners from dropzone on unmount:
-    return () => {
+   return () => {
       tempZoneRef?.removeEventListener('dragenter', handleDragIn)
       tempZoneRef?.removeEventListener('dragleave', handleDragOut)
       tempZoneRef?.removeEventListener('dragover', handleDrag)
       tempZoneRef?.removeEventListener('drop', handleDrop)
     }
-  }, [])
+  }, [handleDrag, handleDragIn, handleDragOut, handleDrop])
 
-  // Render <div /> with ref and children:
   return (
     <div className="flex flex-col my-6">
     <div className="flex items-center my-1">
