@@ -77,6 +77,13 @@ export const lotRouter = t.router({
         orderBy: {
           id: "asc",
         },
+        include: {
+          auction: {
+            select: {
+              end: true
+            }
+          }
+        }
       });
       let nextCursor: typeof cursor | undefined = undefined;
       if (items.length > limit) {
