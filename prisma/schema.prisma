@@ -26,8 +26,9 @@ model Collection {
 
 model NFTSet {
   id            String @id @default(cuid())
-  collectionId  String
-  collection    Collection @relation(fields: [collectionId], references: [id])
+  name          String
+  collectionId  String?
+  collection    Collection? @relation(fields: [collectionId], references: [id])
   nftEditions   NFTEdition[]
   properties    NFTSetProperties[]
 }
