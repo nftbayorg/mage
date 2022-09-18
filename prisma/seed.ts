@@ -194,6 +194,7 @@ async function seed() {
       // Create an NFT set for each NFT.
       const storedNftSet = await prisma.nFTSet.create({
         data: {
+          name: nft.name,
           collectionId: storedCollection.id
         }
       })
