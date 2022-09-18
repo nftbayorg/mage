@@ -14,4 +14,22 @@ export const collectionRouter = t.router({
   getAll: t.procedure.query(({ ctx }) => {
     return ctx.prisma.collection.findMany();
   }),
+  create: t.procedure
+  .input(
+    z.object({ 
+      name: z.string(),
+      description: z.string(),
+      userId: z.string()
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
+    const nftSet = await ctx.prisma.collection.create({
+      data: {
+        description: input.description,
+        name: input.name,
+        userId: input.userId
+      }
+    });
+    return nftSet;
+  }),
 });
