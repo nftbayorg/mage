@@ -21,7 +21,7 @@ const LotSummary = React.forwardRef<HTMLDivElement, { lotId: string}>(( props: {
             {lot.nftEdition.name}
           </div>
           <div className="mt-1 text-sm text-yellow-500">
-            {lot.nftEdition.nftSet.collection.name}
+            {lot.nftEdition.nftSet.collection?.name}
           </div>
           <div className="mt-1 text-sm text-yellow-500">
             Ends in {timeRemaining(lot.auction.end)}
