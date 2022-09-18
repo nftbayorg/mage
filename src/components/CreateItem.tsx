@@ -4,15 +4,27 @@ import TextArea from "../components/form/TextArea";
 import { FaAsterisk } from "react-icons/fa";
 import FileUpload from "./form/FileUpload";
 import { useCallback, useState } from "react";
+import { trpc } from "../utils/trpc";
+
+type FormValues  = {
+  name: string;
+  link?: string;
+  description?: string;
+}
 
 const CreateItem = () => {
+
+  const collections = trpc.useQuery(['collection.getAll']);
+  const createNftSet = trpc.useMutation('nftSet.create');
+  const createNftEdition = trpc.useMutation('nftEdition.create');
+
   const [hasFile, setHasFile] = useState(false);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<FormValues>({
     mode: "onChange",
     reValidateMode: "onChange" 
   });
@@ -20,8 +32,22 @@ const CreateItem = () => {
   const handleFileUploadOnChange = useCallback((hasFile: boolean) => {
     setHasFile(hasFile);
   }, [])
+
+  if (!collections.data?.length) return <div>Loading...</div>
  
-  const onSubmit = (data: Object) => console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    const nftSet = await createNftSet.mutateAsync({
+      collectionId: collections.data[0]?.id || '',
+      name: data.name,
+    });
+
+    await createNftEdition.mutateAsync({
+      name: data.name,
+      nftSetId: nftSet.id,
+      url: '',
+      ownerId: ''
+    })
+  }
 
   return (
     <>
