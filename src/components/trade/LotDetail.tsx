@@ -20,14 +20,14 @@ const LotHeader = ({
   owner,
   views,
 }: {
-  collection: string;
+  collection?: string;
   name: string;
   owner: string;
   views: number;
 }) => {
   return (
     <div className="flex-col space-y-6 mb-4">
-      <div className="text-1xl text-blue-500 mb-3">{collection}</div>
+      {collection &&  <div className="text-1xl text-blue-500 mb-3">{collection}</div>}
       <div className="text-3xl font-semibold mb-5 text-gray-700 dark:text-gray-400">
         {name}
       </div>
@@ -83,7 +83,7 @@ const LotDetail = ({ id }: { id: string }) => {
     <section className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 m-10 pt-0 border-gray-200 dark:border-gray-600 ">
       <div className="lg:hidden">
         <LotHeader
-          collection={lot.nftEdition.nftSet.collection.name}
+          collection={lot.nftEdition.nftSet.collection?.name}
           name={lot.nftEdition.name}
           owner={lot.nftEdition.ownerId}
           views={lot.views}
@@ -122,7 +122,7 @@ const LotDetail = ({ id }: { id: string }) => {
           </div>
           <div className="flex border border-gray-200 dark:border-gray-600 rounded-b-xl items-center">
             <div className="m-5 text-md text-gray-700 dark:text-white">
-              {lot.nftEdition.nftSet.collection.description}
+              {lot.nftEdition.nftSet.collection?.description}
             </div>
           </div>
         </section>
@@ -131,7 +131,7 @@ const LotDetail = ({ id }: { id: string }) => {
       <section className="lg:w-3/5">
         <div className="hidden lg:block">
           <LotHeader
-            collection={lot.nftEdition.nftSet.collection.name}
+            collection={lot.nftEdition.nftSet.collection?.name}
             name={lot.nftEdition.name}
             owner={lot.nftEdition.ownerId}
             views={lot.views}
