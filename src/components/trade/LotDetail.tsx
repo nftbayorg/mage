@@ -56,9 +56,8 @@ const LotDetail = ({ id }: { id: string }) => {
   const lotQuery = trpc.useQuery(["lot.get", { id }]);
 
   useEffect(() => {
-    console.log("Mutate");
     mutation.mutate({ id });
-  }, [id]);
+  }, [id, mutation]);
 
   if (lotQuery.error) {
     return (

@@ -10,40 +10,40 @@ interface FilePreview {
 }
 
 interface FileUploadEvent {
-  onChange(hasFile: boolean): void
+  onChange(file?: File): void
 }
 
 const FileUpload = ({ onChange }: FileUploadEvent) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isDropActive, setIsDropActive] = useState(false);
-  const [file, setFile] = useState<FilePreview>();
+  const [filePreview, setFilePreview] = useState<FilePreview>();
 
   useEffect(() => {
-    onChange(file ? true : false);
-  }, [file, onChange]);
+    onChange(filePreview?.file);
+  }, [filePreview, onChange]);
 
   const onDragStateChange = useCallback((dragActive: boolean) => {
     setIsDropActive(dragActive);
   }, []);
   const onFilesDrop = useCallback((files: File[]) => {
     if (files[0]) {
-      setFile({ url: URL.createObjectURL(files[0]), file: files[0] });
+      setFilePreview({ url: URL.createObjectURL(files[0]), file: files[0] });
     }
   }, []);
 
   const removeFile: MouseEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
     event.preventDefault();
-    if (file) {
-      URL.revokeObjectURL(file?.url);
+    if (filePreview) {
+      URL.revokeObjectURL(filePreview?.url);
     }
 
     if (inputRef && inputRef.current) {
       inputRef.current.value = "";
     }
 
-    setFile(undefined);
+    setFilePreview(undefined);
   };
 
   const onFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,7 @@ const FileUpload = ({ onChange }: FileUploadEvent) => {
     if (event.target.files) {
       const file = event?.target?.files[0];
       if (file) {
-        setFile({ url: URL.createObjectURL(file), file: file });
+        setFilePreview({ url: URL.createObjectURL(file), file: file });
       }
     }
   };
@@ -84,7 +84,7 @@ const FileUpload = ({ onChange }: FileUploadEvent) => {
           className="hidden"
           onChange={onFileSelected}
         />
-        {file ? (
+        {filePreview ? (
           <div className="w-full h-full relative">
             <div
               role="button"
@@ -98,7 +98,7 @@ const FileUpload = ({ onChange }: FileUploadEvent) => {
               objectFit="cover"
               layout="fill"
               className="rounded-lg block max-w-sm max-h-sm md:max-w-lg md:max-h-lg w-auto h-auto p-[inherit]"
-              src={file.url}
+              src={filePreview.url}
             />
           </div>
         ) : (

@@ -4,49 +4,32 @@ import TextArea from "../components/form/TextArea";
 import { FaAsterisk } from "react-icons/fa";
 import FileUpload from "./form/FileUpload";
 import { useCallback, useState } from "react";
-import { trpc } from "../utils/trpc";
 
-type FormValues  = {
-  name: string;
-  link?: string;
-  description?: string;
+type ComponentProps = {
+  onSubmit: (data: CreateItemFormValues) => void;
 }
 
-const CreateItem = () => {
+const CreateItem = ({ onSubmit }: ComponentProps) => {
 
-  const collections = trpc.useQuery(['collection.getAll']);
-  const createNftSet = trpc.useMutation('nftSet.create');
-  const createNftEdition = trpc.useMutation('nftEdition.create');
-
-  const [hasFile, setHasFile] = useState(false);
+  const [file, setFile] = useState<File>();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
+  } = useForm<CreateItemFormValues>({
     mode: "onChange",
     reValidateMode: "onChange" 
   });
 
-  const handleFileUploadOnChange = useCallback((hasFile: boolean) => {
-    setHasFile(hasFile);
+  const handleFileUploadOnChange = useCallback((file: File | undefined) => {
+    setFile(file);
   }, [])
-
-  if (!collections.data?.length) return <div>Loading...</div>
  
-  const onSubmit = async (data: FormValues) => {
-    const nftSet = await createNftSet.mutateAsync({
-      collectionId: collections.data[0]?.id || '',
-      name: data.name,
-    });
-
-    await createNftEdition.mutateAsync({
-      name: data.name,
-      nftSetId: nftSet.id,
-      url: '',
-      ownerId: ''
-    })
+  const onSubmitFormValues = async (data: CreateItemFormValues) => {
+    if (file) {
+      data.file = file;
+      onSubmit(data);
+    }
   }
 
   return (
@@ -55,9 +38,9 @@ const CreateItem = () => {
         <FaAsterisk className="fill-red-500 mr-2" size={10}/>
         <label className="text-sm text-gray-400">Required fields</label>
       </div>
-      <FileUpload onChange={(filePreview) => handleFileUploadOnChange(filePreview)}/>
+      <FileUpload onChange={(file) => handleFileUploadOnChange(file)}/>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmitFormValues)}>
         <Input
           label="Name"
           name="name"
@@ -82,7 +65,7 @@ const CreateItem = () => {
           register={register}
         />
 
-        <button type="submit" disabled={!isValid || !hasFile} className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200">
+        <button type="submit" disabled={!isValid || !file} className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200">
           <div className="text-white">Create Item</div>
         </button>
       </form>
