@@ -27,6 +27,7 @@ const CreateItem = ({ onSubmit }: ComponentProps) => {
  
   const onSubmitFormValues = async (data: CreateItemFormValues) => {
     if (file) {
+      data.totalSupply = parseInt(data.totalSupply);
       data.file = file;
       onSubmit(data);
     }
@@ -60,9 +61,19 @@ const CreateItem = ({ onSubmit }: ComponentProps) => {
         <TextArea    
           caption="The description will be included on your item's detail page underneath its image."
           label="Description"
-          name="descrioption"    
+          name="description"    
           placeholder="Provide a detailed description of your item."
           register={register}
+        />
+
+        <Input
+          label="Total supply"
+          name="totalSupply"
+          register={register}
+          type="number"
+          defaultValue={1}
+          min={1}
+          required
         />
 
         <button type="submit" disabled={!isValid || !file} className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200">

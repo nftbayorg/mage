@@ -83,7 +83,7 @@ const LotDetail = ({ id }: { id: string }) => {
       <div className="lg:hidden">
         <LotHeader
           collection={lot.nftEdition.nftSet.collection?.name}
-          name={lot.nftEdition.name}
+          name={lot.nftEdition.nftSet.name}
           owner={lot.nftEdition.ownerId}
           views={lot.views}
         />
@@ -102,8 +102,8 @@ const LotDetail = ({ id }: { id: string }) => {
           </div>
           <div className="flex items-center justify-center rounded cursor-pointer w-auto relative">
             <Image
-              src={lot.nftEdition.url}
-              alt={lot.nftEdition.name}
+              src={lot.nftEdition.nftSet.imageUrl}
+              alt={lot.nftEdition.nftSet.name}
               width="800"
               height="800"
               objectFit="contain"
@@ -131,7 +131,7 @@ const LotDetail = ({ id }: { id: string }) => {
         <div className="hidden lg:block">
           <LotHeader
             collection={lot.nftEdition.nftSet.collection?.name}
-            name={lot.nftEdition.name}
+            name={lot.nftEdition.nftSet.name}
             owner={lot.nftEdition.ownerId}
             views={lot.views}
           />

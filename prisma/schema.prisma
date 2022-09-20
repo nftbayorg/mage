@@ -27,6 +27,10 @@ model Collection {
 model NFTSet {
   id            String @id @default(cuid())
   name          String
+  imageUrl      String
+  blockchainId  String
+  link          String?
+  description   String?
   collectionId  String?
   collection    Collection? @relation(fields: [collectionId], references: [id])
   nftEditions   NFTEdition[]
@@ -43,18 +47,15 @@ model NFTSetProperties {
 
 model NFTEdition {
   id            String     @id @default(cuid())
-  name          String
   minted        Boolean
-  url           String
-  blockchainId  String
-  tokenAddress  String?
-  nftSetId      String
-  nftSet        NFTSet     @relation(fields: [nftSetId], references: [id])
   ownerId       String
-  owner         Wallet     @relation(fields: [ownerId], references: [id])
-  lots          Lot[]
+  nftSetId      String
+  tokenAddress  String?
   adminWalletId String?
+  lots          Lot[]
   adminWallet   AdminWallet? @relation(fields: [adminWalletId], references: [id])
+  owner         Wallet       @relation(fields: [ownerId], references: [id])
+  nftSet        NFTSet       @relation(fields: [nftSetId], references: [id])
 }
 
 model Lot {

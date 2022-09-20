@@ -1,3 +1,4 @@
+import { deepStrictEqual } from "assert";
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -21,17 +22,28 @@ const Create: NextPage<PageProps> = ({ session }) => {
   if (!collections.data?.length) return <div>Loading...</div>
 
   const handleOnSumbit = async (data: CreateItemFormValues) => {
-    const nftSet = await createNftSet.mutateAsync({
-      collectionId: collections.data[0]?.id || '',
-      name: data.name,
-    });
+    console.log('Form values', data);
 
-    await createNftEdition.mutateAsync({
-      name: data.name,
-      nftSetId: nftSet.id,
-      url: '',
-      ownerId: ''
-    })
+    let reader = new FileReader();
+    reader.readAsDataURL(data.file);
+    reader.onload = async function () {
+      const nftSet = await createNftSet.mutateAsync({
+        collectionId: collections.data[0]?.id || '',
+        file: reader.result?.toString() || '',
+        description: data.description,
+        name: data.name,
+        totalSupply: data.totalSupply,
+        ownerId: session.user?.id || '',
+        link: data.link,
+      });
+
+      console.log('nft', nftSet);
+    };
+    
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+
   }
 
   return (

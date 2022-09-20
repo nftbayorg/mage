@@ -195,7 +195,10 @@ async function seed() {
       const storedNftSet = await prisma.nFTSet.create({
         data: {
           name: nft.name,
-          collectionId: storedCollection.id
+          blockchainId: "Ethereum",
+          collectionId: storedCollection.id,
+          link: nft.url,
+          imageUrl: nft.url
         }
       })
 
@@ -209,12 +212,8 @@ async function seed() {
         await prisma.nFTEdition.create({
           data: {
             nftSetId: storedNftSet.id,
-            tokenAddress: null,
-            name: nft.name,
             minted: false,
             ownerId: wallet?.id,
-            blockchainId: 'Etherium Mainnet',
-            url: nft.url,          
           },
         });
       }

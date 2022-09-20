@@ -14,6 +14,8 @@ export const lotRouter = t.router({
             owner: true,
             nftSet: {
               select: {
+                name: true,
+                imageUrl: true,
                 collection: {
                   select: {
                     name: true,
@@ -40,6 +42,8 @@ export const lotRouter = t.router({
             include: {
               nftSet: {
                 select: {
+                  name: true,
+                  imageUrl: true,
                   collection: {
                     select: {
                       name: true,
