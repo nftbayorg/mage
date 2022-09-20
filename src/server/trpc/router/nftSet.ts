@@ -1,14 +1,14 @@
 import { t } from "../utils";
 import { z } from "zod";
 import { NFTStorage, File } from 'nft.storage';
-import { Blob } from 'node:buffer';
+import { Blob } from 'buffer';
 
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-function convertBase64ToBlob(base64Image: string) {
+function convertBase64(base64Image: string) {
   const atob = (data: string) => Buffer.from(data, 'base64').toString('ascii');
   const parts = base64Image.split(';base64,');
 
@@ -18,11 +18,7 @@ function convertBase64ToBlob(base64Image: string) {
   const decodedData = atob(parts[1]);
   const uInt8Array = new Uint8Array(decodedData.length);
 
-  for (let i = 0; i < decodedData.length; ++i) {
-    uInt8Array[i] = decodedData.charCodeAt(i);
-  }
-
-  return new Blob([uInt8Array], { type: imageType });
+  return { data: uInt8Array.buffer , type: imageType };
 }
 
 export const nftSetRouter = t.router({
@@ -51,19 +47,17 @@ export const nftSetRouter = t.router({
     )
     .mutation(async ({ input, ctx }) => {
 
-      const blobData = convertBase64ToBlob(input.file);
+      const fileData = convertBase64(input.file);
 
-      if (!blobData) return undefined;
+      if (!fileData) return undefined;
 
       const metadata = await client.store({
         name: input.name,
         description: input.description || input.name,
         image: new File(
-          [
-            blobData
-          ],
+          [fileData.data],
           input.name,
-          { type: blobData?.type }
+          { type: fileData?.type }
         ),
       });
 
