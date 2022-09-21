@@ -198,7 +198,8 @@ async function seed() {
           blockchainId: "Ethereum",
           collectionId: storedCollection.id,
           link: nft.url,
-          imageUrl: nft.url
+          imageUrl: nft.url,
+          creatorId: collection.userId
         }
       })
 

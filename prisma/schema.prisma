@@ -32,6 +32,8 @@ model NFTSet {
   link          String?
   description   String?
   collectionId  String?
+  creatorId     String
+  creator       User        @relation(fields: [creatorId], references: [id])
   collection    Collection? @relation(fields: [collectionId], references: [id])
   nftEditions   NFTEdition[]
   properties    NFTSetProperties[]
@@ -135,6 +137,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   collections   Collection[]
+  nftSets       NFTSet[]
 }
 
 model VerificationToken {

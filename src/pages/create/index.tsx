@@ -15,25 +15,22 @@ type PageProps = {
 
 const Create: NextPage<PageProps> = ({ session }) => {
 
-  const collections = trpc.useQuery(['collection.getAll']);
+  // const collections = trpc.useQuery(['collection.getAll']);
   const createNftSet = trpc.useMutation('nftSet.create');
-  const createNftEdition = trpc.useMutation('nftEdition.create');
 
-  if (!collections.data?.length) return <div>Loading...</div>
+  // if (!collections.data?.length) return <div>Loading...</div>
 
   const handleOnSumbit = async (data: CreateItemFormValues) => {
-    console.log('Form values', data);
-
     let reader = new FileReader();
     reader.readAsDataURL(data.file);
     reader.onload = async function () {
       const nftSet = await createNftSet.mutateAsync({
-        collectionId: collections.data[0]?.id || '',
+        creator: session.user?.id || '',
+        // collectionId: collections.data[0]?.id,
         file: reader.result?.toString() || '',
         description: data.description,
         name: data.name,
         totalSupply: data.totalSupply,
-        ownerId: session.user?.id || '',
         link: data.link,
       });
 
@@ -43,7 +40,6 @@ const Create: NextPage<PageProps> = ({ session }) => {
     reader.onerror = function (error) {
       console.log('Error: ', error);
     };
-
   }
 
   return (

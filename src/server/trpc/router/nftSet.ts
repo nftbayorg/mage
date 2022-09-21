@@ -1,7 +1,6 @@
 import { t } from "../utils";
 import { z } from "zod";
 import { NFTStorage, File } from 'nft.storage';
-import { Blob } from 'buffer';
 
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
@@ -39,9 +38,9 @@ export const nftSetRouter = t.router({
         name: z.string(),
         description: z.string().optional(),
         link: z.string().optional(),
-        collectionId: z.string(),
+        collectionId: z.string().optional(),
         totalSupply: z.number(),
-        ownerId: z.string(),
+        creator: z.string(),
         file: z.string()
       })
     )
@@ -49,7 +48,16 @@ export const nftSetRouter = t.router({
 
       const fileData = convertBase64(input.file);
 
-      if (!fileData) return undefined;
+      if (!fileData) return "No file present";
+
+      const creatorWallet = await ctx.prisma.wallet.findFirst({
+        where: {
+          virtual: true,
+          userId: input.creator,
+        }
+      })
+
+      if (!creatorWallet) return "No wallet located for creator";
 
       const metadata = await client.store({
         name: input.name,
@@ -61,29 +69,45 @@ export const nftSetRouter = t.router({
         ),
       });
 
+      let collectionId;
+      if (input.collectionId) {
+        collectionId = input.collectionId;
+      } else {
+        const newCollection = await ctx.prisma.collection.create({
+          data: {
+            name: 'Untitled Collection',
+            description: 'Welcome to the home of Untitled Collection on Mage. Discover the best items in this collection.',
+            userId: input.creator
+          }
+        });
+
+        collectionId = newCollection.id;
+      }
+
+      const nftEditionObjArray = [];
+      for (let index = 0; index < input.totalSupply; index++) {
+        nftEditionObjArray.push(
+          {
+            ownerId: creatorWallet.id,
+            minted: false,
+          }
+        );    
+      }
+
       const nftSet = await ctx.prisma.nFTSet.create({
         data: {
-          collectionId: input.collectionId,
+          creatorId: input.creator,
           name: input.name,
           description: input.description,
           blockchainId: "Ethereum",
           imageUrl: metadata.url,
           link: input.link,
+          collectionId,
+          nftEditions: {
+            create: nftEditionObjArray
+          }
         }
       });
-
-      let promises = [];
-      for (let index = 0; index < input.totalSupply; index++) {
-        promises.push(ctx.prisma.nFTEdition.create({
-          data: {
-            nftSetId: nftSet.id,
-            ownerId: input.ownerId,
-            minted: false,
-          }
-        }));    
-      }
-
-      await Promise.allSettled(promises);
 
       return nftSet;
     }),
