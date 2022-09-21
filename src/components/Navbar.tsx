@@ -32,6 +32,11 @@ const NavBar = () => {
               Create
             </a>
           </Link>}
+          {data && <Link href="/collections">
+            <a className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
+              Collections
+            </a>
+          </Link>}
         </div>
         <div className="hidden md:flex">
           {data && (

@@ -1,9 +1,4 @@
-import type {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  NextPage,
-} from "next";
-import { getMageAuthSession } from "../../server/common/get-server-session";
+import type { NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 
 import Sidebar from "../../components/Sidebar";
@@ -61,25 +56,6 @@ const Trade: NextPage = () => {
       </div>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const session = await getMageAuthSession(ctx);
-
-  // if (session) {
-  //   return {
-  //     redirect: { destination: "/", permanent: false },
-  //     props: {},
-  //   };
-  // }
-
-  return {
-    props: {
-      session,
-    },
-  };
 };
 
 export default Trade;

@@ -16,6 +16,30 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async signIn({ user }) {
+
+      let userWallet = await prisma.wallet.findFirst({
+        where: {
+          userId: user.id,
+          virtual: true
+        }
+      })
+ 
+      if (!userWallet) {
+        userWallet = await prisma.wallet.create({
+          data: {
+            virtual: true,
+            userId: user.id
+          }
+        })
+      }
+
+      if (!userWallet) {
+        return "Could not sign in - no wallet located"
+      }
+
+      return true;
+    }
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),

@@ -11,6 +11,17 @@ export const collectionRouter = t.router({
           }
       });
     }),
+  getByUser: t.procedure
+    .input(z.object({ 
+      user: z.string() 
+    }))
+    .query(({ input }) => {
+      return prisma?.collection.findMany({
+        where: {
+          userId: input.user
+        }
+      });
+    }),
   getAll: t.procedure.query(({ ctx }) => {
     return ctx.prisma.collection.findMany();
   }),

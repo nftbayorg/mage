@@ -1,0 +1,3 @@
+type AuthenticatedPageProps = {
+  session: Session
+}
