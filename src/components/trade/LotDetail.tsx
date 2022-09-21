@@ -57,7 +57,7 @@ const LotDetail = ({ id }: { id: string }) => {
 
   useEffect(() => {
     mutation.mutate({ id });
-  }, [id, mutation]);
+  }, [id]);
 
   if (lotQuery.error) {
     return (
