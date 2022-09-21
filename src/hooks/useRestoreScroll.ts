@@ -20,12 +20,10 @@ export const useRestoreScroll = <T extends HTMLElement>() => {
   }, []));
 
   const handleScroll = useCallback((e: any) => {
-    console.log('Set scroll position', e.currentTarget.scrollTop);
     setScrollPosition(e.currentTarget.scrollTop);
   }, [setScrollPosition]);
 
   useEffect(() => {
-    console.log('Add event listener');
     ref.current?.addEventListener('scroll', handleScroll);
   }, [ref.current]);
 
