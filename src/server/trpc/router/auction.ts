@@ -51,6 +51,21 @@ export const auctionRouter = t.router({
                 select: {
                   end: true
                 }
+              },
+              nftEdition: {
+                select: {
+                  nftSet: {
+                    select: {
+                      imageUrl: true,
+                      name: true,
+                      collection: {
+                        select: {
+                          name: true
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }

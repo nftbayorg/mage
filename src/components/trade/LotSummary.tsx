@@ -1,14 +1,29 @@
 import React from "react";
 import Image from 'next/image';
-import { trpc } from "../../utils/trpc";
 import { timeRemaining } from '../../utils/time';
 import Link from 'next/link';
+import { Decimal } from "@prisma/client/runtime";
 
-const LotSummary = React.forwardRef<HTMLDivElement, { lotId: string}>(( props: { lotId: string }, ref) => {
-  const { lotId } = props;
-  const result = trpc.proxy.lot.get.useQuery({ id: lotId })
-  if (!result.data) return <div>Loading...</div>;
-  const lot = result.data;
+type Lot = {
+  id: string;
+  reservePrice: Decimal;
+  auction: {
+    end: Date;
+  }
+  nftEdition: {
+    nftSet: {
+      imageUrl: string;
+      name: string;
+      collection: {
+        name: string;
+      } | null
+    }
+  }
+}
+
+const LotSummary = React.forwardRef<HTMLDivElement, { lot: Lot}>(( props: { lot: Lot }, ref) => {
+  const { lot } = props;
+  if (!lot) return <div>Loading...</div>;
 
   return (
     <Link href={`/lot/${lot.id}`}>

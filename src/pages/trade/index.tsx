@@ -11,14 +11,17 @@ const Trade: NextPage = () => {
   const [listRef] = useRestoreScroll<HTMLDivElement>();
  
   const results = trpc.proxy.auction.getInfiniteAuctions.useInfiniteQuery({ 
-    limit: 3
+    limit: 3,
   }, {
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
     getNextPageParam: (lastPage) => lastPage.nextCursor
   });
 
   const { lastItemRef } = useInfiniteScroll(results.isLoading, results.hasNextPage, results.fetchNextPage);
 
-  if (results.isLoading || !results.data) return <div>Loading...</div>
+  if (!results.data) return <div>Loading...</div>
 
   const pages = results.data.pages; 
 
@@ -44,12 +47,11 @@ const Trade: NextPage = () => {
                 return auction.lots.map((lot, lotIndex) => {
                   lastLot = auction.lots.length === lotIndex + 1;
             
-                  if (lastAuction && lastLot) return <LotSummary ref={lastItemRef} lotId={lot.id} key={lot.id}/>
+                  if (lastAuction && lastLot) return <LotSummary ref={lastItemRef} lot={lot} key={lot.id}/>
             
-                  return (<LotSummary lotId={lot.id} key={lot.id}/>)
+                  return (<LotSummary lot={lot} key={lot.id}/>)
                 })
-              }))
-            
+              }))            
             }
           })}
         </div>
