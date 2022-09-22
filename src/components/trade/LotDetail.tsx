@@ -1,6 +1,4 @@
-import NextError from "next/error";
 import Image from "next/image";
-import { trpc } from "../../utils/trpc";
 import { DateAsWord } from "../../utils/date";
 import {
   FaEye,
@@ -12,7 +10,9 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect } from "react";
+import { inferQueryOutput } from "../../utils/trpc";
+
+type Lot = inferQueryOutput<"lot.get">;
 
 const LotHeader = ({
   collection,
@@ -51,32 +51,12 @@ const LotHeader = ({
   );
 };
 
-const LotDetail = ({ id }: { id: string }) => {
-  const mutation = trpc.useMutation("lot.update");
-  const lotQuery = trpc.useQuery(["lot.get", { id }]);
+type ComponentProps = {
+  lot: Lot
+}
 
-  useEffect(() => {
-    mutation.mutate({ id });
-  }, [id]);
-
-  if (lotQuery.error) {
-    return (
-      <NextError
-        title={lotQuery.error.message}
-        statusCode={lotQuery.error.data?.httpStatus ?? 500}
-      />
-    );
-  }
-
-  if (lotQuery.status !== "success") {
-    return <>Loading...</>;
-  }
-
-  if (!lotQuery.data) {
-    return <>Unknown lot...</>;
-  }
-
-  const { data: lot } = lotQuery;
+const LotDetail = ({ lot }: ComponentProps) => {
+  if (!lot) return <div>Loading...</div>
 
   return (
     <section className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 m-10 pt-0 border-gray-200 dark:border-gray-600 ">

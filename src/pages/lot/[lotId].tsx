@@ -1,40 +1,45 @@
 import type {
-  GetServerSideProps,
-  GetServerSidePropsContext,
   NextPage,
 } from "next";
-import { getMageAuthSession } from "../../server/common/get-server-session";
-
-import LotDetail from "../../components/trade/LotDetail";
+import NextError from "next/error";
 import { useRouter } from "next/router";
+import { trpc } from "../../utils/trpc";
+import { useEffect } from "react";
+import LotDetail from "../../components/trade/LotDetail";
 
-const Lot: NextPage = () => {
+const LotPage: NextPage = () => {
   const id = useRouter().query.lotId as string;
+  const mutation = trpc.useMutation("lot.update");
+  const lotQuery = trpc.useQuery(["lot.get", { id }]);
 
+  useEffect(() => {
+    mutation.mutate({ id });
+  }, [id]);
+
+  if (lotQuery.error) {
+    return (
+      <NextError
+        title={lotQuery.error.message}
+        statusCode={lotQuery.error.data?.httpStatus ?? 500}
+      />
+    );
+  }
+
+  if (lotQuery.status !== "success") {
+    return <>Loading...</>;
+  }
+
+  if (!lotQuery.data) {
+    return <>Unknown lot...</>;
+  }
+
+  const lot = lotQuery.data;
+ 
   return (
     <div className="flex items-center justify-center w-full">
-      <LotDetail id={id} />
+      <LotDetail lot={lot} />
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const session = await getMageAuthSession(ctx);
-
-  // if (session) {
-  //   return {
-  //     redirect: { destination: "/", permanent: false },
-  //     props: {},
-  //   };
-  // }
-
-  return {
-    props: {
-      session,
-    },
-  };
-};
-
-export default Lot;
+export default LotPage;

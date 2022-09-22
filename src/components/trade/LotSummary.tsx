@@ -1,25 +1,10 @@
 import React from "react";
 import Image from 'next/image';
-import { timeRemaining } from '../../utils/time';
 import Link from 'next/link';
-import { Decimal } from "@prisma/client/runtime";
+import { inferQueryOutput } from "../../utils/trpc";
+import { timeRemaining } from '../../utils/time';
 
-type Lot = {
-  id: string;
-  reservePrice: Decimal;
-  auction: {
-    end: Date;
-  }
-  nftEdition: {
-    nftSet: {
-      imageUrl: string;
-      name: string;
-      collection: {
-        name: string;
-      } | null
-    }
-  }
-}
+type Lot = inferQueryOutput<"auction.getInfiniteAuctions">["items"][0]["lots"][0];
 
 const LotSummary = React.forwardRef<HTMLDivElement, { lot: Lot}>(( props: { lot: Lot }, ref) => {
   const { lot } = props;
