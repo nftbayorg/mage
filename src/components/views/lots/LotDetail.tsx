@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DateAsWord } from "../../utils/date";
+import { DateAsWord } from "../../../utils/date";
 import {
   FaEye,
   FaEthereum,
@@ -10,7 +10,7 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import Link from "next/link";
-import { inferQueryOutput } from "../../utils/trpc";
+import { inferQueryOutput } from "../../../utils/trpc";
 
 type Lot = inferQueryOutput<"lot.get">;
 

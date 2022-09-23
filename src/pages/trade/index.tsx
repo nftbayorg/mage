@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 
-import Sidebar from "../../components/Sidebar";
-import LotSummary from "../../components/trade/LotSummary";
+import Sidebar from "../../components/layout/Sidebar";
+import LotSummary from "../../components/views/lots/LotSummary";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { useRestoreScroll } from "../../hooks/useRestoreScroll";
 

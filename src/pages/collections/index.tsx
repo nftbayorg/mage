@@ -39,7 +39,8 @@ const Collections: NextPage<AuthenticatedPageProps> = ({ session }) => {
   return (
     <div className="p-5 mb-10 flex items-center justify-center w-full h-full overflow-y-scroll">
       <div className="md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300">
-        <h1 className="text-4xl my-5">My Collections</h1>
+        <h1 className="text-5xl my-5">My Collections</h1>
+        <h2 className="text-md font-light my-5">Create, curate, and manage collections of uniqie NFTs to share and sell.</h2>
         <div className="flex flex-col md:flex-row gap-2">
           {collections.data?.map(collection => (<CollectionPanel key={collection.id} collection={collection}/>))}
         </div>

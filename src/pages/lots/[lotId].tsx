@@ -5,7 +5,7 @@ import NextError from "next/error";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 import { useEffect } from "react";
-import LotDetail from "../../components/trade/LotDetail";
+import LotDetail from "../../components/views/lots/LotDetail";
 
 const LotPage: NextPage = () => {
   const id = useRouter().query.lotId as string;

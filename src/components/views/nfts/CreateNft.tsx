@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import Input from "../components/form/Input";
-import TextArea from "../components/form/TextArea";
+import Input from "../../forms/controls/Input";
+import TextArea from "../../forms/controls/TextArea";
 import { FaAsterisk } from "react-icons/fa";
-import FileUpload from "./form/FileUpload";
+import FileUpload from "../../forms/controls/FileUpload";
 import { useCallback, useState } from "react";
 
 type ComponentProps = {

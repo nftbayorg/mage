@@ -5,7 +5,7 @@ import type {
   NextPage,
 } from "next";
 import { Session } from "next-auth";
-import CreateItem from "../../components/CreateItem";
+import CreateItem from "../../components/views/nfts/CreateNft";
 import { getMageAuthSession } from "../../server/common/get-server-session";
 import { trpc } from "../../utils/trpc";
 

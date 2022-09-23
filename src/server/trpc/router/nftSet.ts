@@ -75,6 +75,7 @@ export const nftSetRouter = t.router({
       } else {
         const newCollection = await ctx.prisma.collection.create({
           data: {
+            logoImageUrl: metadata.url,
             name: 'Untitled Collection',
             description: 'Welcome to the home of Untitled Collection on Mage. Discover the best items in this collection.',
             userId: input.creator

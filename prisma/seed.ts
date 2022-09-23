@@ -185,7 +185,7 @@ async function seed() {
         name: collection.name,
         description: collection.description,
         userId: collection.userId,
-        color: collection.color
+        logoImageUrl: collection.nfts[0]?.url || ''
       },
     }); 
       

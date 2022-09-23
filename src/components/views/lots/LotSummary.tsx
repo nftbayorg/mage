@@ -1,8 +1,8 @@
 import React from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { inferQueryOutput } from "../../utils/trpc";
-import { timeRemaining } from '../../utils/time';
+import { inferQueryOutput } from "../../../utils/trpc";
+import { timeRemaining } from '../../../utils/time';
 
 type Lot = inferQueryOutput<"auction.getInfiniteAuctions">["items"][0]["lots"][0];
 

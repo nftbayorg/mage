@@ -15,13 +15,18 @@ datasource db {
 }
 
 model Collection {
-  id            String @id @default(cuid())
-  name          String
-  description   String
-  userId        String
-  color         String?
-  user          User   @relation(fields: [userId], references: [id])
-  nftSets       NFTSet[]
+  id              String @id @default(cuid())
+  name            String
+  description     String?
+  logoImageUrl    String
+  featureImageUrl String?
+  bannerImageUrl  String?
+  blockChainId    String? @default("Ethereum")
+  explicitContent Boolean? @default(false)
+  displayThemee   String? @default("contained")
+  userId          String
+  user            User   @relation(fields: [userId], references: [id])
+  nftSets         NFTSet[]
 }
 
 model NFTSet {

@@ -30,6 +30,7 @@ export const collectionRouter = t.router({
     z.object({ 
       name: z.string(),
       description: z.string(),
+      logoImageUrl: z.string(),
       userId: z.string()
     })
   )
@@ -38,6 +39,7 @@ export const collectionRouter = t.router({
       data: {
         description: input.description,
         name: input.name,
+        logoImageUrl: input.logoImageUrl,
         userId: input.userId
       }
     });

@@ -1,4 +1,4 @@
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 
 import { GiAbstract116 } from "react-icons/gi";
 
