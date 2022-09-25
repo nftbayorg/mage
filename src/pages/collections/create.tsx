@@ -16,35 +16,54 @@ type PageProps = {
 const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
 
   // const collections = trpc.useQuery(['collection.getAll']);
-  const createNftSet = trpc.useMutation('nftSet.create');
+  const createCollection = trpc.useMutation('collection.create');
 
   // if (!collections.data?.length) return <div>Loading...</div>
 
   const handleOnSumbit = async (data: CreateCollectionFormValues) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(data.logoImageFile);
-    reader.onload = async function () {
-    //   const nftSet = await createNftSet.mutateAsync({
-    //     creator: session.user?.id || '',
-    //     // collectionId: collections.data[0]?.id,
-    //     file: reader.result?.toString() || '',
-    //     description: data.description,
-    //     name: data.name,
-    //     totalSupply: data.totalSupply,
-    //     link: data.link,
-    //   });
 
+    const readFiles = async (files: Array<File | undefined>) => {
+      let promises = Array.from(files)
+        .map(file => {
+         if (file) {
+            let reader = new FileReader();
+            return new Promise<ArrayBuffer | string | null>(resolve => {
+              reader.onload = () => resolve(reader.result);
+              reader.readAsDataURL(file);
+            });
+         }
+      });
+  
+      // At this point you'll have an array of results
+      let res = await Promise.allSettled(promises);
+
+      return res;
+    }
+
+    const fileReaderResults = await readFiles([data.logoImageFile, data.featuredImageFile, data.bannerImageFile]);
+    const determineResult = (result: PromiseSettledResult<ArrayBuffer | string | null | undefined> | undefined) => {
+      if (result && result.status === 'fulfilled' && result.value) {
+        return result.value.toString();
+      } 
+
+      return '';
     };
-    
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
+
+
+    const collection = await createCollection.mutateAsync({
+      description: data.description || '',
+      logoImageUrl: determineResult(fileReaderResults[0]),
+      name: data.name,
+      userId: session.user?.id || ''
+    })
+  
+    console.log('New collection', collection);
   }
 
   return (
-    <div className="p-5 mb-10 flex items-center justify-center w-full h-full overflow-y-scroll">
+    <div className="p-5 mb-14 mt-14 flex items-center justify-center w-full h-full overflow-y-scroll">
     <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
-      <h1 className="text-4xl my-5">Create a Collection</h1>
+      <h1 className="text-5xl my-14">Create a Collection</h1>
       <CreateCollectionForm onSubmit={handleOnSumbit}/>
     </div>
   </div>
