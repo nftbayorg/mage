@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { getMageAuthSession } from "../server/common/get-server-session";
 import dynamic from "next/dynamic";
 
-const SetTheme = dynamic(() => import("../components/SetTheme"), { ssr: false });
+const SetTheme = dynamic(() => import("../components/layout/SetTheme"), { ssr: false });
 
 const Home: NextPage = () => {
 

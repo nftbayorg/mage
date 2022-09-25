@@ -14,6 +14,7 @@ const LotPage: NextPage = () => {
 
   useEffect(() => {
     mutation.mutate({ id });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (lotQuery.error) {

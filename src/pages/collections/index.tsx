@@ -28,7 +28,7 @@ const CollectionPanel = ({ collection }: CollectionProps) => {
   )
 }
 
-const Collections: NextPage<AuthenticatedPageProps> = ({ session }) => {
+const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
 
   const collections = trpc.useQuery(['collection.getByUser', { user: session.user.id }],{
     refetchOnWindowFocus: false
@@ -44,6 +44,11 @@ const Collections: NextPage<AuthenticatedPageProps> = ({ session }) => {
         <div className="flex flex-col md:flex-row gap-2">
           {collections.data?.map(collection => (<CollectionPanel key={collection.id} collection={collection}/>))}
         </div>
+        <Link href="/collections/create">
+          <a className="w-2/5 flex items-center justify-center dark:text-gray-300 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200 text-white">
+            Create a collection
+          </a>
+        </Link>
       </div>
     </div>
   )
@@ -69,5 +74,5 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 
-export default Collections;
+export default CollectionsPage;
 

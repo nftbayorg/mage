@@ -18,12 +18,16 @@ export const authOptions: NextAuthOptions = {
     },
     async signIn({ user }) {
 
+      console.log('user', user);
+
       let userWallet = await prisma.wallet.findFirst({
         where: {
           userId: user.id,
           virtual: true
         }
       })
+
+      console.log('User wallet', userWallet);
  
       if (!userWallet) {
         userWallet = await prisma.wallet.create({

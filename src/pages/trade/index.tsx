@@ -6,7 +6,7 @@ import LotSummary from "../../components/views/lots/LotSummary";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { useRestoreScroll } from "../../hooks/useRestoreScroll";
 
-const Trade: NextPage = () => {
+const TradePage: NextPage = () => {
 
   const [listRef] = useRestoreScroll<HTMLDivElement>();
  
@@ -60,4 +60,4 @@ const Trade: NextPage = () => {
   );
 };
 
-export default Trade;
+export default TradePage;

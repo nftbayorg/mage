@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
-import Input from "../../forms/controls/Input";
-import TextArea from "../../forms/controls/TextArea";
+import Input from "./controls/Input";
+import TextArea from "./controls/TextArea";
 import { FaAsterisk } from "react-icons/fa";
-import FileUpload from "../../forms/controls/FileUpload";
+import FileUpload from "./controls/FileUpload";
 import { useCallback, useState } from "react";
 
 type ComponentProps = {
   onSubmit: (data: CreateItemFormValues) => void;
 }
 
-const CreateItem = ({ onSubmit }: ComponentProps) => {
+const CreateNft = ({ onSubmit }: ComponentProps) => {
 
   const [file, setFile] = useState<File>();
   const {
@@ -84,4 +84,4 @@ const CreateItem = ({ onSubmit }: ComponentProps) => {
   );
 };
 
-export default CreateItem;
+export default CreateNft;

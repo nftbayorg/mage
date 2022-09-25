@@ -25,6 +25,7 @@ export const useRestoreScroll = <T extends HTMLElement>() => {
 
   useEffect(() => {
     ref.current?.addEventListener('scroll', handleScroll);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current]);
 
   useEffect(() => {
@@ -35,7 +36,9 @@ export const useRestoreScroll = <T extends HTMLElement>() => {
       });
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => ref.current?.removeEventListener('scroll', handleScroll);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, handleScroll]);
 
   return [ref] as const;
