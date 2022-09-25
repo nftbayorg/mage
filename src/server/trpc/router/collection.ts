@@ -1,5 +1,9 @@
 import { t } from "../utils";
 import { z } from "zod";
+import { convertBase64 } from "../../../utils/file";
+import { NFTStorage, File } from "nft.storage";
+
+const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
 export const collectionRouter = t.router({
   get: t.procedure
@@ -35,11 +39,26 @@ export const collectionRouter = t.router({
     })
   )
   .mutation(async ({ input, ctx }) => {
+
+    const fileData = convertBase64(input.logoImageUrl);
+
+    if (!fileData) return "No file present";
+
+    const metadata = await client.store({
+      name: input.name,
+      description: input.description || input.name,
+      image: new File(
+        [fileData.data],
+        input.name,
+        { type: fileData?.type }
+      ),
+    });
+
     const nftSet = await ctx.prisma.collection.create({
       data: {
         description: input.description,
         name: input.name,
-        logoImageUrl: input.logoImageUrl,
+        logoImageUrl: metadata.url,
         userId: input.userId
       }
     });
