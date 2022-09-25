@@ -9,7 +9,7 @@ type ComponentProps = {
   onSubmit: (data: CreateItemFormValues) => void;
 }
 
-const CreateNft = ({ onSubmit }: ComponentProps) => {
+const NftForm = ({ onSubmit }: ComponentProps) => {
 
   const [file, setFile] = useState<File>();
   const {
@@ -84,4 +84,4 @@ const CreateNft = ({ onSubmit }: ComponentProps) => {
   );
 };
 
-export default CreateNft;
+export default NftForm;

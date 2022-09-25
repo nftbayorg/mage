@@ -9,19 +9,56 @@ interface FilePreview {
   file: File;
 }
 
-interface FileUploadEvent {
-  onChange(file?: File): void
+type ComponentProps = {
+  label?: string;
+  caption?: string;
+  captionSize?: "sm" | "md" | "lg";
+  dropZoneSize?: "sm" | "md" | "lg";
+  onChange(file?: File): void;
 }
 
-const FileUpload = ({ onChange }: FileUploadEvent) => {
+
+const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: ComponentProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [dropzoneDimensions, setDropzoneDimensions] = useState<string>("w-full h-96 md:w-96");
+  const [roundedDimensions, setRoundedDimensions] = useState<string>("rounded-lg");
+  const [insetBgColor, setInsetBgColor] = useState<string>("bg-gray-300");
+  const [insetIconFillColor, setInsetIconFillColor] = useState<string>("fill-gray-700");
+  const [buttonBorderColor, setButtonBorderColor] = useState<string>("");
+  const [isMouseOver, setMouseOver] = useState<boolean>(false);
   const [isDropActive, setIsDropActive] = useState(false);
   const [filePreview, setFilePreview] = useState<FilePreview>();
 
   useEffect(() => {
     onChange(filePreview?.file);
   }, [filePreview, onChange]);
+
+  useEffect(() => {
+    switch (dropZoneSize) {
+      case "sm":
+        setDropzoneDimensions("h-64 w-64");
+        setRoundedDimensions("rounded-full");
+        break;
+      case "lg":
+        setDropzoneDimensions("w-full h-72");
+        break;
+      default:
+        break;
+    }
+  }, [dropZoneSize]);
+
+  useEffect(() => {
+    if (isMouseOver) {
+      setInsetBgColor("bg-gray-300");
+      setInsetIconFillColor("fill-gray-700");
+      setButtonBorderColor("border-gray-400");
+    } else {
+      setInsetBgColor("bg-white");
+      setInsetIconFillColor("fill-gray-300");
+      setButtonBorderColor("");
+    }
+  }, [isMouseOver])
 
   const onDragStateChange = useCallback((dragActive: boolean) => {
     setIsDropActive(dragActive);
@@ -64,18 +101,22 @@ const FileUpload = ({ onChange }: FileUploadEvent) => {
     }
   };
 
+
   return (
     <DropZone
       name="drop"
-      label="Image"
+      label={label || "Image"}
       required
-      caption="File types supported: JPG, PNG, GIF, SVG"
+      caption={caption || "File types supported: JPG, PNG, GIF, SVG"}
+      captionSize={captionSize || "sm"}
       onDragStateChange={onDragStateChange}
       onFilesDrop={onFilesDrop}
     >
       <button
         onClick={onOpenFileDialog}
-        className="flex items-center justify-center p-2 w-full h-96 md:w-96 border-4 border-dashed rounded-lg"
+        onMouseEnter={() => setMouseOver(true)}
+        onMouseLeave={() => setMouseOver(false)}
+        className={`flex items-center justify-center p-2 border-4 border-dashed ${buttonBorderColor} ${dropzoneDimensions} ${roundedDimensions}`}
       >
         <input
           type="file"
@@ -86,24 +127,26 @@ const FileUpload = ({ onChange }: FileUploadEvent) => {
         />
         {filePreview ? (
           <div className="w-full h-full relative">
-            <div
-              role="button"
-              className="absolute top-3 right-3 z-10"
-              onClick={removeFile}
-            >
-              <FaTimes className="fill-slate-400" />
-            </div>
+            {dropZoneSize !== "sm" && 
+              <div
+                role="button"
+                className="absolute z-10 top-3 right-3"
+                onClick={removeFile}
+              >
+                <FaTimes className="fill-slate-400" />
+              </div>
+            } 
             <Image
               alt="image"
               objectFit="cover"
               layout="fill"
-              className="rounded-lg block max-w-sm max-h-sm md:max-w-lg md:max-h-lg w-auto h-auto p-[inherit]"
+              className={`block max-w-sm max-h-sm md:max-w-lg md:max-h-lg w-auto h-auto p-[inherit] ${roundedDimensions}`}
               src={filePreview.url}
             />
           </div>
         ) : (
-          <div className="flex items-center justify-center p-2 bg-gray-300 w-full h-full rounded-lg">
-            <FaImage className="fill-gray-700" size={80} />
+          <div className={`flex items-center justify-center p-2 w-full h-full ${roundedDimensions} ${insetBgColor}`}>
+            <FaImage className={insetIconFillColor} size={80} />
           </div>
         )}
       </button>

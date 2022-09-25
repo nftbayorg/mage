@@ -5,6 +5,7 @@ import { FaAsterisk } from "react-icons/fa";
 export interface DropZoneProps {
   required: boolean;
   caption?: string;
+  captionSize: "sm" | "md" | "lg";
   name: string;
   label: string;
   onDragStateChange?: (isDragActive: boolean) => void;
@@ -19,6 +20,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
   const {
     required,
     caption,
+    captionSize,
     name,
     label,
     onDragStateChange,
@@ -133,7 +135,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
       <label className="text-xl" htmlFor={name}>{label}</label>
       {required ? <FaAsterisk className="fill-red-500 ml-2" size={10}/> : null}
     </div>
-    {caption && <label className="mb-3 text-gray-400 text-sm">{caption}</label>}
+    {caption && <label className={`mb-3 text-gray-400 text-${captionSize} font-light`}>{caption}</label>}
     <div ref={dropZoneRef} className="w-auto flex">
       {props.children}
     </div>

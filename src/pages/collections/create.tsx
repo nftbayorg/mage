@@ -4,10 +4,10 @@ import type {
   NextPage,
 } from "next";
 import { Session } from "next-auth";
-import CreateCollectionForm from "../components/forms/Collection";
+import CreateCollectionForm from "../../components/forms/Collection";
 
-import { getMageAuthSession } from "../server/common/get-server-session";
-import { trpc } from "../utils/trpc";
+import { getMageAuthSession } from "../../server/common/get-server-session";
+import { trpc } from "../../utils/trpc";
 
 type PageProps = {
   session: Session
@@ -20,9 +20,9 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
 
   // if (!collections.data?.length) return <div>Loading...</div>
 
-  const handleOnSumbit = async (data: CreateItemFormValues) => {
+  const handleOnSumbit = async (data: CreateCollectionFormValues) => {
     let reader = new FileReader();
-    reader.readAsDataURL(data.file);
+    reader.readAsDataURL(data.logoImageFile);
     reader.onload = async function () {
     //   const nftSet = await createNftSet.mutateAsync({
     //     creator: session.user?.id || '',
@@ -43,8 +43,8 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
 
   return (
     <div className="p-5 mb-10 flex items-center justify-center w-full h-full overflow-y-scroll">
-    <div className="w-full md:w-4/5 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-center justify-center">
-      <h1 className="text-4xl my-5">Create New Item</h1>
+    <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
+      <h1 className="text-4xl my-5">Create a Collection</h1>
       <CreateCollectionForm onSubmit={handleOnSumbit}/>
     </div>
   </div>
