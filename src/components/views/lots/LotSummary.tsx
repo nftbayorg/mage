@@ -11,7 +11,7 @@ const LotSummary = React.forwardRef<HTMLDivElement, { lot: Lot}>(( props: { lot:
   if (!lot) return <div>Loading...</div>;
 
   return (
-    <Link href={`/lot/${lot.id}`}>
+    <Link href={`/lots/${lot.id}`}>
       <div ref={ref} className="flex-col hover:shadow-lg hover:shadow-gray-500/50 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
         <div className="relative flex items-center justify-center">
           <Image src={lot.nftEdition.nftSet.imageUrl} alt={lot.nftEdition.nftSet.name} height={500} width={500} objectFit="contain"/>

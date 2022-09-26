@@ -1,7 +1,7 @@
 import { t } from "../utils";
 import { z } from "zod";
 import { NFTStorage, File } from 'nft.storage';
-import { convertBase64 } from "../../../utils/file";
+import { convertBase64 } from "../../../utils/image";
 
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 

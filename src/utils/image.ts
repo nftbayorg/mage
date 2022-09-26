@@ -10,3 +10,4 @@ export const convertBase64 = (base64Image: string) => {
 
   return { data: uInt8Array.buffer, type: imageType };
 };
+
