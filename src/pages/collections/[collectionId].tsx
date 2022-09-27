@@ -28,7 +28,7 @@ const CollectionDetailPage: NextPage = () => {
   const collection = collectionQuery.data;
 
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full">
       <CollectionDetail collection={collection} />
     </div>
   );

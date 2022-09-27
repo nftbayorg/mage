@@ -12,6 +12,9 @@ export const collectionRouter = t.router({
       return prisma?.collection.findFirst({
           where: {
             id: input.input?.id || ''
+          },
+          include: {
+            nftSets: true
           }
       });
     }),
@@ -23,6 +26,9 @@ export const collectionRouter = t.router({
       return prisma?.collection.findMany({
         where: {
           userId: input.user
+        },
+        include: {
+          nftSets: true
         }
       });
     }),

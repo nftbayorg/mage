@@ -1,3 +1,14 @@
+export const DateAsMonthYearAsWords = (date: Date) => {
+  const longEnUSFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    
+  });
+
+  return `${longEnUSFormatter.format(date)
+  }`
+}
+
 export const DateAsWord = (date: Date): string => {
   const longEnUSFormatter = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
