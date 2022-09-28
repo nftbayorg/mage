@@ -53,19 +53,8 @@ export const collectionRouter = t.router({
           input.logoImageUrl.replace(/^data:image\/\w+;base64,/, ""),
           "base64"
         );
-        // const type = input.logoImageUrl.split(";")[0]?.split("/")[1];
 
         if (!base64) return "No file present";
-
-        // const metadata = await client.store({
-        //   name: input.name,
-        //   description: input.description || input.name,
-        //   image: new File(
-        //     [base64],
-        //     `input.name.${type}`,
-        //     { type }
-        //   ),
-        // });
 
         const blob = new Blob([base64]);
         const imageCid = await client.storeBlob(blob);
