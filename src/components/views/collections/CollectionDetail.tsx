@@ -1,5 +1,6 @@
 import { DateAsMonthYearAsWords } from "../../../utils/date";
 import { inferQueryOutput } from "../../../utils/trpc";
+import Image from 'next/image';
 
 type Collection = inferQueryOutput<"collection.get">;
 
@@ -11,13 +12,37 @@ type CollectionHeaderProps = {
 const CollectionHeader = ({ bannerImageUrl, logoImageUrl }: CollectionHeaderProps) => {
   return (    
     <div className="flex-col w-full h-full mb-14 md:mb-24">
-      <div className="h-48 md:h-96 w-full relative">
-        <div className="flex w-full h-full empty:bg-gray-100"/>
-        <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg p-1 md:p-2 shadow-md">
-          <div className="w-full h-full bg-gray-100 rounded-lg"/>
+      {logoImageUrl ? 
+        <div className="h-48 md:h-96 w-full relative">
+
+        <Image
+          src={logoImageUrl} 
+          alt="image"
+          objectFit="cover"
+          layout="fill"
+        />
+          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg shadow-md p-1">
+            <div className="w-full h-full p-1 relative">
+                <Image className="rounded-lg"
+              src={logoImageUrl} 
+              alt="image"
+              objectFit="cover"
+              layout="fill"
+            />
+
+            </div>
+          </div>
+
         </div>
-      </div>
-    </div>
+        :
+        <div className="h-48 md:h-96 w-full relative">
+          <div className="flex w-full h-full empty:bg-gray-100"/>
+          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg p-1 md:p-2 shadow-md">
+            <div className="w-full h-full bg-gray-100 rounded-lg"/>
+          </div>
+        </div>
+      }
+   </div>
   );
 };
 
@@ -35,7 +60,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
 
   return (
     <section className="flex flex-col w-full text-lg font-normal dark:text-gray-300 text-gray-700">
-      <CollectionHeader />
+      <CollectionHeader logoImageUrl={collection.logoImageUrl} />
       <section className="p-10">
         <section className="flex flex-col mb-10">
           <div className="text-2xl md:text-3xl font-semibold">{collection.name}</div>
