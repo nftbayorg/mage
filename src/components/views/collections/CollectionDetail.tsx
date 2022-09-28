@@ -76,7 +76,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
             </div>
           </div>
           <div>
-            {`Welcome to the home of ${collection.name} on Mage. Discover the best items in this collection.`}
+            {collection.description || `Welcome to the home of ${collection.name} on Mage. Discover the best items in this collection.`}
           </div>
         </section>
         <section className="flex flex-col w-full">
