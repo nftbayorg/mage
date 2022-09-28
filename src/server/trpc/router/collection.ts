@@ -1,7 +1,6 @@
 import { t } from "../utils";
 import { z } from "zod";
-import { convertBase64 } from "../../../utils/image";
-import { NFTStorage, File, Blob } from "nft.storage";
+import { NFTStorage, Blob } from "nft.storage";
 
 const client = new NFTStorage({
   token: process.env.NFTSTORAGE_API_TOKEN || "",
@@ -10,10 +9,10 @@ const client = new NFTStorage({
 export const collectionRouter = t.router({
   get: t.procedure
     .input(z.object({ id: z.string().nullish() }).nullish())
-    .query((input) => {
-      return prisma?.collection.findFirst({
+    .query(({ input, ctx }) => {
+      return ctx.prisma.collection.findFirst({
         where: {
-          id: input.input?.id || "",
+          id: input?.id || "",
         },
         include: {
           nftSets: true,
@@ -26,8 +25,8 @@ export const collectionRouter = t.router({
         user: z.string(),
       })
     )
-    .query(({ input }) => {
-      return prisma?.collection.findMany({
+    .query(({ input, ctx }) => {
+      return ctx.prisma.collection.findMany({
         where: {
           userId: input.user,
         },
