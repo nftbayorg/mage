@@ -1,13 +1,18 @@
+import { router } from "@trpc/server";
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
   NextPage,
 } from "next";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { FaCheck, FaRedo } from "react-icons/fa";
 import CreateCollectionForm from "../../components/forms/Collection";
 
 import { getMageAuthSession } from "../../server/common/get-server-session";
 import { trpc } from "../../utils/trpc";
+
 
 type PageProps = {
   session: Session
@@ -15,12 +20,23 @@ type PageProps = {
 
 const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
 
-  // const collections = trpc.useQuery(['collection.getAll']);
-  const createCollection = trpc.useMutation('collection.create');
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [collectionCreated, setCollectionCreated] = useState(false);
+  const [logoImageUploaded, setLogoImageUploaded] = useState(false);
+  const [bannerImageUploaded, setBannerImageUploaded] = useState(false);
+  const [featuredImageUploaded, setFeaturedImageUploaded] = useState(false);
+  const [hasBannerImage, setHasBannerImage] = useState(false);
+  const [hasFeaturedImage, setHasFearturedImage] = useState(false);
 
-  // if (!collections.data?.length) return <div>Loading...</div>
+  const createCollection = trpc.useMutation('collection.create');
+  const updateImages = trpc.useMutation('collection.updateImages');
 
   const handleOnSumbit = async (data: CreateCollectionFormValues) => {
+
+    setIsSubmitting(true);
+    setHasBannerImage(data.bannerImageFile ? true : false);
+    setHasFearturedImage(data.featuredImageFile ? true : false);
 
     const readFiles = async (files: Array<File | undefined>) => {
       let promises = Array.from(files)
@@ -34,7 +50,6 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
          }
       });
   
-      // At this point you'll have an array of results
       let res = await Promise.allSettled(promises);
 
       return res;
@@ -49,22 +64,78 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
       return '';
     };
 
-
-    const collection = await createCollection.mutateAsync({
+    let collection = await createCollection.mutateAsync({
       description: data.description || '',
-      logoImageUrl: determineResult(fileReaderResults[0]),
+      logoImageFile: determineResult(fileReaderResults[0]),
       name: data.name,
       userId: session.user?.id || ''
-    })
+    });
+
+    setLogoImageUploaded(true);
   
+    if (data.bannerImageFile) {
+      collection = await updateImages.mutateAsync({
+        id: collection.id,
+        bannerImageFile: determineResult(fileReaderResults[2])
+      });
+
+      setBannerImageUploaded(true);
+    }
+
+    if (data.featuredImageFile) {
+      collection = await updateImages.mutateAsync({
+        id: collection.id,
+        featuredImageFile: determineResult(fileReaderResults[1])
+      });
+
+      setFeaturedImageUploaded(true);
+    }
+
+    setCollectionCreated(true);
+
+    router.push("/collections");    
     console.log('New collection', collection);
   }
 
   return (
     <div className="p-5 mb-14 mt-14 flex items-center justify-center w-full h-full overflow-y-scroll">
     <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
-      <h1 className="text-5xl my-14">Create a Collection</h1>
-      <CreateCollectionForm onSubmit={handleOnSumbit}/>
+      {isSubmitting ?
+        <>
+          <div className="flex flex-col text-xl md:text-2xl gap-5 h-full w-full justify-start">
+            <div className="text-2xl md:text-4xl">Creating your collection</div>
+            <div className="flex items-center gap-5 w-full h-16 border-2 rounded-lg p-5 md:p-10">
+              {!logoImageUploaded && <FaRedo className="animate-spin fill-red-500"/>}
+              {logoImageUploaded && <FaCheck className="fill-green-500"/>}
+              <div>Uploading logo image</div>
+            </div>
+            {hasBannerImage &&
+              <div className="flex items-center gap-5 w-full h-16 border-2 rounded-lg p-5 md:p-10">
+                {!bannerImageUploaded && <FaRedo className="animate-spin fill-red-500"/>}
+                {bannerImageUploaded && <FaCheck className="fill-green-500"/>}
+                <div>Uploading banner image</div>
+              </div>
+            }
+            {hasFeaturedImage && 
+              <div className="flex items-center gap-5 w-full h-16 border-2 rounded-lg p-5 md:p-10">
+                {!featuredImageUploaded && <FaRedo className="animate-spin fill-red-500"/>}
+                {featuredImageUploaded && <FaCheck className="fill-green-500"/>}
+                <div>Uploading featured image</div>
+              </div>
+            }
+            <div className="flex items-center gap-5 w-full h-16 border-2 rounded-lg p-5 md:p-10">
+              {!collectionCreated && <FaRedo className="animate-spin fill-red-500"/>}
+              {collectionCreated && <FaCheck className="fill-green-500"/>}
+              <div>Collection created</div>
+            </div>
+          </div>
+        </>
+      :
+        <>
+          <h1 className="text-5xl my-14">Create a Collection</h1>
+          <CreateCollectionForm onSubmit={handleOnSumbit}/>
+        </>
+      }
     </div>
   </div>
 

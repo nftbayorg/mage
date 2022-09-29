@@ -5,7 +5,7 @@ import Image from 'next/image';
 type Collection = inferQueryOutput<"collection.get">;
 
 type CollectionHeaderProps = {
-  bannerImageUrl?: string;
+  bannerImageUrl?: string | undefined | null;
   logoImageUrl?: string;
 }
 
@@ -16,23 +16,23 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl }: CollectionHeaderProp
         <div className="h-48 md:h-96 w-full relative">
 
         <Image
-          src={logoImageUrl} 
+          src={bannerImageUrl || logoImageUrl} 
           alt="image"
           objectFit="cover"
           layout="fill"
+          placeholder="blur"
+          blurDataURL="https://nftstorage.link/ipfs/bafkreicbskrm57qslrodktuajali26hxjgdexg2batzhjbnktu63zbbncu"
         />
           <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg shadow-md p-1">
             <div className="w-full h-full p-1 relative">
-                <Image className="rounded-lg"
-              src={logoImageUrl} 
-              alt="image"
-              objectFit="cover"
-              layout="fill"
-            />
-
+              <Image className="rounded-lg"
+                src={logoImageUrl} 
+                alt="image"
+                objectFit="cover"
+                layout="fill"                
+              />
             </div>
           </div>
-
         </div>
         :
         <div className="h-48 md:h-96 w-full relative">
@@ -53,6 +53,8 @@ type ComponentProps = {
 const CollectionDetail = ({ collection }: ComponentProps) => {
   if (!collection) return <div>Loading...</div>
 
+  const { bannerImageUrl, logoImageUrl, name, nftSets, createdAt, description  } = collection;
+ 
   function pluralize(word: string, value: number): string {
     const plural = value && (value > 0 || value === 0) ? '' : 's';
     return `${word}${plural}`;
@@ -60,23 +62,23 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
 
   return (
     <section className="flex flex-col w-full text-lg font-normal dark:text-gray-300 text-gray-700">
-      <CollectionHeader logoImageUrl={collection.logoImageUrl} />
+      <CollectionHeader logoImageUrl={logoImageUrl} bannerImageUrl={bannerImageUrl} />
       <section className="p-10">
         <section className="flex flex-col mb-10">
-          <div className="text-2xl md:text-3xl font-semibold">{collection.name}</div>
+          <div className="text-2xl md:text-3xl font-semibold">{name}</div>
           <div className="flex gap-3 font-gray-500 my-5">
             <div className="flex gap-2">
-              <div className="">{`${pluralize('Item', collection.nftSets.length)}`}</div>
-              <div className="font-bold">{`${collection.nftSets.length}`}</div>
+              <div className="">{`${pluralize('Item', nftSets.length)}`}</div>
+              <div className="font-bold">{`${nftSets.length}`}</div>
             </div>
             <div className="">-</div>
             <div className="flex gap-2">
               <div className="">Created</div>
-              <div className="font-bold">{`${DateAsMonthYearAsWords(collection.createdAt)}`}</div>
+              <div className="font-bold">{`${DateAsMonthYearAsWords(createdAt)}`}</div>
             </div>
           </div>
           <div>
-            {collection.description || `Welcome to the home of ${collection.name} on Mage. Discover the best items in this collection.`}
+            {description || `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
           </div>
         </section>
         <section className="flex flex-col w-full">

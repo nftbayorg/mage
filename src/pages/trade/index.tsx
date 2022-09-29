@@ -21,9 +21,8 @@ const TradePage: NextPage = () => {
 
   const { lastItemRef } = useInfiniteScroll(results.isLoading, results.hasNextPage, results.fetchNextPage);
 
-  if (!results.data) return <div>Loading...</div>
 
-  const pages = results.data.pages; 
+  const pages = results.data?.pages; 
 
   return (
     <div className="flex">
@@ -34,7 +33,8 @@ const TradePage: NextPage = () => {
       >
         Trade
         <div className="p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
-          {pages.map(page => {
+
+          {pages && pages[0]?.items?.length ? pages.map(page => {
             if (page.items) {
               const auctions = page.items;
               let lastAuction = false;
@@ -53,7 +53,10 @@ const TradePage: NextPage = () => {
                 })
               }))            
             }
-          })}
+           })
+           :
+           <div>No items for sale</div>
+          }
         </div>
       </div>
     </div>

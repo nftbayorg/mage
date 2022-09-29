@@ -3,6 +3,7 @@ import NextError from "next/error";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
+import Loading from "../../components/layout/Loading";
 
 const CollectionDetailPage: NextPage = () => {
   const id = useRouter().query.collectionId as string;
@@ -18,7 +19,11 @@ const CollectionDetailPage: NextPage = () => {
   }
 
   if (collectionQuery.isLoading) {
-    return <>Loading...</>;
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <Loading/>
+      </div>
+    )
   }
 
   if (!collectionQuery.data) {

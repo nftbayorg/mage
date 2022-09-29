@@ -34,7 +34,7 @@ const NavBar = () => {
           </Link>}
           {data && <Link href="/collections">
             <a className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
-              Collections
+              My Collections
             </a>
           </Link>}
         </div>

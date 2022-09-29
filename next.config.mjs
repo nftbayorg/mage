@@ -18,5 +18,10 @@ export default defineNextConfig({
   swcMinify: true,
   images: {
     domains: ['nftstorage.link']
+  },
+  api: {
+    bodyParser: {
+      sizeLimit: '4mb' // Set desired value here
+    }
   }
 });

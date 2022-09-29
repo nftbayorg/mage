@@ -1,13 +1,20 @@
-export const convertBase64 = (base64Image: string) => {
-  const atob = (data: string) => Buffer.from(data, "base64").toString("ascii");
-  const parts = base64Image.split(";base64,");
+import { NFTStorage, Blob } from "nft.storage";
 
-  if (!parts || !parts[0] || !parts[1]) return undefined;
+const client = new NFTStorage({
+  token: process.env.NFTSTORAGE_API_TOKEN || "",
+});
 
-  const imageType = parts[0]?.split(":")[1];
-  const decodedData = atob(parts[1]);
-  const uInt8Array = new Uint8Array(decodedData.length);
+export const uploadBase64ToIpfs = async (base64Data: string | undefined) => {
+  if (!base64Data) return undefined;
+  
+  const base64 = Buffer.from(
+    base64Data.replace(/^data:image\/\w+;base64,/, ""),
+    "base64"
+  );
 
-  return { data: uInt8Array.buffer, type: imageType };
-};
+  const blob = new Blob([base64]);
+  const imageCid = await client.storeBlob(blob);
+
+  return `https://nftstorage.link/ipfs/${imageCid}`;
+}
 
