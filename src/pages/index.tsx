@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         <meta name="description" content="NFT DeFi Platform" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container flex flex-col items-center justify-center min-h-screen p-4 mx-auto">
+      <main className="container flex flex-col items-center justify-center min-h-[calc(100vh-350px)] p-4 mx-auto">
         <h1 className="dark:text-gray-300 text-3xl md:text-6xl lg:text-[5rem] leading-normal font-extrabold text-gray-700">
           Trade and stake NFTs
         </h1>
