@@ -7,12 +7,13 @@ type Collection = inferQueryOutput<"collection.get">;
 type CollectionHeaderProps = {
   bannerImageUrl?: string | undefined | null;
   logoImageUrl?: string;
+  isLoading: boolean;
 }
 
-const CollectionHeader = ({ bannerImageUrl, logoImageUrl }: CollectionHeaderProps) => {
+const CollectionHeader = ({ bannerImageUrl, logoImageUrl, isLoading }: CollectionHeaderProps) => {
   return (    
     <div className="flex-col w-full h-full mb-14 md:mb-24">
-      {logoImageUrl ? 
+      {logoImageUrl && !isLoading ? 
         <div className="h-48 md:h-96 w-full relative">
 
         <Image
@@ -47,13 +48,19 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl }: CollectionHeaderProp
 };
 
 type ComponentProps = {
-  collection: Collection
+  collection: Collection | undefined;
 }
 
 const CollectionDetail = ({ collection }: ComponentProps) => {
-  if (!collection) return <div>Loading...</div>
 
-  const { bannerImageUrl, logoImageUrl, name, nftSets, createdAt, description  } = collection;
+  const { bannerImageUrl, logoImageUrl, name, nftSets, createdAt, description  } = collection ? collection : {
+    name: '',
+    bannerImageUrl: '',
+    logoImageUrl: '',
+    nftSets: [],
+    createdAt: undefined,
+    description: ''
+  };
  
   function pluralize(word: string, value: number): string {
     const plural = value && (value > 0 || value === 0) ? '' : 's';
@@ -62,7 +69,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
 
   return (
     <section className="flex flex-col w-full text-lg font-normal dark:text-gray-300 text-gray-700">
-      <CollectionHeader logoImageUrl={logoImageUrl} bannerImageUrl={bannerImageUrl} />
+      <CollectionHeader logoImageUrl={logoImageUrl} bannerImageUrl={bannerImageUrl} isLoading={collection ? false : true} />
       <section className="p-10">
         <section className="flex flex-col mb-10">
           <div className="text-2xl md:text-3xl font-semibold">{name}</div>
@@ -72,10 +79,12 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
               <div className="font-bold">{`${nftSets.length}`}</div>
             </div>
             <div className="">-</div>
-            <div className="flex gap-2">
-              <div className="">Created</div>
-              <div className="font-bold">{`${DateAsMonthYearAsWords(createdAt)}`}</div>
-            </div>
+            {createdAt && 
+              <div className="flex gap-2">
+                <div className="">Created</div>
+                <div className="font-bold">{`${DateAsMonthYearAsWords(createdAt)}`}</div>
+              </div>
+            }
           </div>
           <div>
             {description || `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}

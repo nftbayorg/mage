@@ -18,18 +18,6 @@ const CollectionDetailPage: NextPage = () => {
     );
   }
 
-  if (collectionQuery.isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        <Loading/>
-      </div>
-    )
-  }
-
-  if (!collectionQuery.data) {
-    return <>Unknown collection...</>;
-  }
-
   const collection = collectionQuery.data;
 
   return (
