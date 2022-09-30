@@ -5,6 +5,7 @@ import type {
   NextPage,
 } from "next";
 import { Session } from "next-auth";
+import { useS3Upload } from "next-s3-upload";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FaCheck, FaRedo } from "react-icons/fa";
@@ -29,6 +30,8 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
   const [hasBannerImage, setHasBannerImage] = useState(false);
   const [hasFeaturedImage, setHasFearturedImage] = useState(false);
 
+  let { FileInput, openFileDialog, uploadToS3 } = useS3Upload();
+
   const createCollection = trpc.useMutation('collection.create');
   const updateImages = trpc.useMutation('collection.updateImages');
 
@@ -38,59 +41,30 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
     setHasBannerImage(data.bannerImageFile ? true : false);
     setHasFearturedImage(data.featuredImageFile ? true : false);
 
-    const readFiles = async (files: Array<File | undefined>) => {
-      let promises = Array.from(files)
-        .map(file => {
-         if (file) {
-            let reader = new FileReader();
-            return new Promise<ArrayBuffer | string | null>(resolve => {
-              reader.onload = () => resolve(reader.result);
-              reader.readAsDataURL(file);
-            });
-         }
-      });
-  
-      let res = await Promise.allSettled(promises);
+    let { url: logoImageUrl } = await uploadToS3(data.logoImageFile);
+    let images = {};
 
-      return res;
-    }
-
-    const fileReaderResults = await readFiles([data.logoImageFile, data.featuredImageFile, data.bannerImageFile]);
-    const determineResult = (result: PromiseSettledResult<ArrayBuffer | string | null | undefined> | undefined) => {
-      if (result && result.status === 'fulfilled' && result.value) {
-        return result.value.toString();
-      } 
-
-      return '';
-    };
-
-    let collection = await createCollection.mutateAsync({
-      description: data.description || '',
-      logoImageFile: determineResult(fileReaderResults[0]),
-      name: data.name,
-      userId: session.user?.id || ''
-    });
-
-    setLogoImageUploaded(true);
-  
     if (data.bannerImageFile) {
-      collection = await updateImages.mutateAsync({
-        id: collection.id,
-        bannerImageFile: determineResult(fileReaderResults[2])
-      });
-
+      let { url: bannerImageUrl } = await uploadToS3(data.bannerImageFile);
+      images = {...images, bannerImageUrl }
       setBannerImageUploaded(true);
     }
 
     if (data.featuredImageFile) {
-      collection = await updateImages.mutateAsync({
-        id: collection.id,
-        featuredImageFile: determineResult(fileReaderResults[1])
-      });
-
+      let { url: featuredImageUrl } = await uploadToS3(data.featuredImageFile);
+      images = {...images, featuredImageUrl }
       setFeaturedImageUploaded(true);
     }
 
+    let collection = await createCollection.mutateAsync({
+      description: data.description || '',
+      logoImageUrl,
+      ...images,
+      name: data.name,
+      userId: session.user?.id || ''
+    });
+
+    setLogoImageUploaded(true);  
     setCollectionCreated(true);
 
     router.push("/collections");    

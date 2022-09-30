@@ -17,11 +17,15 @@ export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['nftstorage.link']
+    domains: [
+      'nftstorage.link', 
+      `${env.S3_UPLOAD_BUCKET}.s3.amazonaws.com`,
+      `${env.S3_UPLOAD_BUCKET}.s3.${process.env.S3_UPLOAD_REGION}.amazonaws.com`,
+    ],
   },
   api: {
     bodyParser: {
-      sizeLimit: '4mb' // Set desired value here
+      sizeLimit: '4mb'
     }
   }
 });

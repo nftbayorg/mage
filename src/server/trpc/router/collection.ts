@@ -40,27 +40,23 @@ export const collectionRouter = t.router({
       z.object({
         name: z.string(),
         description: z.string(),
-        logoImageFile: z.string(),
+        logoImageUrl: z.string(),
+        bannerImageUrl: z.string().optional(),
+        featuredImageUrl: z.string().optional(),
         userId: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
 
-      if (input.logoImageFile) {
-        const logoImageCid = await uploadBase64ToIpfs(input.logoImageFile);
-
-        if (!logoImageCid) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: 'Logo image could not be uploaded.',
-          });
-        }
+      if (input.logoImageUrl) {
 
         const nftSet = await ctx.prisma.collection.create({
           data: {
             description: input.description,
             name: input.name,
-            logoImageUrl: logoImageCid,
+            logoImageUrl: input.logoImageUrl,
+            bannerImageUrl: input.bannerImageUrl,
+            featureImageUrl: input.featuredImageUrl,
             userId: input.userId,
           }
         });
