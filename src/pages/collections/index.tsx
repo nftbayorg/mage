@@ -1,9 +1,9 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import Loading from "../../components/layout/Loading";
 import { getMageAuthSession } from "../../server/common/get-server-session";
 import { trpc, inferQueryOutput } from "../../utils/trpc";
+import Image from "../../components/forms/controls/Image";
 
 type Collection = inferQueryOutput<"collection.get">;
 type CollectionProps = {

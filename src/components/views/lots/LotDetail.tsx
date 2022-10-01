@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { DateAsWord } from "../../../utils/date";
 import {
   FaEye,
@@ -10,6 +9,7 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import Link from "next/link";
+import Image from '../../forms/controls/Image';
 import { inferQueryOutput } from "../../../utils/trpc";
 
 type Lot = inferQueryOutput<"lot.get">;
@@ -88,6 +88,8 @@ const LotDetail = ({ lot }: ComponentProps) => {
               height="800"
               objectFit="contain"
               className="rounded-b-xl"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
             />
           </div>
         </section>

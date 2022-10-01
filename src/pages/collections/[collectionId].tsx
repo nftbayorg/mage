@@ -3,7 +3,6 @@ import NextError from "next/error";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
-import Loading from "../../components/layout/Loading";
 
 const CollectionDetailPage: NextPage = () => {
   const id = useRouter().query.collectionId as string;

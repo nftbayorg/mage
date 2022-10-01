@@ -1,6 +1,6 @@
 import { DateAsMonthYearAsWords } from "../../../utils/date";
 import { inferQueryOutput } from "../../../utils/trpc";
-import Image from 'next/image';
+import Image from '../../forms/controls/Image';
 
 type Collection = inferQueryOutput<"collection.get">;
 
@@ -22,7 +22,7 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl, isLoading }: Collectio
           objectFit="cover"
           layout="fill"
           placeholder="blur"
-          blurDataURL="https://nftstorage.link/ipfs/bafkreicbskrm57qslrodktuajali26hxjgdexg2batzhjbnktu63zbbncu"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
         />
           <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg shadow-md p-1">
             <div className="w-full h-full p-1 relative">
@@ -30,7 +30,9 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl, isLoading }: Collectio
                 src={logoImageUrl} 
                 alt="image"
                 objectFit="cover"
-                layout="fill"                
+                layout="fill"   
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
               />
             </div>
           </div>
