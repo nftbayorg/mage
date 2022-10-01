@@ -27,6 +27,8 @@ const CollectionPanel = ({ collection }: CollectionProps) => {
               layout="fill"
               className="rounded-t-lg"
               src={logoImageUrl}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
             />
             </div>
           }
