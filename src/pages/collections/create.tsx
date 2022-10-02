@@ -1,4 +1,3 @@
-import { router } from "@trpc/server";
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -13,7 +12,6 @@ import CreateCollectionForm from "../../components/forms/Collection";
 
 import { getMageAuthSession } from "../../server/common/get-server-session";
 import { trpc } from "../../utils/trpc";
-
 
 type PageProps = {
   session: Session
@@ -30,7 +28,7 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
   const [hasBannerImage, setHasBannerImage] = useState(false);
   const [hasFeaturedImage, setHasFearturedImage] = useState(false);
 
-  let { FileInput, openFileDialog, uploadToS3 } = useS3Upload();
+  let { uploadToS3 } = useS3Upload();
 
   const createCollection = trpc.useMutation('collection.create');
   const updateImages = trpc.useMutation('collection.updateImages');
@@ -41,36 +39,65 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
     setHasBannerImage(data.bannerImageFile ? true : false);
     setHasFearturedImage(data.featuredImageFile ? true : false);
 
-    let { url: logoImageUrl } = await uploadToS3(data.logoImageFile);
-    let images = {};
+    const readFiles = async (files: Array<File | undefined>) => {
+      let promises = Array.from(files)
+        .map(file => {
+         if (file) {
+            let reader = new FileReader();
+            return new Promise<ArrayBuffer | string | null>(resolve => {
+              reader.onload = () => resolve(reader.result);
+              reader.readAsDataURL(file);
+            });
+         }
+      });
+  
+      let res = await Promise.allSettled(promises);
 
-    if (data.bannerImageFile) {
-      let { url: bannerImageUrl } = await uploadToS3(data.bannerImageFile);
-      images = {...images, bannerImageUrl }
-      setBannerImageUploaded(true);
+      return res;
     }
 
-    if (data.featuredImageFile) {
-      let { url: featuredImageUrl } = await uploadToS3(data.featuredImageFile);
-      images = {...images, featuredImageUrl }
-      setFeaturedImageUploaded(true);
-    }
+    const fileReaderResults = await readFiles([data.logoImageFile, data.featuredImageFile, data.bannerImageFile]);
+    const determineResult = (result: PromiseSettledResult<ArrayBuffer | string | null | undefined> | undefined) => {
+      if (result && result.status === 'fulfilled' && result.value) {
+        return result.value.toString();
+      } 
+
+      return '';
+    };
 
     let collection = await createCollection.mutateAsync({
       description: data.description || '',
-      logoImageUrl,
-      ...images,
+      logoImageFile: determineResult(fileReaderResults[0]),
       name: data.name,
       userId: session.user?.id || ''
     });
 
-    setLogoImageUploaded(true);  
+    setLogoImageUploaded(true);
+  
+    if (data.bannerImageFile) {
+      collection = await updateImages.mutateAsync({
+        id: collection.id,
+        bannerImageFile: determineResult(fileReaderResults[2])
+      });
+
+      setBannerImageUploaded(true);
+    }
+
+    if (data.featuredImageFile) {
+      collection = await updateImages.mutateAsync({
+        id: collection.id,
+        featuredImageFile: determineResult(fileReaderResults[1])
+      });
+
+      setFeaturedImageUploaded(true);
+    }
+
     setCollectionCreated(true);
 
     router.push("/collections");    
     console.log('New collection', collection);
   }
-
+  
   return (
     <div className="p-5 mb-14 mt-14 flex items-center justify-center w-full h-full overflow-y-scroll">
     <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">

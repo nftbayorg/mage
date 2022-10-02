@@ -36,81 +36,85 @@ export const collectionRouter = t.router({
     return ctx.prisma.collection.findMany();
   }),
   create: t.procedure
-    .input(
-      z.object({
-        name: z.string(),
-        description: z.string(),
-        logoImageUrl: z.string(),
-        bannerImageUrl: z.string().optional(),
-        featuredImageUrl: z.string().optional(),
-        userId: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
+  .input(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      logoImageFile: z.string(),
+      userId: z.string(),
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
 
-      if (input.logoImageUrl) {
-
-        const nftSet = await ctx.prisma.collection.create({
-          data: {
-            description: input.description,
-            name: input.name,
-            logoImageUrl: input.logoImageUrl,
-            bannerImageUrl: input.bannerImageUrl,
-            featureImageUrl: input.featuredImageUrl,
-            userId: input.userId,
-          }
-        });
-
-        return nftSet;
-      } else {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: 'No logo image supplied.',
-        });
-      }
-    }),
-    updateImages: t.procedure
-    .input(
-      z.object({
-        id: z.string(),
-        logoImageFile: z.string().optional(),
-        bannerImageFile: z.string().optional(),
-        featuredImageFile: z.string().optional(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-
+    if (input.logoImageFile) {
       const logoImageCid = await uploadBase64ToIpfs(input.logoImageFile);
-      const bannerImageCid = await uploadBase64ToIpfs(input.bannerImageFile);
-      const featuredImageCid = await uploadBase64ToIpfs(input.featuredImageFile);
-      let data;
 
-      if (input.logoImageFile) {
-        data = { logoImageUrl: logoImageCid }
-      }
-
-      if (input.featuredImageFile) {
-        data = {...data, featureImageUrl: featuredImageCid }
-      }
-
-      if (input.bannerImageFile) {
-        data = {...data, bannerImageUrl: bannerImageCid }
-      }
-
-      if (data) {
-        const nftSet = await ctx.prisma.collection.update({
-          where: {
-            id: input.id
-          },
-          data,
-        });
-        return nftSet;
-      } else {
+      if (!logoImageCid) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: 'Please supply at least one image.',
+          message: 'Logo image could not be uploaded.',
         });
-
       }
-    }),
+
+      const nftSet = await ctx.prisma.collection.create({
+        data: {
+          description: input.description,
+          name: input.name,
+          logoImageUrl: logoImageCid,
+          userId: input.userId,
+        }
+      });
+
+      return nftSet;
+    } else {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: 'No logo image supplied.',
+      });
+    }
+  }),
+  updateImages: t.procedure
+  .input(
+    z.object({
+      id: z.string(),
+      logoImageFile: z.string().optional(),
+      bannerImageFile: z.string().optional(),
+      featuredImageFile: z.string().optional(),
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
+
+    const logoImageCid = await uploadBase64ToIpfs(input.logoImageFile);
+    const bannerImageCid = await uploadBase64ToIpfs(input.bannerImageFile);
+    const featuredImageCid = await uploadBase64ToIpfs(input.featuredImageFile);
+    let data;
+
+    if (input.logoImageFile) {
+      data = { logoImageUrl: logoImageCid }
+    }
+
+    if (input.featuredImageFile) {
+      data = {...data, featureImageUrl: featuredImageCid }
+    }
+
+    if (input.bannerImageFile) {
+      data = {...data, bannerImageUrl: bannerImageCid }
+    }
+
+    if (data) {
+      const nftSet = await ctx.prisma.collection.update({
+        where: {
+          id: input.id
+        },
+        data,
+      });
+      return nftSet;
+    } else {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: 'Please supply at least one image.',
+      });
+
+    }
+  }),
 });
