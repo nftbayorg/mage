@@ -1,27 +1,31 @@
 import Image, { ImageProps } from "next/image";
 import { useEffect, useState } from "react";
 
-export default function ImageFallback({ src, ...rest }: ImageProps) {
-  const [imgSrc, set_imgSrc] = useState(src);
-  const fallbackSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg==";
+type MageImageProps = ImageProps & {
+  fallbackImage?: string
+}
+
+export default function ImageFallback({ src, fallbackImage, ...rest }: MageImageProps) {
+  const [imgageSource, setImgageSource] = useState(src);
+
+  if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
   useEffect(() => {
-    set_imgSrc(src);
+    setImgageSource(src);
   }, [src]);
 
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
       {...rest}
-      src={imgSrc}
+      src={imgageSource}
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth === 0) {
-          // Broken image
-          set_imgSrc(fallbackSrc);
+          setImgageSource(fallbackImage || '');
         }
       }}
       onError={() => {
-        set_imgSrc(fallbackSrc);
+        setImgageSource(fallbackImage || '');
       }}
     />
   );
