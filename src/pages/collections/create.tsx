@@ -100,9 +100,8 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
   
   return (
     <div className="p-5 mb-14 mt-14 flex items-center justify-center w-full h-full overflow-y-scroll">
-    <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
       {isSubmitting ?
-        <>
+        <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-full text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
           <div className="flex flex-col text-xl md:text-2xl gap-5 h-full w-full justify-start">
             <div className="text-2xl md:text-4xl">Creating your collection</div>
             <div className="flex items-center gap-5 w-full h-16 border-2 rounded-lg p-5 md:p-10">
@@ -130,14 +129,13 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
               <div>Collection created</div>
             </div>
           </div>
-        </>
+        </div>
       :
-        <>
+        <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
           <h1 className="text-5xl my-14">Create a Collection</h1>
           <CreateCollectionForm onSubmit={handleOnSumbit}/>
-        </>
+        </div>
       }
-    </div>
   </div>
 
   );
