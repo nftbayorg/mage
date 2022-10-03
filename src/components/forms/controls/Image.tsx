@@ -18,7 +18,6 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
       {...rest}
-      priority={true}
       src={imgageSource}
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth === 0) {
