@@ -22,11 +22,11 @@ const MobileNav = () => {
         {!active && <FaBars size={30} className="fill-gray-700 dark:fill-gray-300" onClick={handleClick}/>}
         {active && <FaTimes size={30} className="fill-gray-700 dark:fill-gray-300" onClick={handleClick}/>}
         <div className={`${!active ? "opacity-0": "opacity-100"} dark:border-gray-300 transition-opacity ease-in-out delay-150 border h-60 w-72 bg-white dark:bg-slate-800 absolute md:relative top-10 right-1 rounded-lg shadow-lg p-10`}>
-          {<MenuItems onClick={handleClick}/>}
+          {<MenuItems onClick={handleClick} active={active}/>}
         </div>
       </div>
       <div className="hidden md:flex space-x-6 justify-center items-center w-full">
-        <MenuItems onClick={handleClick}/>
+        <MenuItems onClick={handleClick} active={true}/>
       </div>
     </>
   )
@@ -34,9 +34,10 @@ const MobileNav = () => {
 
 type MenuItemsProps = {
   onClick: () => void;
+  active: boolean;
 }
 
-const MenuItems = ({ onClick }: MenuItemsProps) => {
+const MenuItems = ({ onClick, active }: MenuItemsProps) => {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -46,7 +47,7 @@ const MenuItems = ({ onClick }: MenuItemsProps) => {
   } 
 
   return (
-    <div className="flex flex-col gap-y-8 md:flex-row justify-between md:items-center md:justify-center w-full h-full">
+    <div className={`${!active ? "hidden" : ""} flex flex-col gap-y-8 md:flex-row justify-between md:items-center md:justify-center w-full h-full`}>
       <div className="flex flex-col gap-y-4 md:flex-row md:space-x-6 md:items-center md:justify-center w-full">
         <Link href="/trade" >
           <a onClick={() => onClick()} className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
