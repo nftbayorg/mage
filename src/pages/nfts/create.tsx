@@ -17,28 +17,45 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
   // const collections = trpc.useQuery(['collection.getAll']);
   const createNftSet = trpc.useMutation('nftSet.create');
 
-  // if (!collections.data?.length) return <div>Loading...</div>
+  const readFiles = async (files: Array<File | undefined>) => {
+    let promises = Array.from(files)
+      .map(file => {
+       if (file) {
+          let reader = new FileReader();
+          return new Promise<ArrayBuffer | string | null>(resolve => {
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+          });
+       }
+    });
+
+    let res = await Promise.allSettled(promises);
+
+    return res;
+  }
+
+  const determineResult = (result: PromiseSettledResult<ArrayBuffer | string | null | undefined> | undefined) => {
+    if (result && result.status === 'fulfilled' && result.value) {
+      return result.value.toString();
+    } 
+
+    return '';
+  };
 
   const handleOnSumbit = async (data: CreateItemFormValues) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(data.file);
-    reader.onload = async function () {
-      const nftSet = await createNftSet.mutateAsync({
-        creator: session.user?.id || '',
-        // collectionId: collections.data[0]?.id,
-        file: reader.result?.toString() || '',
-        description: data.description,
-        name: data.name,
-        totalSupply: data.totalSupply,
-        link: data.link,
-      });
+    const fileReaderResults = await readFiles([data.file]);
+    const nftSet = await createNftSet.mutateAsync({
+      creator: session.user?.id || '',
+      // collectionId: collections.data[0]?.id,
+      file: determineResult(fileReaderResults[0]),
+      description: data.description,
+      name: data.name,
+      totalSupply: data.totalSupply,
+      link: data.link,
+    });
 
-      console.log('nft', nftSet);
-    };
+    console.log('nft', nftSet);
     
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
   }
 
   return (
