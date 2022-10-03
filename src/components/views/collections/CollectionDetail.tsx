@@ -25,7 +25,7 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl, isLoading }: Collectio
           blurDataURL="/images/AwaitingImage1400x350.png"
           fallbackImage="/images/AwaitingImage1400x350.png"
         />
-          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg shadow-md p-1">
+          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-1">
             <div className="w-full h-full p-1 relative">
               <Image className="rounded-lg"
                 src={logoImageUrl} 
@@ -42,7 +42,7 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl, isLoading }: Collectio
         :
         <div className="h-48 md:h-96 w-full relative">
           <div className="flex w-full h-full empty:bg-gray-100"/>
-          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-50 rounded-lg p-1 md:p-2 shadow-md">
+          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg p-1 md:p-2 shadow-md">
             <div className="w-full h-full bg-gray-100 rounded-lg"/>
           </div>
         </div>
