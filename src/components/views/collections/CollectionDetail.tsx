@@ -1,6 +1,7 @@
 import { DateAsMonthYearAsWords } from "../../../utils/date";
 import { inferQueryOutput } from "../../../utils/trpc";
 import Image from '../../forms/controls/Image';
+import NftSetSummary from "../nfts/nftSetSummary";
 
 type Collection = inferQueryOutput<"collection.get">;
 
@@ -97,8 +98,12 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
         <section className="flex flex-col w-full">
           <div className="w-fit border-b-2 border-gray-700 pb-3 font-medium">Items</div>
           <hr className="border border-gray-200"/>
-          <div>
-
+          <div className="md:p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
+              {collection?.nftSets.map(nftSet => (
+                <div key={nftSet.id}>
+                  <NftSetSummary nftSet={nftSet} />
+                </div>
+              ))}
           </div>
         </section>
       </section>

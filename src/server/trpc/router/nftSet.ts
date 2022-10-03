@@ -5,6 +5,13 @@ import { NFTStorage, Blob } from 'nft.storage';
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
 export const nftSetRouter = t.router({
+  getLean: t.procedure.input(z.object({ id: z.string() })).query((input) => {
+    return prisma?.nFTSet.findFirst({
+      where: {
+        id: input.input?.id,
+      },
+    });
+  }),
   get: t.procedure.input(z.object({ id: z.string() })).query((input) => {
     return prisma?.nFTSet.findFirst({
       where: {
