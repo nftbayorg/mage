@@ -62,10 +62,13 @@ export const nftSetRouter = t.router({
       if (input.collectionId) {
         collectionId = input.collectionId;
       } else {
+
+        const count = await prisma?.collection.count() || 0;
+
         const newCollection = await ctx.prisma.collection.create({
           data: {
             logoImageUrl: `https://nftstorage.link/ipfs/${imageCid}`,
-            name: 'Untitled Collection',
+            name: `Untitled Collection #${count +1}`,
             description: 'Welcome to the home of Untitled Collection on Mage. Discover the best items in this collection.',
             userId: input.creator
           }
