@@ -63,7 +63,7 @@ export const nftSetRouter = t.router({
         collectionId = input.collectionId;
       } else {
 
-        const count = await prisma?.collection.count() || 0;
+        const count = await ctx.prisma.collection.count() || 0;
 
         const newCollection = await ctx.prisma.collection.create({
           data: {
