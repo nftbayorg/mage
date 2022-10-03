@@ -12,6 +12,7 @@ export const serverSchema = z.object({
   NEXTAUTH_URL: z.string().url(),
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
+  NFTSTORAGE_API_TOKEN: z.string(),
   S3_UPLOAD_KEY: z.string(),
   S3_UPLOAD_SECRET: z.string(),
   S3_UPLOAD_BUCKET: z.string(),
