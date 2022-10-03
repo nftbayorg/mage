@@ -6,26 +6,31 @@ type MageImageProps = ImageProps & {
 }
 
 export default function ImageFallback({ src, fallbackImage, ...rest }: MageImageProps) {
-  const [imgageSource, setImgageSource] = useState(src);
+  const [imgageSource, setImageSource] = useState(src);
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
   useEffect(() => {
-    setImgageSource(src);
+    setImageSource(src);
   }, [src]);
 
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
       {...rest}
+      priority={false}
       src={imgageSource}
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth === 0) {
-          setImgageSource(fallbackImage || '');
+          if (fallbackImage) {
+            setImageSource(fallbackImage);
+          }
         }
       }}
       onError={() => {
-        setImgageSource(fallbackImage || '');
+        if (fallbackImage) {
+          setImageSource(fallbackImage);
+        }
       }}
     />
   );
