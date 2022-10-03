@@ -17,10 +17,9 @@ const CollectionPanel = ({ collection }: CollectionProps) => {
 
   return (    
     <Link href={`/collections/${collection.id}`}>
-      <div>
-        <div className="flex flex-col items-center justify-center w-full md:w-80 h-80 rounded-lg hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 cursor-pointer relative">
-          {collection.logoImageUrl && 
-            <div className="w-full md:w-80 h-80 relative">
+      <div className="flex flex-col items-center justify-center w-full min-w-[80px] h-80 rounded-lg hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 cursor-pointer relative">
+        {collection.logoImageUrl && 
+          <div className="w-full h-80 relative">
             <Image
               alt="image"
               objectFit="cover"
@@ -30,15 +29,14 @@ const CollectionPanel = ({ collection }: CollectionProps) => {
               placeholder="blur"
               blurDataURL="/images/AwaitingImage600x400.png"
             />
-            </div>
-          }
-          <div className="flex justify-start w-full p-5">
-            <div className="text-md">
-              {name}
-            </div>
+          </div>
+        }
+        <div className="flex justify-start w-full p-5">
+          <div className="text-md">
+            {name}
           </div>
         </div>
-      </div>    
+      </div>
     </Link>
   )
 }
@@ -62,7 +60,7 @@ const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
         {isLoading || !data ?
           <Loading/>
         :
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {data.map(collection => (<CollectionPanel key={collection.id} collection={collection}/>))}
           </div>
         }
