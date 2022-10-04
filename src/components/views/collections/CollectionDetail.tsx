@@ -75,8 +75,8 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
   return (
     <section className="flex flex-col w-full text-lg font-normal dark:text-gray-300 text-gray-700">
       <CollectionHeader logoImageUrl={logoImageUrl} bannerImageUrl={bannerImageUrl} isLoading={collection ? false : true} />
-      <section className="p-10">
-        <section className="flex flex-col mb-10">
+      <section>
+        <section className="flex flex-col mb-10 px-10">
           <div className="text-2xl md:text-3xl font-semibold">{name}</div>
           <div className="flex gap-3 font-gray-500 my-5">
             <div className="flex gap-2">
@@ -95,10 +95,10 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
             {description || `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
           </div>
         </section>
-        <section className="flex flex-col w-full">
+        <section className="flex flex-col w-full p-2 md:p-10">
           <div className="w-fit border-b-2 border-gray-700 pb-3 font-medium">Items</div>
           <hr className="border border-gray-200"/>
-          <div className="md:p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
+          <div className="p-3 md:p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
               {collection?.nftSets.map(nftSet => (
                 <div key={nftSet.id}>
                   <NftSetSummary nftSet={nftSet} />
