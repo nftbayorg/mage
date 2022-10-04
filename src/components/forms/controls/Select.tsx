@@ -18,7 +18,7 @@ const classes = " w-full p-4 rounded-lg border-2 border-gray-200 dark:border-gra
 
 export const Select = ({ caption, children, label, name, placeholder, required, register, setValue, ...rest }: SelectProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(undefined);
+  const [selectedOption, setSelectedOption] = useState('');
   const showDropdownHandler = () => {
     setShowDropdown(!showDropdown);
   }
@@ -34,10 +34,6 @@ export const Select = ({ caption, children, label, name, placeholder, required, 
     setShowDropdown(false);
   }, [name, setValue]);
 
-  const determineTextColor = useCallback(() => {
-    return !selectedOption ? "text-gray-300" : "text-gray-700";
-  }, [selectedOption])
-
   return (
 
   <div className="flex flex-col my-6">
@@ -45,13 +41,17 @@ export const Select = ({ caption, children, label, name, placeholder, required, 
       <label className="text-xl" htmlFor={name}>{label}</label>
       {required ? <FaAsterisk className="fill-red-500 ml-2" size={10}/> : null}
     </div>
+
     {caption && <label className="mb-3 text-gray-400 text-sm">{caption}</label>}
+    
     <SelectContext.Provider value={{ selectedOption, changeSelectedOption: updateSelectedOption }}>
       <div ref={selectContainerRef} className="relative w-full flex" onClick={showDropdownHandler}>
-        <input {...register(name, { required })} className="hidden" id={name} {...rest}/>
-        <div className={`${classes} ${determineTextColor()}`}>{selectedOption || placeholder || "Select option"}</div>
+    
+        <input {...register(name, { required })} className="hidden" id={name} {...rest}/>    
+        <input placeholder={placeholder} value={selectedOption} readOnly className={classes}/>
+    
         <div className={`absolute left-0 top-[100%] ${showDropdown ? "" : "hidden"} transition-all ease-in-out delay-150 w-full pb-10 h-40 z-20`}>
-          <ul className="bg-white overflow-scroll h-96 rounded-md shadow-[0px_0px_15px_5px_rgba(186,186,186,0.57)]">
+          <ul className="bg-white dark:bg-slate-700 overflow-scroll h-96 rounded-md shadow-[0px_0px_15px_5px_rgba(186,186,186,0.57)] dark:shadow-none">
             {children}
           </ul>
         </div>
