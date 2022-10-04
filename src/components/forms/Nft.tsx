@@ -57,11 +57,10 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
           required
         />
 
-
         {collections && 
           <Select 
             label="Collection"
-            name="collection"    
+            name="collectionId"    
             placeholder="Place the NFT in a collection"
             register={register}
             setValue={setValue}            

@@ -52,15 +52,17 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
   const handleOnSumbit = async (data: CreateItemFormValues) => {
     setIsSubmitting(true);
 
+    const hasCollection = data.collectionId ? { collectionId: data.collectionId } : {};
+
     const fileReaderResults = await readFiles([data.file]);
-    const nftSet = await createNftSet.mutateAsync({
+    await createNftSet.mutateAsync({
       creator: session.user?.id || '',
-      // collectionId: collections.data[0]?.id,
       file: determineResult(fileReaderResults[0]),
       description: data.description,
       name: data.name,
       totalSupply: data.totalSupply,
       link: data.link,
+      ...hasCollection
     });
 
     setNftSetCreated(true);

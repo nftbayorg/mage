@@ -4,6 +4,7 @@ type CreateItemFormValues = {
   totalSupply: integer;
   link?: string;
   description?: string;
+  collectionId: string;
 };
 
 type CreateCollectionFormValues = {
@@ -12,4 +13,5 @@ type CreateCollectionFormValues = {
   bannerImageFile?: File;
   name: string;
   description?: string;
+  collectionId: string;
 };
