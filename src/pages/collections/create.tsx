@@ -20,7 +20,7 @@ type PageProps = {
 const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
 
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [collectionCreated, setCollectionCreated] = useState(false);
   const [logoImageUploaded, setLogoImageUploaded] = useState(false);
   const [bannerImageUploaded, setBannerImageUploaded] = useState(false);
@@ -99,7 +99,7 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
   }
   
   return (
-    <div className="p-5 mb-14 mt-14 flex items-center justify-center w-full h-full overflow-y-scroll">
+    <div className="p-5 mb-14 md:mt-14 flex items-center justify-center w-full h-full overflow-y-scroll">
       {isSubmitting ?
         <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-[calc(100vh-490px)] text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
           <div className="flex flex-col text-xl md:text-2xl gap-5 h-full w-full justify-start">
@@ -131,8 +131,8 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
           </div>
         </div>
       :
-        <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
-          <h1 className="text-5xl my-14">Create a Collection</h1>
+        <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-full text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
+          <h1 className="text-3xl md:text-5xl my-14">Create a Collection</h1>
           <CreateCollectionForm onSubmit={handleOnSumbit}/>
         </div>
       }

@@ -21,7 +21,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nftSetCreated, setNftSetCreated] = useState(false);
 
-  // const collections = trpc.useQuery(['collection.getAll']);
+  const collections = trpc.useQuery(['collection.getByUser', { user: session.user?.id || '' }]);
   const createNftSet = trpc.useMutation('nftSet.create');
 
   const readFiles = async (files: Array<File | undefined>) => {
@@ -69,7 +69,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
   }
 
   return (
-    <div className="p-5 mb-10 flex items-center justify-center w-full h-full overflow-y-scroll">
+    <div className="p-5 mb-10 flex items-center justify-center w-full h-full">
       {isSubmitting ?
         <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-[calc(100vh-490px)] text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
           <div className="flex flex-col text-xl md:text-2xl gap-5 h-full w-full justify-start">
@@ -88,9 +88,9 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
         </div>
       :
         <>
-          <div className="md:p-4 text-2xl flex flex-col h-screen text-gray-700 font-medium dark:text-gray-300">
+          <div className="md:p-4 text-2xl flex flex-col text-gray-700 font-medium dark:text-gray-300 h-full">
             <h1 className="text-4xl my-5">Create New Item</h1>
-            <CreateItem onSubmit={handleOnSumbit}/>
+            <CreateItem onSubmit={handleOnSumbit} collections={collections.data}/>
           </div>
         </>
       }

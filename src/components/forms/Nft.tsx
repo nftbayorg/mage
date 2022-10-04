@@ -4,17 +4,24 @@ import TextArea from "./controls/TextArea";
 import { FaAsterisk } from "react-icons/fa";
 import FileUpload from "./controls/FileUpload";
 import { useCallback, useState } from "react";
+import { inferQueryOutput } from "../../utils/trpc";
+import { Select } from "./controls/Select";
+import { Option } from "./controls/Option";
+
+type Collections = inferQueryOutput<"collection.getByUser">;
 
 type ComponentProps = {
   onSubmit: (data: CreateItemFormValues) => void;
+  collections: Collections | undefined;
 }
 
-const NftForm = ({ onSubmit }: ComponentProps) => {
+const NftForm = ({ onSubmit, collections }: ComponentProps) => {
 
   const [file, setFile] = useState<File>();
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<CreateItemFormValues>({
     mode: "onChange",
@@ -49,6 +56,23 @@ const NftForm = ({ onSubmit }: ComponentProps) => {
           register={register}
           required
         />
+
+
+        {collections && 
+          <Select 
+            label="Collection"
+            name="collection"    
+            placeholder="Place the NFT in a collection"
+            register={register}
+            setValue={setValue}            
+          >
+            <>
+              {collections.map(collection => (
+                <Option key={collection.id} value={[collection.id, collection.name]}>{collection.name}</Option>
+                ))}            
+            </>
+          </Select>
+        }
 
         <Input
           caption="Mage will include a link on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
