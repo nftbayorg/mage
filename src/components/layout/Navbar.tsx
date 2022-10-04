@@ -68,7 +68,7 @@ const MenuItems = ({ onClick, active }: MenuItemsProps) => {
       <div className="flex flex-col justify-end md:flex-row md:ml-auto min-w-fit h-full">
         {session && (
           <button
-            className="md:block hover:bg-blue-400 p-3 md:px-6 pt-2 text-white bg-red-500 rounded"
+            className="md:block hover:bg-red-400 p-3 md:px-6 pt-2 text-white bg-red-500 rounded"
             onClick={() => handleButtonClick(() => signOut(), onClick)}
           >
             Sign Out
