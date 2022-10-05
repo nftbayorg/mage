@@ -84,7 +84,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
   }
 
   return (
-    <section className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 m-10 pt-0 border-gray-200 dark:border-gray-600 ">
+    <section className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 m-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600 ">
       <div className="lg:hidden">
         <NftSetHeader
           collection={nftSet.collection?.name}
