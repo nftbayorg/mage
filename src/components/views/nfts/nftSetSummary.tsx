@@ -13,16 +13,16 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet}>(( prop
   return (
     <Link href={`/nftSets/${nftSet.id}`}>
       <div ref={ref} className="flex-col hover:shadow-lg hover:shadow-gray-500/50 dark:border-gray-600 cursor-pointer rounded-xl">
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex items-center justify-center overflow-hidden rounded-t-2xl">
           <Image 
             src={nftSet.imageUrl} 
             alt={nftSet.name} 
             height={500} 
             width={500} 
-            objectFit="contain"
+            objectFit="cover"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
-            className="rounded-t-2xl"
+            className="rounded-t-2xl transition transform-gpu hover:scale-125"
           />
         </div>
         <div className="border border-gray-200 dark:border-gray-600 p-4 rounded-b-2xl">

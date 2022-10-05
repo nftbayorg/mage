@@ -23,11 +23,11 @@ const NftSetHeader = ({
 }) => {
   return (
     <div className="flex-col space-y-6 mb-4">
-      {collection &&  <div className="text-1xl text-blue-500 mb-3">{collection}</div>}
-      <div className="text-3xl font-semibold mb-5 text-gray-700 dark:text-gray-400">
+      {collection &&  <div className="text-xl font-light text-blue-500 my-3">{collection}</div>}
+      <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
         {name}
       </div>
-      <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-10 lg:items-center">
+      <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-10 lg:items-center pb-5">
         <div className="flex space-x-1 lg:space-x-2 items-center">
           <div className="text-1xl text-gray-700 dark:text-gray-400">
             Owned by
