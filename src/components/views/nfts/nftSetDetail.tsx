@@ -48,7 +48,7 @@ const NftSetHeader = ({
 };
 
 type ComponentProps = {
-  nftSet: NftSet
+  nftSet: NftSet | undefined;
 }
 
 const NftSetDetail = ({ nftSet }: ComponentProps) => {
