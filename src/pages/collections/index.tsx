@@ -19,15 +19,15 @@ const CollectionPanel = ({ collection }: CollectionProps) => {
     <Link href={`/collections/${collection.id}`}>
       <div className="flex flex-col items-center justify-center w-full min-w-[80px] h-80 rounded-lg hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 cursor-pointer relative">
         {collection.logoImageUrl && 
-          <div className="w-full h-80 relative">
+          <div className="w-full h-80 relative rounded-t-lg overflow-hidden">
             <Image
               alt="image"
               objectFit="cover"
               layout="fill"
-              className="rounded-t-lg"
               src={logoImageUrl}
               placeholder="blur"
               blurDataURL="/images/AwaitingImage600x400.png"
+              className="rounded-t-lg transition transform-gpu hover:scale-125"
             />
           </div>
         }
