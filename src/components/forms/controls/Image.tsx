@@ -19,7 +19,7 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
     <Image
       {...rest}
       src={imageSource}
-      loader={({ src }) => { return src }}
+      // loader={({ src }) => { return src }}
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth === 0) {
           if (fallbackImage) {
