@@ -6,7 +6,7 @@ type MageImageProps = ImageProps & {
 }
 
 export default function ImageFallback({ src, fallbackImage, ...rest }: MageImageProps) {
-  const [imgageSource, setImageSource] = useState(src);
+  const [imageSource, setImageSource] = useState(src);
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
@@ -18,7 +18,8 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
       {...rest}
-      src={imgageSource}
+      src={imageSource}
+      loader={({ src }) => { return src }}
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth === 0) {
           if (fallbackImage) {
