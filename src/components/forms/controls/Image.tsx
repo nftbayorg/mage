@@ -19,6 +19,7 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
     <Image
       {...rest}
       src={imageSource}
+      unoptimized={true}
       // loader={({ src }) => { return src }}
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth !== 0) return
@@ -28,7 +29,7 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
       }}
       onError={() => {
         if (!fallbackImage) return
-        
+
         setImageSource(fallbackImage);
       }}
     />
