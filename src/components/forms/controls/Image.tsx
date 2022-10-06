@@ -7,8 +7,6 @@ type MageImageProps = ImageProps & {
 
 export default function ImageFallback({ src, fallbackImage, ...rest }: MageImageProps) {
   const [imageSource, setImageSource] = useState(src);
-  const [attempts, setAttempts] = useState(0); 
-
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
@@ -26,23 +24,13 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
         if (result.naturalWidth !== 0) return
         if (!fallbackImage) return
 
-        if (attempts < 4) {
-          setAttempts(prev => prev + 1);
-          setImageSource(imageSource + `%3F_%3D${Math.floor(Math.random() * 100) + 1}`);
-        } else {
-          setImageSource(fallbackImage);
-        }
+        setImageSource(fallbackImage);
       }}
       onError={() => {
         if (!fallbackImage) return
-
-        if (attempts < 4) {
-          setAttempts(prev => prev + 1);
-          setImageSource(imageSource + `%3F_%3D${Math.floor(Math.random() * 100) + 1}`);
-        } else {
-          setImageSource(fallbackImage);
-        }
-    }}
+        
+        setImageSource(fallbackImage);
+      }}
     />
   );
 }
