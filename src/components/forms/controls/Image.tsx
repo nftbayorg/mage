@@ -28,7 +28,7 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
 
         if (attempts < 4) {
           setAttempts(prev => prev + 1);
-          setImageSource(imageSource + `?${Math.floor(Math.random() * 100) + 1}`);
+          setImageSource(imageSource + `%3F_%3D${Math.floor(Math.random() * 100) + 1}`);
         } else {
           setImageSource(fallbackImage);
         }
@@ -38,7 +38,7 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
 
         if (attempts < 4) {
           setAttempts(prev => prev + 1);
-          setImageSource(imageSource + `?${Math.floor(Math.random() * 100) + 1}`);
+          setImageSource(imageSource + `%3F_%3D${Math.floor(Math.random() * 100) + 1}`);
         } else {
           setImageSource(fallbackImage);
         }
