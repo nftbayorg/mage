@@ -79,8 +79,8 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
       </div>
 
       <div className="flex flex-col lg:w-2/5 space-y-4">
-        <section>
-          <div className="flex p-3 border border-gray-200 dark:border-gray-600 rounded-t-xl">
+        <section className="border border-gray-200 rounded-xl">
+          <div className="flex p-3 dark:border-gray-600">
             <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-400">
               <FaEthereum className="fill-blue-500 mr-2" size={20} />
               Buy now
@@ -89,13 +89,14 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               <FaRegHeart size={20} className="fill-gray-400 mr-2" />
             </button>
           </div>
-          <div className="first-letter:first-line:flex items-center justify-center rounded cursor-pointer w-auto relative">
+          <div className="first-letter:first-line:flex items-center justify-center rounded cursor-pointer w-auto relative rounded-b-xl">
             <Image
               src={nftSet.imageUrl}
               alt={nftSet.name}
+              layout="intrinsic"
               width="800"
               height="800"
-              objectFit="cover"
+              objectFit="contain"
               className="rounded-b-xl"
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
