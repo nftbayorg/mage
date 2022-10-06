@@ -4,8 +4,8 @@ import {
   FaChartLine,
   FaEthereum,
   FaRegHeart,
-  FaRegClock,
   FaTag,
+  FaTags,
   FaAlignLeft,
   FaWallet,
 } from "react-icons/fa";
@@ -105,7 +105,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
 
         <CollapsePanel
           label="Description"
-          icon={<FaAlignLeft className="fill-gray-700 dark:fill-gray-400" />}
+          icon={<FaAlignLeft size={25} className="fill-gray-700 dark:fill-gray-400" />}
         >
           <div className="flex flex-col items-start justify-start">
             <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-white">
@@ -114,6 +114,16 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
             {nftSet.collection?.description && <div className="text-md text-gray-700 dark:text-white">
               {nftSet.collection?.description}
             </div>}
+          </div>
+        </CollapsePanel>
+
+        <CollapsePanel
+          label="Properties"
+          icon={<FaTags size={25} className="fill-gray-700 dark:fill-gray-400 rotate-90" />}
+          collapsible={true}
+        >
+          <div className="flex flex-col items-start justify-start">
+
           </div>
         </CollapsePanel>
       </div>
@@ -133,60 +143,26 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           defaultState="collapsed"
         >
           <div className="flex-col space-y-3">
-            <div className="text-md text-gray-700 dark:text-gray-400">
-              Current Price
-            </div>
-            <div className="flex items-center space-x-2 pb-5">
-              {/* <div className="text-3xl font-bold">
-                {lot.reservePrice.toString()}
-              </div> */}
-              <FaEthereum className="fill-blue-500" size={30} />
-            </div>
-            <div className="flex-col flex lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
-              <button className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold">
-                <FaWallet className="fill-white" size={20} />
-                <div className="text-white">Buy Now</div>
-              </button>
-              <button className="flex items-center justify-center space-x-4 py-4 px-10 rounded border border-gray-200 hover:bg-white">
-                <FaTag className="fill-blue-500" size={20} />
-                <div className="text-blue-500 font-semibold">Make Offer</div>
-              </button>
-            </div>
           </div>
         </CollapsePanel>
 
-        <div>
-
-          <div className="flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center">
-            <FaTag size={25} className="fill-gray-700 dark:fill-gray-400" />
-            <div className="ml-5 text-xl text-gray-700 font-semibold">
-              Listings
-            </div>
+        <CollapsePanel 
+          label="Listings"
+          icon={<FaTag size={25} className="fill-gray-700 dark:fill-gray-400" />}
+          collapsible={true}
+        >
+          <div className="flex flex-col justify-center items-center space-y-3 ">
+            <Image
+              src="/images/empty.png"
+              alt="Empty listings"
+              width="150"
+              height="100"
+              objectFit="cover"
+              className="rounded-xl"
+            />
+            <div className="text-gray-700 text-xl">No listings yet</div>
           </div>
-          <div className="flex-col p-10 border border-t-0 border-gray-200 dark:border-gray-600 rounded-b-xl items-start justify-start space-x-4">
-            <div className="flex-col space-y-3">
-              <div className="text-md text-gray-700 dark:text-gray-400">
-                Current Price
-              </div>
-              <div className="flex items-center space-x-2 pb-5">
-                {/* <div className="text-3xl font-bold">
-                  {lot.reservePrice.toString()}
-                </div> */}
-                <FaEthereum className="fill-blue-500" size={30} />
-              </div>
-              <div className="flex-col flex lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
-                <button className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold">
-                  <FaWallet className="fill-white" size={20} />
-                  <div className="text-white">Buy Now</div>
-                </button>
-                <button className="flex items-center justify-center space-x-4 py-4 px-10 rounded border border-gray-200 hover:bg-white">
-                  <FaTag className="fill-blue-500" size={20} />
-                  <div className="text-blue-500 font-semibold">Make Offer</div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        </CollapsePanel>
       </section>
     </section>
   );
