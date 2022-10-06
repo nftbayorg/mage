@@ -23,13 +23,13 @@ export default function ImageFallback({ src, fallbackImage, ...rest }: MageImage
       onLoadingComplete={(result: { naturalWidth: number }) => {
         if (result.naturalWidth === 0) {
           if (fallbackImage) {
-            setImageSource(fallbackImage);
+            setImageSource(imageSource + `?${Math.floor(Math.random() * 100) + 1}`);
           }
         }
       }}
       onError={() => {
         if (fallbackImage) {
-          setImageSource(fallbackImage);
+          setImageSource(imageSource + `?${Math.floor(Math.random() * 100) + 1}`);
         }
       }}
     />
