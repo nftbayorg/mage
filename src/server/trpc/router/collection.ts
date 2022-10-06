@@ -30,6 +30,9 @@ export const collectionRouter = t.router({
         include: {
           nftSets: true,
         },
+        orderBy: {
+          name: "asc"
+        }
       });
     }),
   getAll: t.procedure.query(({ ctx }) => {
