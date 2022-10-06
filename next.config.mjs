@@ -17,6 +17,7 @@ export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
   images: {
+    formats: ['image/avif', 'image/webp'],
     domains: [
       'nftstorage.link', 
       `${env.S3_UPLOAD_BUCKET}.s3.amazonaws.com`,
