@@ -6,8 +6,8 @@ import {
   FaRegHeart,
   FaTag,
   FaTags,
-  FaAlignLeft,
-  FaWallet,
+  FaAlignLeft,  
+  FaListUl,
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from '../../forms/controls/Image';
@@ -161,6 +161,24 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               className="rounded-xl"
             />
             <div className="text-gray-700 text-xl">No listings yet</div>
+          </div>
+        </CollapsePanel>
+
+        <CollapsePanel 
+          label="Offers"
+          icon={<FaListUl size={25} className="fill-gray-700 dark:fill-gray-400" />}
+          collapsible={true}
+        >
+          <div className="flex flex-col justify-center items-center space-y-3 ">
+            <Image
+              src="/images/empty.png"
+              alt="Empty listings"
+              width="150"
+              height="100"
+              objectFit="cover"
+              className="rounded-xl"
+            />
+            <div className="text-gray-700 text-xl">No offers yet</div>
           </div>
         </CollapsePanel>
       </section>
