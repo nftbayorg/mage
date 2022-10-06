@@ -17,6 +17,7 @@ export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
   images: {
+    minimumCacheTTL: 50,
     formats: ['image/avif', 'image/webp'],
     domains: [
       'nftstorage.link', 
