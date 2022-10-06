@@ -54,7 +54,9 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         createdAt: new Date(),
         userId: "",
         displayThemee: "",
-        updatedAt: new Date() 
+        updatedAt: new Date(),
+        published: true,
+        visible: true 
       },
       imageUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg==",
       blockchainId: "",
@@ -79,8 +81,8 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
       </div>
 
       <div className="flex flex-col lg:w-2/5 space-y-4">
-        <section className="border border-gray-200 rounded-xl">
-          <div className="flex p-3 dark:border-gray-600">
+        <section className="">
+          <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
             <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-400">
               <FaEthereum className="fill-blue-500 mr-2" size={20} />
               Buy now
@@ -89,7 +91,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               <FaRegHeart size={20} className="fill-gray-400 mr-2" />
             </button>
           </div>
-          <div className="first-letter:first-line:flex items-center justify-center rounded cursor-pointer w-auto relative rounded-b-xl">
+          <div className="flex items-center justify-center cursor-pointer w-auto h-auto relative rounded-b-xl border border-gray-200 border-t-0 rounded-xl rounded-t-none">
             <Image
               src={nftSet.imageUrl}
               alt={nftSet.name}

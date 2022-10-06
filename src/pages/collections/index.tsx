@@ -13,7 +13,7 @@ type CollectionProps = {
 const CollectionPanel = ({ collection }: CollectionProps) => {
 
   if (!collection) return <div>Unknown collection</div>
-  const { logoImageUrl, name } = collection;
+  const { logoImageUrl, featureImageUrl, name } = collection;
 
   return (    
     <Link href={`/collections/${collection.id}`}>
@@ -24,7 +24,7 @@ const CollectionPanel = ({ collection }: CollectionProps) => {
               alt="image"
               objectFit="cover"
               layout="fill"
-              src={logoImageUrl}
+              src={featureImageUrl || logoImageUrl}
               placeholder="blur"
               blurDataURL="/images/AwaitingImage600x400.png"
               className="rounded-t-lg transition transform-gpu hover:scale-125"

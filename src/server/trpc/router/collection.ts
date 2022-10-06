@@ -26,6 +26,7 @@ export const collectionRouter = t.router({
       return ctx.prisma.collection.findMany({
         where: {
           userId: input.user,
+          visible: true,
         },
         include: {
           nftSets: true,
