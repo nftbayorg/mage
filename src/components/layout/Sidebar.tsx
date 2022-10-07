@@ -2,6 +2,7 @@ import { trpc } from "../../utils/trpc";
 
 import { GiAbstract116 } from "react-icons/gi";
 import Link from "next/link";
+import Image from "../forms/controls/Image";
 
 const Sidebar = () => {
 
@@ -21,8 +22,15 @@ const Sidebar = () => {
             return (
               <Link href={`collections/${item.id}`} key={item.id}>
                 {/* <GiAbstract116 color={item.color || "white"}/> */}
-                <div className="flex items-cente text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5">
-                    {item.name}
+                <div className="flex items-center text-gray-700 gap-x-5 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5">
+                    <div className="h-[20px] w-[20px] min-w-[20px]">
+                      <Image 
+                        alt="collection logo"
+                        src={item.logoImageUrl}
+                        className="rounded-full"
+                      />
+                    </div>
+                    <div>{item.name}</div>
                 </div>
               </Link>
             )
