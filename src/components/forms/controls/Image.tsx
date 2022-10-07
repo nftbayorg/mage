@@ -8,18 +8,8 @@ type MageImageProps = ImageProps & {
 
 export default function ImageFallback({ alt, className, src, fallbackImage, width, height }: MageImageProps) {
   const [loadingError, setLoadingError] = useState(false);
-  const [imageSource, setImageSource] = useState('');
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
-
-  const handleClickRetry = () => {
-    setImageSource('');
-    setImageSource(src as string);
-  }
-
-  useEffect(() => {
-    setImageSource(src as string);
-  }, [])
 
   return (
     <>
@@ -32,7 +22,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, widt
           <img 
             alt={alt}
             className={`${className} object-cover`}
-            src={imageSource || src as string || ''} 
+            src={src as string} 
             style={{ height: `100%`, width: `100%` }} 
             onError={() => {
               console.log('Error');
@@ -42,7 +32,6 @@ export default function ImageFallback({ alt, className, src, fallbackImage, widt
         }
         {loadingError &&
           <div 
-            onClick={handleClickRetry} 
             className="flex flex-col gap-5 w-full items-center justify-center"
             style={{ height: `${height}px`, width: `100%` }} 
           >
