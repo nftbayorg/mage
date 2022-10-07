@@ -1,6 +1,7 @@
 import { trpc } from "../../utils/trpc";
 
 import { GiAbstract116 } from "react-icons/gi";
+import Link from "next/link";
 
 const Sidebar = () => {
 
@@ -18,12 +19,12 @@ const Sidebar = () => {
         <div className="mt-5 ml-2 flex-col overflow-y-scroll max-h-50 w-full">
           {collections.data && collections.data.map(item => {
             return (
-              <a className="flex items-center text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5" key={item.id}>
+              <Link href={`collections/${item.id}`} key={item.id}>
                 {/* <GiAbstract116 color={item.color || "white"}/> */}
-                <div className="ml-2">
+                <div className="flex items-cente text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5">
                     {item.name}
                 </div>
-              </a>
+              </Link>
             )
           })}
         </div>

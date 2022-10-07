@@ -10,6 +10,7 @@ export const collectionRouter = t.router({
       return ctx.prisma.collection.findFirst({
         where: {
           id: input?.id || "",
+          visible: true
         },
         include: {
           nftSets: true,
@@ -37,7 +38,11 @@ export const collectionRouter = t.router({
       });
     }),
   getAll: t.procedure.query(({ ctx }) => {
-    return ctx.prisma.collection.findMany();
+    return ctx.prisma.collection.findMany({
+      where: {
+        visible: true
+      }
+    });
   }),
   create: t.procedure
   .input(
