@@ -23,7 +23,7 @@ const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: Com
 
   const [dropzoneDimensions, setDropzoneDimensions] = useState<string>("w-full h-96 md:w-96");
   const [roundedDimensions, setRoundedDimensions] = useState<string>("rounded-lg");
-  const [insetBgColor, setInsetBgColor] = useState<string>("bg-gray-300");
+  const [insetBgColor, setInsetBgColor] = useState<string>("bg-gray-300 dark:bg-gray-700");
   const [insetIconFillColor, setInsetIconFillColor] = useState<string>("fill-gray-700");
   const [buttonBorderColor, setButtonBorderColor] = useState<string>("");
   const [isMouseOver, setMouseOver] = useState<boolean>(false);
@@ -54,7 +54,7 @@ const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: Com
       setInsetIconFillColor("fill-gray-700");
       setButtonBorderColor("border-gray-400");
     } else {
-      setInsetBgColor("bg-white");
+      setInsetBgColor("bg-gray-300 dark:bg-neutral-700");
       setInsetIconFillColor("fill-gray-300");
       setButtonBorderColor("");
     }
@@ -107,7 +107,7 @@ const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: Com
       name="drop"
       label={label || "Image"}
       required
-      caption={caption || "File types supported: JPG, PNG, GIF, SVG"}
+      caption={caption || "File types supported: JPG, PNG, GIF, AVIF, WEBP"}
       captionSize={captionSize || "sm"}
       onDragStateChange={onDragStateChange}
       onFilesDrop={onFilesDrop}

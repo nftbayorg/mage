@@ -14,7 +14,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, widt
   return (
     <>
       <div 
-        className={`${className} w-full flex relative items-center justify-center bg-gray-100`}
+        className={`${className} w-full flex relative items-center justify-center bg-gray-100 dark:bg-neutral-500`}
         style={{ 'height': `100%` }}
       >
         {!loadingError && 

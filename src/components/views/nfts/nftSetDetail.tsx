@@ -98,7 +98,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               <FaRegHeart size={20} className="fill-gray-400 mr-2" />
             </button>
           </div>
-          <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 border-t-0 rounded-xl rounded-t-none">
+          <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-400 border-t-0 rounded-xl rounded-t-none">
             <Image
               src={nftSet.imageUrl}
               alt={nftSet.name}
@@ -119,10 +119,10 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           icon={<FaAlignLeft size={25} className="fill-gray-700 dark:fill-gray-400" />}
         >
           <div className="flex flex-col items-start justify-start">
-            <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-white">
+            <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
               By <div className="font-bold">{nftSet.creatorId}</div>
             </div>
-            {nftSet.collection?.description && <div className="text-md text-gray-700 dark:text-white">
+            {nftSet.collection?.description && <div className="text-md text-gray-700 dark:text-gray-200">
               {nftSet.collection?.description}
             </div>}
           </div>
@@ -171,7 +171,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               objectFit="cover"
               className="rounded-xl w-[150px] h-[100px]"
             />
-            <div className="text-gray-700 text-xl">No listings yet</div>
+            <div className="text-gray-700 dark:text-gray-200 text-xl">No listings yet</div>
           </div>
         </CollapsePanel>
 
@@ -189,7 +189,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               objectFit="cover"
               className="rounded-xl w-[150px] h-[100px]"
             />
-            <div className="text-gray-700 text-xl">No offers yet</div>
+            <div className="text-gray-700 dark:text-gray-200 text-xl">No offers yet</div>
           </div>
         </CollapsePanel>
       </section>

@@ -30,7 +30,7 @@ export const CollapsePanel = ({ children, collapsible, defaultState, icon, label
           </div>
         }
       </div>
-      <div className={`${panelCollapsed ? "max-h-0 border-0" : "max-h-screen p-10"} transition-[height] ease-in-out delay-100 flex-col border border-t-0 border-gray-200 dark:border-gray-600 rounded-b-xl items-start justify-start bg-gray-50 overflow-hidden`}>
+      <div className={`${panelCollapsed ? "max-h-0 border-0" : "max-h-screen p-10"} transition-[height] ease-in-out delay-100 flex-col border border-t-0 border-gray-200 dark:border-gray-600 rounded-b-xl items-start justify-start bg-gray-50 dark:bg-neutral-500 overflow-hidden`}>
         {children}
       </div>
     </section>
