@@ -28,7 +28,8 @@ const CollectionHeader = ({ bannerImageUrl, logoImageUrl, isLoading }: Collectio
         />
           <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-1">
             <div className="w-full h-full p-1 relative">
-              <Image className="rounded-lg"
+              <Image 
+                className="rounded-lg"
                 src={logoImageUrl} 
                 alt="image"
                 objectFit="cover"
