@@ -74,7 +74,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
   }
 
   return (
-    <section className="flex flex-col w-full text-lg font-normal dark:text-gray-300 text-gray-700">
+    <section className="flex flex-col gap-y-5 w-full text-lg font-normal dark:text-gray-300 text-gray-700">
       <CollectionHeader logoImageUrl={logoImageUrl} bannerImageUrl={bannerImageUrl} isLoading={collection ? false : true} />
       <section>
         <section className="flex flex-col mb-10 px-10">
