@@ -15,17 +15,24 @@ import { inferQueryOutput } from "../../../utils/trpc";
 import { CollapsePanel } from "../../forms/controls/CollapsePanel";
 
 type NftSet = inferQueryOutput<"nftSet.get">;
+type Collection = inferQueryOutput<"collection.get">;
 
 const NftSetHeader = ({
   collection,
   name,
 }: {
-  collection?: string;
+  collection?: Collection | null;
   name: string;
 }) => {
+  if (!collection) return <></>
+
   return (
-    <div className="flex-col space-y-6 mb-4">
-      {collection &&  <div className="text-xl font-light text-blue-500 my-3">{collection}</div>}
+    <div className="flex-col space-y-6 mb-4 w-full">
+      {collection &&  
+        <Link href={`/collections/${collection?.id}`}>
+          <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">{collection.name}</div>
+        </Link>
+      }
       <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
         {name}
       </div>
@@ -72,10 +79,10 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
   }
 
   return (
-    <section className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 m-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600 ">
+    <section className="flex flex-col w-full space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 p-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600 ">
       <div className="lg:hidden">
         <NftSetHeader
-          collection={nftSet.collection?.name}
+          collection={nftSet.collection as Collection}
           name={nftSet.name}
         />
       </div>
@@ -91,7 +98,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               <FaRegHeart size={20} className="fill-gray-400 mr-2" />
             </button>
           </div>
-          <div className="flex items-center justify-center cursor-pointer w-auto h-[578px] relative rounded-b-xl border border-gray-200 border-t-0 rounded-xl rounded-t-none">
+          <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 border-t-0 rounded-xl rounded-t-none">
             <Image
               src={nftSet.imageUrl}
               alt={nftSet.name}
@@ -135,7 +142,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
       <section className="lg:w-3/5 flex flex-col gap-5">
         <div className="hidden lg:block">
           <NftSetHeader
-            collection={nftSet.collection?.name}
+            collection={nftSet.collection as Collection}
             name={nftSet.name}
           />
         </div>
@@ -162,7 +169,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               width="150"
               height="100"
               objectFit="cover"
-              className="rounded-xl"
+              className="rounded-xl w-[150px] h-[100px]"
             />
             <div className="text-gray-700 text-xl">No listings yet</div>
           </div>
@@ -180,7 +187,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               width="150"
               height="100"
               objectFit="cover"
-              className="rounded-xl"
+              className="rounded-xl w-[150px] h-[100px]"
             />
             <div className="text-gray-700 text-xl">No offers yet</div>
           </div>
