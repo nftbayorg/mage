@@ -1,7 +1,11 @@
 import React, { InputHTMLAttributes, useCallback } from "react";
 import { useState } from "react";
-import { UseFormSetValue } from "react-hook-form";
-import { FaAsterisk } from "react-icons/fa";
+import { 
+  FaAsterisk,
+  FaChevronDown,
+  FaChevronUp
+
+} from "react-icons/fa";
 import { SelectContext } from "../../../context/selectContext";
 import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
 
@@ -48,7 +52,10 @@ export const Select = ({ caption, children, label, name, placeholder, required, 
       <div ref={selectContainerRef} className="relative w-full flex" onClick={showDropdownHandler}>
     
         <input {...register(name, { required })} className="hidden" id={name} {...rest}/>    
-        <input placeholder={placeholder} value={selectedOption} readOnly className={classes}/>
+        <div className="w-full flex relative cursor-pointer">
+          <input placeholder={placeholder} value={selectedOption} readOnly className={`${classes} cursor-pointer`}/>
+          <FaChevronDown size={25} className={`fill-gray-700 dark:fill-gray-400 font-light cursor-pointer absolute right-5 top-5 transition-all ${showDropdown ? 'rotate-180' : ''}`} />
+        </div>
     
         <div className={`absolute left-0 top-[100%] ${showDropdown ? "" : "hidden"} transition-all ease-in-out delay-150 w-full pb-10 h-40 z-20`}>
           <ul className="bg-white dark:bg-slate-700 overflow-scroll h-96 rounded-md shadow-[0px_0px_15px_5px_rgba(186,186,186,0.57)] dark:shadow-none">
