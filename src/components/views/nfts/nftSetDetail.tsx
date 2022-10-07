@@ -91,7 +91,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               <FaRegHeart size={20} className="fill-gray-400 mr-2" />
             </button>
           </div>
-          <div className="flex items-center justify-center cursor-pointer w-auto h-auto relative rounded-b-xl border border-gray-200 border-t-0 rounded-xl rounded-t-none">
+          <div className="flex items-center justify-center cursor-pointer w-auto h-[578px] relative rounded-b-xl border border-gray-200 border-t-0 rounded-xl rounded-t-none">
             <Image
               src={nftSet.imageUrl}
               alt={nftSet.name}
