@@ -96,6 +96,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               src={nftSet.imageUrl}
               alt={nftSet.name}
               layout="intrinsic"
+              priority={true}
               width="800"
               height="800"
               objectFit="contain"
