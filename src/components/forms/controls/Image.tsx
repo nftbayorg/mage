@@ -1,13 +1,18 @@
 import { ImageProps } from "next/image";
 import { useEffect, useState } from "react";
 import { MdImageNotSupported } from "react-icons/md";
+import { BiLoaderAlt } from 'react-icons/bi';
 
 type MageImageProps = ImageProps & {
-  fallbackImage?: string
+  fallbackImage?: string;
+  hideLoadingIndicator?: boolean;
 }
 
-export default function ImageFallback({ alt, className, src, fallbackImage, width, height }: MageImageProps) {
+export default function ImageFallback({ alt, className, src, fallbackImage, hideLoadingIndicator, width, height }: MageImageProps) {
+  const [loading, setLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(false);
+  const [attempts, setAttempts] = useState(1);
+  const [loadingIndicator] = useState(!hideLoadingIndicator);
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
@@ -18,17 +23,31 @@ export default function ImageFallback({ alt, className, src, fallbackImage, widt
         style={{ 'height': `100%` }}
       >
         {!loadingError && 
-          // eslint-disable-next-line @next/next/no-img-element 
-          <img 
-            alt={alt}
-            className={`${className} object-cover`}
-            src={src as string} 
-            style={{ height: `100%`, width: `100%` }} 
-            onError={() => {
-              console.log('Error');
-              setLoadingError(true);
-            }}
-          />
+          <div className="flex w-full h-full relative ">
+            {loading && loadingIndicator && 
+              <div className="w-full h-full absolute right-1 bottom-1">
+                <div className="w-full h-full relative">
+
+                  <div className="w-full h-full absolute left-2 top-2">
+                    <BiLoaderAlt size={40} className="fill-gray-700 animate-spin" />                
+                  </div>
+                  <div className="text-sm w-full h-full absolute left-6 top-5">
+                    {attempts}
+                  </div>
+                </div>
+              </div>
+            }
+            { // eslint-disable-next-line @next/next/no-img-element 
+              <img 
+                alt={alt}
+                className={`${className} object-cover`}
+                src={src as string} 
+                style={{ height: `100%`, width: `100%` }} 
+                onLoad={() => setLoading(false)}
+                onError={() => setLoadingError(true)}
+              />
+            }
+          </div>
         }
         {loadingError &&
           <div 
