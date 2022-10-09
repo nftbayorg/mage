@@ -1,15 +1,15 @@
 # Mage NFT
 
-DeFi NFT Marketplace. All NFTs purchased on the marketplace can be staked to earn as you own, or used as collateral for a DeFi loan.
+DeFi NFT Marketplace. All NFTs purchased on the platform can be staked to earn as you own, or used as collateral for a DeFi loan.
 
 ## How do I deploy this?
 
 ### Vercel
 
-We recommend deploying to [Vercel](https://vercel.com/?utm_source=t3-oss&utm_campaign=oss). It makes it super easy to deploy NextJs apps.
+Deploying to Vercel
 
 - Push your code to a GitHub repository.
-- Go to [Vercel](https://vercel.com/?utm_source=t3-oss&utm_campaign=oss) and sign up with GitHub.
+- Go to [Vercel](https://vercel.com and sign up with GitHub.
 - Create a Project and import the repository you pushed your code to.
 - Add your environment variables.
 - Click **Deploy**
