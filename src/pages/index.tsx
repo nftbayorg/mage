@@ -26,7 +26,7 @@ const Home: NextPage = () => {
         </p>
         <div className="flex flex-col items-start justify-center w-full pt-6 text-2xl">
           <div className="text-4xl text-gr">New and noteable</div>
-          <div className="flex items-center justify-center w-full pt-6 text-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
             {data && [data[0], data[1], data[2]].map(collection => {
               return collection && (
                 <CollectionPanel
@@ -42,18 +42,16 @@ const Home: NextPage = () => {
         </div>
         <div className="flex flex-col items-start justify-center w-full pt-6 text-2xl">
           <div className="text-4xl">Collectibles</div>
-          <div className="flex items-center justify-center w-full pt-6 text-2xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
             {data && [data[3], data[4], data[5]].map(collection => {
               return collection && (
-                <div className="miin-w-[100%] md:min-w-[33%]">
-                  <CollectionPanel
-                    key={collection.id} 
-                    collectionId={collection.id}
-                    featuredImageUrl={collection.featureImageUrl}
-                    logoImageUrl={collection.logoImageUrl}
-                    name={collection.name}
-                    />
-                </div>
+                <CollectionPanel
+                  key={collection.id} 
+                  collectionId={collection.id}
+                  featuredImageUrl={collection.featureImageUrl}
+                  logoImageUrl={collection.logoImageUrl}
+                  name={collection.name}
+                  />
                 )
               })}
           </div>

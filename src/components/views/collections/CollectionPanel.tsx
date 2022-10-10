@@ -12,7 +12,7 @@ export const CollectionPanel = ({ collectionId, logoImageUrl, featuredImageUrl, 
 
   return (
     <Link href={`/collections/${collectionId}`}>
-      <div className="flex flex-col items-center justify-center w-full h-fit rounded-lg hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 cursor-pointer relative">
+      <div className="flex flex-col items-center justify-center w-full h-80 rounded-lg hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 cursor-pointer relative">
         {logoImageUrl && (
           <div className="w-full h-80 relative rounded-t-lg overflow-hidden">
             <Image
