@@ -87,34 +87,36 @@ const MenuItems = () => {
         </Link>}
       </div>
       <div className="flex justify-end md:flex-row md:ml-auto min-w-fit h-full mr-7">
-        {session && (
-          <NavMenu 
-            icon={<FaRegUserCircle size={30}/>} 
-            position="left"
-          >
-            <NavMenuItem 
-              icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-              caption="My Collections" 
-              onClick={() => router.push('/collections')}
-            />
-            <SetTheme/>
-            <NavMenuItem 
-              icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-              caption="Sign Out" 
-              onClick={() => signOut()}
-            />
-          </NavMenu>
-        )}
-        {!session && (
-          <>
-            <SetTheme/>
-            <NavMenuItem 
-              icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
-              caption="Log In" 
-              onClick={() => router.push('/login')}
-            />
-          </>
-        )}
+        <NavMenu 
+          icon={<FaRegUserCircle size={30}/>} 
+          position="left"
+        >
+          {session && (
+            <>
+              <NavMenuItem 
+                icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+                caption="My Collections" 
+                onClick={() => router.push('/collections')}
+              />
+              <SetTheme/>
+              <NavMenuItem 
+                icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+                caption="Sign Out" 
+                onClick={() => signOut()}
+              />
+            </>
+          )}
+          {!session && (
+            <>
+              <SetTheme/>
+              <NavMenuItem 
+                icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
+                caption="Log In" 
+                onClick={() => router.push('/login')}
+              />
+            </>
+          )}
+        </NavMenu>
       </div>
     </div>
     </>
