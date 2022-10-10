@@ -17,12 +17,8 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet}>(( prop
           <Image 
             src={nftSet.imageUrl} 
             alt={nftSet.name} 
-            layout="intrinsic"
             height={500} 
             width={500} 
-            objectFit="contain"
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
             className="rounded-t-2xl transition transform-gpu hover:scale-125"
           />
         </div>

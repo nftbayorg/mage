@@ -1,5 +1,5 @@
 import { ImageProps } from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MdImageNotSupported } from "react-icons/md";
 import { BiLoaderAlt } from 'react-icons/bi';
 
@@ -15,6 +15,16 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
   const [loadingIndicator] = useState(!hideLoadingIndicator);
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
+
+  const handleError = useCallback(() => {
+    setAttempts(prev => prev+1);
+  },[]);
+
+  useEffect(() => {
+    if (attempts > 3) {
+      setLoadingError(true);
+    }
+  }, [attempts]);
 
   return (
     <>
@@ -44,7 +54,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
                 src={src as string} 
                 style={{ height: `100%`, width: `100%` }} 
                 onLoad={() => setLoading(false)}
-                onError={() => setLoadingError(true)}
+                onError={handleError}
               />
             }
           </div>

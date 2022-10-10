@@ -28,6 +28,7 @@ const Sidebar = () => {
                         alt="collection logo"
                         src={item.logoImageUrl}
                         className="rounded-full"
+                        hideLoadingIndicator={true}
                       />
                     </div>
                     <div>{item.name}</div>
