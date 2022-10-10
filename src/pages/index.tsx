@@ -8,7 +8,11 @@ import { CollectionPanel } from "../components/views/collections/CollectionPanel
 const Home: NextPage = () => {
 
   const collections = trpc.proxy.collection.getAll.useQuery();
-  const { data } = collections;
+  let { data } = collections;
+
+  if (!data) {
+    data = Array(6);
+  }
 
   return (
     <div className="my-10">
@@ -27,14 +31,11 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-start justify-center w-full pt-6 text-2xl">
           <div className="text-4xl text-gr">New and noteable</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
-            {data && [data[0], data[1], data[2]].map(collection => {
-              return collection && (
+            {[data[0], data[1], data[2]].map((collection, idx) => {
+              return (
                 <CollectionPanel
-                  key={collection.id} 
-                  collectionId={collection.id}
-                  featuredImageUrl={collection.featureImageUrl}
-                  logoImageUrl={collection.logoImageUrl}
-                  name={collection.name}
+                  key={idx} 
+                  collection={collection}
                 />
                 )
               })}
@@ -43,14 +44,11 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-start justify-center w-full pt-6 text-2xl">
           <div className="text-4xl">Collectibles</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
-            {data && [data[3], data[4], data[5]].map(collection => {
-              return collection && (
+            {[data[3], data[4], data[5]].map((collection, idx) => {
+              return (
                 <CollectionPanel
-                  key={collection.id} 
-                  collectionId={collection.id}
-                  featuredImageUrl={collection.featureImageUrl}
-                  logoImageUrl={collection.logoImageUrl}
-                  name={collection.name}
+                  key={idx} 
+                  collection={collection}
                   />
                 )
               })}
