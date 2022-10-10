@@ -56,6 +56,7 @@ const CollectionForm = ({ onSubmit }: ComponentProps) => {
         caption ="This image will also be used for navigation. 350 x 350 recommended." 
         captionSize="md" 
         dropZoneSize="sm"
+        required={true}
         onChange={(file) => handleLogoImageUploaded(file)}
       />
       <FileUpload 
@@ -89,8 +90,22 @@ const CollectionForm = ({ onSubmit }: ComponentProps) => {
           register={register}
         />
 
-        <button type="submit" disabled={!isValid || !logoImageFile} className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200">
-          <div className="text-white">Create</div>
+        <button type="submit" disabled={!isValid || !logoImageFile} 
+          className="
+            flex items-center justify-center space-x-4 py-4 px-10 
+            hover:bg-blue-400 bg-blue-500 
+            rounded font-semibold 
+            disabled:bg-blue-200
+            dark:border
+            dark:border-gray-300
+            dark:bg-white dark:bg-opacity-0
+            dark:hover:bg-opacity-10
+            dark:disabled:bg-opacity-0
+            text-white
+            dark:disabled:text-gray-700
+          "
+        >
+          <div>Create</div>
         </button>
       </form>
     </div>

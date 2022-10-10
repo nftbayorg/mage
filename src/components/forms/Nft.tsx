@@ -46,7 +46,7 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
         <FaAsterisk className="fill-red-500 mr-2" size={10}/>
         <label className="text-sm text-gray-400">Required fields</label>
       </div>
-      <FileUpload onChange={(file) => handleFileUploadOnChange(file)}/>
+      <FileUpload required={true} onChange={(file) => handleFileUploadOnChange(file)}/>
 
       <form onSubmit={handleSubmit(onSubmitFormValues)}>
         <Input
@@ -99,8 +99,20 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
           required
         />
 
-        <button type="submit" disabled={!isValid || !file} className="flex items-center justify-center space-x-4 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200">
-          <div className="text-white">Create Item</div>
+        <button type="submit" disabled={!isValid || !file} 
+          className="flex items-center justify-center space-x-4 py-4 px-10 
+            hover:bg-blue-400 bg-blue-500 rounded font-semibold 
+            disabled:bg-blue-200
+            dark:border
+            dark:border-gray-300
+            dark:bg-white dark:bg-opacity-0
+            dark:hover:bg-opacity-10
+            dark:disabled:bg-opacity-0
+            text-white
+            dark:disabled:text-gray-700
+          "
+        >
+          <div>Create Item</div>
         </button>
       </form>
     </>

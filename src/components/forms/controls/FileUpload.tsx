@@ -15,10 +15,11 @@ type ComponentProps = {
   captionSize?: "sm" | "md" | "lg";
   dropZoneSize?: "sm" | "md" | "lg";
   onChange(file?: File): void;
+  required?: boolean;
 }
 
 
-const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: ComponentProps) => {
+const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize, required }: ComponentProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [dropzoneDimensions, setDropzoneDimensions] = useState<string>("w-full h-96 md:w-96");
@@ -106,7 +107,7 @@ const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: Com
     <DropZone
       name="drop"
       label={label || "Image"}
-      required
+      required={required || false}
       caption={caption || "File types supported: JPG, PNG, GIF, AVIF, WEBP"}
       captionSize={captionSize || "sm"}
       onDragStateChange={onDragStateChange}

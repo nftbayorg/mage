@@ -15,7 +15,16 @@ const Login: NextPage = () => {
           Welcome to Mage
         </h1>
         <button
-          className="mt-10 hover:bg-blue-400  p-3 px-6 pt-2 text-white bg-blue-500 rounded"
+          className="
+            mt-10 
+            hover:bg-blue-400 text-white bg-blue-500 
+            dark:border
+            dark:border-gray-300
+            dark:bg-white dark:bg-opacity-0
+            dark:hover:bg-opacity-10
+            p-3 px-6 pt-2
+            rounded
+          "
           onClick={() => signIn("discord")}
         >
           <div className="flex items-center">

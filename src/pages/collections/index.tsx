@@ -21,7 +21,17 @@ const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
         <h1 className="text-3xl md:text-5xl my-5">My Collections</h1>
         <h2 className="md:text-md font-light">Create, curate, and manage collections of unique NFTs to share and sell.</h2>
         <Link href="/collections/create">
-          <a className="md:max-w-fit my-10 flex items-center justify-center dark:text-gray-300 py-4 px-10 hover:bg-blue-400 bg-blue-500 rounded font-semibold disabled:bg-blue-200 text-white">
+          <a className="
+            md:max-w-fit my-10 
+            flex items-center justify-center 
+            dark:text-gray-300 py-4 px-10 hover:bg-blue-400 bg-blue-500 disabled:bg-blue-200 text-white
+            dark:border
+            dark:border-gray-300
+            dark:bg-white dark:bg-opacity-0
+            dark:hover:bg-opacity-10
+            rounded
+            font-semibold 
+          ">
             Create a collection
           </a>
         </Link>
