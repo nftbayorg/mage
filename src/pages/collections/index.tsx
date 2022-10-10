@@ -2,15 +2,18 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import Link from "next/link";
 import Loading from "../../components/layout/Loading";
 import { getMageAuthSession } from "../../server/common/get-server-session";
-import { trpc, inferQueryOutput } from "../../utils/trpc";
-import Image from "../../components/forms/controls/Image";
+import { trpc } from "../../utils/trpc";
 import { CollectionPanel } from "../../components/views/collections/CollectionPanel";
 
 const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
 
-  const { data, isLoading } = trpc.useQuery(['collection.getByUser', { user: session.user.id }],{
+  let { data } = trpc.useQuery(['collection.getByUser', { user: session.user.id }],{
     refetchOnWindowFocus: false
   });
+
+  if (!data) {
+    data = Array(6);
+  }
 
   return (
     <div className="p-5 mb-10 flex items-center justify-center h-full overflow-y-scroll overflow-x-hidden">
@@ -22,11 +25,9 @@ const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
             Create a collection
           </a>
         </Link>
-        {isLoading || !data ?
-          <Loading/>
-        :
+        {data && data.length &&
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data.map(collection => (<CollectionPanel key={collection.id} collection={collection}/>))}
+            {data.map((collection, idx) => (<CollectionPanel key={idx} collection={collection}/>))}
           </div>
         }
       </div>

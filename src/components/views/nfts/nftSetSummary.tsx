@@ -1,7 +1,6 @@
 import React from "react";
 import Link from 'next/link';
 import { inferQueryOutput } from "../../../utils/trpc";
-import { timeRemaining } from '../../../utils/time';
 import Image from '../../forms/controls/Image';
 
 type NftSet = inferQueryOutput<"nftSet.getLean">;
