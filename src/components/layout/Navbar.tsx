@@ -74,7 +74,7 @@ const MenuItems = () => {
       w-full h-full
       dark:text-gray-300 text-gray-700 font-bold
     ">
-      <div className="flex gap-y-4 space-x-6 items-center justify-center w-full">
+      <div className="flex gap-x-6 w-full items-center justify-center md:mr-[55px]">
         <Link href="/trade" >
           <a className="outline-none dark:hover:text-blue-500 hover:text-blue-500">
             Trade
