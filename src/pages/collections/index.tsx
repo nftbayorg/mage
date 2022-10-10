@@ -4,42 +4,7 @@ import Loading from "../../components/layout/Loading";
 import { getMageAuthSession } from "../../server/common/get-server-session";
 import { trpc, inferQueryOutput } from "../../utils/trpc";
 import Image from "../../components/forms/controls/Image";
-
-type Collection = inferQueryOutput<"collection.get">;
-type CollectionProps = {
-  collection: Collection
-}
-
-const CollectionPanel = ({ collection }: CollectionProps) => {
-
-  if (!collection) return <div>Unknown collection</div>
-  const { logoImageUrl, featureImageUrl, name } = collection;
-
-  return (    
-    <Link href={`/collections/${collection.id}`}>
-      <div className="flex flex-col items-center justify-center w-full min-w-[80px] h-80 rounded-lg hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 cursor-pointer relative">
-        {collection.logoImageUrl && 
-          <div className="w-full h-80 relative rounded-t-lg overflow-hidden">
-            <Image
-              alt="image"
-              objectFit="cover"
-              layout="fill"
-              src={featureImageUrl || logoImageUrl}
-              placeholder="blur"
-              blurDataURL="/images/AwaitingImage600x400.png"
-              className="rounded-t-lg transition transform-gpu hover:scale-125"
-            />
-          </div>
-        }
-        <div className="flex justify-start w-full p-5">
-          <div className="text-md">
-            {name}
-          </div>
-        </div>
-      </div>
-    </Link>
-  )
-}
+import { CollectionPanel } from "../../components/views/collections/CollectionPanel";
 
 const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
 
@@ -60,7 +25,7 @@ const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
         {isLoading || !data ?
           <Loading/>
         :
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.map(collection => (<CollectionPanel key={collection.id} collection={collection}/>))}
           </div>
         }

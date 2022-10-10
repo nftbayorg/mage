@@ -10,8 +10,8 @@ import { FaDiscord } from "react-icons/fa";
 const Login: NextPage = () => {
   return (
     <>
-      <div className="container flex flex-col items-center justify-center min-h-screen p-4 mx-auto">
-        <h1 className="text-4xl text-gray-700 font-medium dark:text-gray-300">
+      <div className="container flex flex-col items-center justify-center min-h-[calc(100vh-350px)] p-4 mx-auto">
+        <h1 className="text-4xl md:text-5xl text-gray-700 font-medium dark:text-gray-300">
           Welcome to Mage
         </h1>
         <button

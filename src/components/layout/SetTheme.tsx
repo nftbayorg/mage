@@ -1,15 +1,26 @@
 import { useTheme } from "next-themes";
+import { FaRegMoon } from "react-icons/fa";
+import { NavMenuItem } from "./NavMenu";
 
 const SetTheme = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <button
-      className="mt-10 hover:bg-blue-400  p-3 px-6 pt-2 text-white bg-blue-500 rounded"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-    >
-      {theme === "dark" ? "Light Theme" : "Dark Theme"}
-    </button>
+    <>
+      {theme === "dark" ? 
+        <NavMenuItem
+          icon={<FaRegMoon size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          caption="Use Light Theme"
+          onClick={() => setTheme("light")}
+        />
+       : 
+        <NavMenuItem
+          icon={<FaRegMoon size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          caption="Use Dark Theme"
+          onClick={() => setTheme("dark")}
+        />
+      }
+    </>
   );
 };
 

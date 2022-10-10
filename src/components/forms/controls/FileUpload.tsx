@@ -55,7 +55,7 @@ const FileUpload = ({ onChange, label, caption, captionSize, dropZoneSize }: Com
       setButtonBorderColor("border-gray-400");
     } else {
       setInsetBgColor("bg-gray-300 dark:bg-neutral-700");
-      setInsetIconFillColor("fill-gray-300");
+      setInsetIconFillColor("fill-gray-700");
       setButtonBorderColor("");
     }
   }, [isMouseOver])

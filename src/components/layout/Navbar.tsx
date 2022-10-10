@@ -2,88 +2,122 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaWallet } from "react-icons/fa";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 import React from "react";
+import { NavMenu, NavMenuItem  } from "./NavMenu";
+import dynamic from "next/dynamic";
+
+const SetTheme = dynamic(() => import("./SetTheme"), { ssr: false });
 
 const MobileNav = () => {
-  const [active, setActive] = useState(false);  
-  const ref = React.createRef<HTMLDivElement>();
-
-  function handleClick() {
-    setActive(currentActive => !currentActive);
-  }
-
-  useOnClickOutside(ref, () => setActive(false));
-
-  return (
-    <>
-      <div ref={ref} className="relative md:hidden z-[1000]">
-        {!active && <FaBars size={30} className="fill-gray-700 dark:fill-gray-300" onClick={handleClick}/>}
-        {active && <FaTimes size={30} className="fill-gray-700 dark:fill-gray-300" onClick={handleClick}/>}
-        <div className={`${!active ? "opacity-0": "opacity-100"} dark:border-gray-300 transition-opacity ease-in-out delay-150 border h-60 w-72 bg-white dark:bg-slate-800 absolute md:relative top-10 right-1 rounded-lg shadow-lg p-5`}>
-          {<MenuItems onClick={handleClick} active={active}/>}
-        </div>
-      </div>
-      <div className="hidden md:flex space-x-6 justify-center items-center w-full">
-        <MenuItems onClick={() => ''} active={true}/>
-      </div>
-    </>
-  )
-}
-
-type MenuItemsProps = {
-  onClick: () => void;
-  active: boolean;
-}
-
-const MenuItems = ({ onClick, active }: MenuItemsProps) => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  function handleButtonClick(fn: Function, clickHandler: Function) {
-    if (fn) fn();
-    if (clickHandler) clickHandler();
-  } 
+  return (
+    <div className="mr-5">
+      <NavMenu
+        position="left"
+        icon={<FaBars size={30} className="fill-gray-700 dark:fill-gray-300"/>}
+        activeIcon={<FaTimes size={30} className="fill-gray-700 dark:fill-gray-300"/>}
+      >
+        <NavMenuItem
+          icon={<FaDollarSign size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          caption="Trade"
+          onClick={() => router.push("/trade")}
+        />
+        {session &&
+          <>
+            <NavMenuItem
+              icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+              caption="Create"
+              onClick={() => router.push("/nfts/create")}
+            />
+            <NavMenuItem 
+              icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+              caption="My Collections" 
+              onClick={() => router.push('/collections')}
+            />
+            <SetTheme/>
+            <NavMenuItem 
+              icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+              caption="Sign Out" 
+              onClick={() => signOut()}
+            />
+          </>
+        }
+        {!session && 
+          <>
+            <SetTheme/>
+            <NavMenuItem 
+              icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
+              caption="Log In" 
+              onClick={() => router.push('/login')}
+            />
+          </>
+        }
+      </NavMenu>
+    </div>
+  )
+}
+
+
+const MenuItems = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
 
   return (
-    <div className={`${!active ? "hidden" : ""} text-md flex flex-col gap-y-8 md:flex-row justify-between md:items-center md:justify-center w-full h-full`}>
-      <div className="flex flex-col gap-y-4 md:flex-row md:space-x-6 md:items-center md:justify-center w-full">
+    <>
+    <div className="
+      text-md 
+      flex gap-y-8 flex-row items-center 
+      w-full h-full
+      dark:text-gray-300 text-gray-700 font-bold
+    ">
+      <div className="flex gap-y-4 space-x-6 items-center justify-center w-full">
         <Link href="/trade" >
-          <a onClick={() => onClick()} className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
+          <a className="outline-none dark:hover:text-blue-500 hover:text-blue-500">
             Trade
           </a>
         </Link>
         {session && <Link href="/nfts/create">
-          <a onClick={() => onClick()} className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
+          <a className="outline-none dark:hover:text-blue-500 hover:text-blue-500">
             Create
           </a>
         </Link>}
-        {session && <Link href="/collections">
-          <a onClick={() => onClick()} className="dark:text-gray-300 dark:hover:text-blue-500 hover:text-blue-500 text-gray-700">
-            My Collections
-          </a>
-        </Link>}
       </div>
-      <div className="flex flex-col justify-end md:flex-row md:ml-auto min-w-fit h-full">
+      <div className="flex justify-end md:flex-row md:ml-auto min-w-fit h-full">
         {session && (
-          <button
-            className="md:block hover:bg-red-400 p-3 md:px-6 pt-2 text-white bg-red-500 rounded"
-            onClick={() => handleButtonClick(() => signOut(), onClick)}
+          <NavMenu 
+            icon={<FaRegUserCircle size={30}/>} 
+            position="left"
           >
-            Sign Out
-          </button>
+            <NavMenuItem 
+              icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+              caption="My Collections" 
+              onClick={() => router.push('/collections')}
+            />
+            <SetTheme/>
+            <NavMenuItem 
+              icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+              caption="Sign Out" 
+              onClick={() => signOut()}
+            />
+          </NavMenu>
         )}
         {!session && (
-          <button
-            className="md:block hover:bg-blue-400 mt-auto p-3 md:px-6 pt-2 text-white bg-blue-500 rounded"
-            onClick={() => handleButtonClick(() => router.push("/login"), onClick)}
-          >
-            Log In
-          </button>
+          <>
+            <SetTheme/>
+            <NavMenuItem 
+              icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
+              caption="Log In" 
+              onClick={() => router.push('/login')}
+            />
+          </>
         )}
       </div>
     </div>
+    </>
   )
 }
 
@@ -99,7 +133,12 @@ const NavBar = () => {
             </span>
           </div>
         </Link>
-        <MobileNav />
+        <div className="w-full hidden md:block">
+          <MenuItems/>
+        </div>
+        <div className="md:hidden">
+          <MobileNav />
+        </div>
       </div>
     </nav>
   );
