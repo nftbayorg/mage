@@ -28,9 +28,14 @@ export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
       justify-start 
       cursor-pointer 
       bg-black bg-opacity-0
+      dark:bg-white dark:bg-opacity-0
+      dark:hover:bg-opacity-10
       hover:bg-opacity-5
       hover:text-blue-500
       hover:fill-blue-500
+      dark:hover:text-blue-500
+      dark:hover:fill-blue-500
+
       text-gray-700 dark:text-gray-300
       font-bold
     " 
