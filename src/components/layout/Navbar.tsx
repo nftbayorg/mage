@@ -76,12 +76,12 @@ const MenuItems = () => {
     ">
       <div className="flex gap-x-6 w-full items-center justify-center md:mr-[55px]">
         <Link href="/trade" >
-          <a className="outline-none dark:hover:text-blue-500 hover:text-blue-500">
+          <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500 ">
             Trade
           </a>
         </Link>
         {session && <Link href="/nfts/create">
-          <a className="outline-none dark:hover:text-blue-500 hover:text-blue-500">
+          <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500">
             Create
           </a>
         </Link>}

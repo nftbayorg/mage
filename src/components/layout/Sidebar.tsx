@@ -22,7 +22,7 @@ const Sidebar = () => {
             return (
               <Link href={`collections/${item.id}`} key={item.id}>
                 {/* <GiAbstract116 color={item.color || "white"}/> */}
-                <div className="flex items-center text-gray-700 gap-x-5 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5">
+                <div className="flex items-center text-gray-700 gap-x-5 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-gray-500 mt-5">
                     <div className="h-[20px] w-[20px] min-w-[20px]">
                       <Image 
                         alt="collection logo"
@@ -44,7 +44,7 @@ const Sidebar = () => {
         <div className="mt-5 ml-2 flex-col">
           {salesTypes && salesTypes.map(item => {
             return (
-              <a className="block text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5" key={item}>
+              <a className="block text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-gray-500 mt-5" key={item}>
                 {item}
               </a>
             )
@@ -57,7 +57,7 @@ const Sidebar = () => {
         <div className="mt-5 ml-2 flex-col">
           {categories && categories.map(item => {
             return (
-              <a className="block text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-blue-500 mt-5" key={item}>
+              <a className="block text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-500  dark:hover:text-gray-500 mt-5" key={item}>
                 {item}
               </a>
             )

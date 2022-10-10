@@ -33,8 +33,8 @@ export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
       hover:bg-opacity-5
       hover:text-blue-500
       hover:fill-blue-500
-      dark:hover:text-blue-500
-      dark:hover:fill-blue-500
+      dark:hover:text-gray-400
+      dark:hover:fill-gray-500
 
       text-gray-700 dark:text-gray-300
       font-bold
@@ -42,7 +42,7 @@ export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
     onClick={onClick}
   >
     {icon && React.cloneElement(icon, { 
-      className: `${icon.props.classes} hover:fill-blue-500`
+      className: `${icon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-400`
     })}
     <div>{caption}</div>
   </div>
@@ -64,13 +64,13 @@ export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) =
       <div className="w-14 h-14 absolute -left-4 -top-4 cursor-pointer" onClick={toggle} >
         <div className="absolute top-0 left-3">
           {!activeIcon && icon && React.cloneElement(icon, { 
-            className: `${icon.props.classes} hover:fill-blue-500`
+            className: `${icon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {activeIcon && !active && icon && React.cloneElement(icon, { 
-            className: `${icon.props.classes} hover:fill-blue-500`
+            className: `${icon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {activeIcon && active && activeIcon && React.cloneElement(activeIcon, { 
-            className: `${activeIcon.props.classes} hover:fill-blue-500`
+            className: `${activeIcon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {caption && caption}
         </div>
