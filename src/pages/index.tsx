@@ -4,15 +4,22 @@ import type {
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
 import { CollectionPanel } from "../components/views/collections/CollectionPanel";
+import { useMemo } from "react";
 
 const Home: NextPage = () => {
 
-  const collections = trpc.proxy.collection.getAll.useQuery();
+  const collections = trpc.proxy.collection.getAll.useQuery(undefined, {
+    refetchOnWindowFocus: false
+  });
+  
   let { data } = collections;
 
   if (!data) {
     data = Array(6);
+  } else {
+    data.sort(() => Math.random() - Math.random());
   }
+
 
   return (
     <div className="my-10">
