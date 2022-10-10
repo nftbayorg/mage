@@ -90,7 +90,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
       <div className="flex flex-col lg:w-2/5 space-y-4">
         <section className="">
           <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
-            <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-400">
+            <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-300">
               <FaEthereum className="fill-blue-500 mr-2" size={20} />
               Buy now
             </button>
@@ -170,6 +170,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               height="100"
               objectFit="cover"
               className="rounded-xl w-[150px] h-[100px]"
+              hideLoadingIndicator={true}
             />
             <div className="text-gray-700 dark:text-gray-200 text-xl">No listings yet</div>
           </div>
@@ -188,6 +189,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               height="100"
               objectFit="cover"
               className="rounded-xl w-[150px] h-[100px]"
+              hideLoadingIndicator={true}
             />
             <div className="text-gray-700 dark:text-gray-200 text-xl">No offers yet</div>
           </div>

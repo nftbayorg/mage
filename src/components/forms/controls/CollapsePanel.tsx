@@ -20,7 +20,7 @@ export const CollapsePanel = ({ children, collapsible, defaultState, icon, label
         className={`${panelCollapsed ? "rounded-b-xl" : ""} cursor-pointer flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center`}
       >
         {icon}
-        <div className="ml-5 text-xl font-semibold text-gray-700">
+        <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
           {label}
         </div>
         {collapsible && 
