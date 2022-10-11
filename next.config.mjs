@@ -24,16 +24,5 @@ export default defineNextConfig({
       `${env.S3_UPLOAD_BUCKET}.s3.amazonaws.com`,
       `${env.S3_UPLOAD_BUCKET}.s3.${process.env.S3_UPLOAD_REGION}.amazonaws.com`,
     ],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'nftstorage.link',
-      },
-    ],
   },
-  api: {
-    bodyParser: {
-      sizeLimit: '4mb'
-    }
-  }
 });
