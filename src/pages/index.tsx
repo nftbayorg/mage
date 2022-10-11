@@ -10,18 +10,19 @@ const Home: NextPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const dataRef = useRef(collections.data);
+  let { data } = collections;
 
-  if (!dataRef.current) {
-    dataRef.current = Array(6);
+  if (!data) {
+    data = Array(6);
   }
 
   useEffect(() => {
-    if (dataRef.current) {
-      dataRef.current.sort(() => Math.random() - Math.random());
+    if (!data) {
+      data = Array(6);
+    } else {
       setSorted(true);
     }
-  }, [])
+  }, [data])
 
   if (!sorted) <></>
 
@@ -40,7 +41,7 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-start justify-center w-full pt-10 md:pt-6 text-2xl">
           <div className="text-3xl md:text-4xl text-gr">New and noteable</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
-            {[dataRef.current[0], dataRef.current[1], dataRef.current[2]].map((collection, idx) => {
+            {data && [data[0], data[1], data[2]].map((collection, idx) => {
               return <CollectionPanel key={idx} collection={collection} />;
             })}
           </div>
@@ -48,7 +49,7 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-start justify-center w-full md:pt-6 text-2xl">
           <div className="text-3xl md:text-4xl">Collectibles</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
-            {[dataRef.current[3], dataRef.current[4], dataRef.current[5]].map((collection, idx) => {
+            {data && [data[3], data[4], data[5]].map((collection, idx) => {
               return <CollectionPanel key={idx} collection={collection} />;
             })}
           </div>
