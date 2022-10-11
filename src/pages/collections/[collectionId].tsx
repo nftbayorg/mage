@@ -6,7 +6,7 @@ import CollectionDetail from "../../components/views/collections/CollectionDetai
 
 const CollectionDetailPage: NextPage = () => {
   const id = useRouter().query.collectionId as string;
-  const collectionQuery = trpc.useQuery(["collection.get", { id }]);
+  const collectionQuery = trpc.collection.get.useQuery({ id });
 
   if (collectionQuery.error) {
     return (

@@ -4,19 +4,19 @@ import TextArea from "./controls/TextArea";
 import { FaAsterisk } from "react-icons/fa";
 import FileUpload from "./controls/FileUpload";
 import { useCallback, useState } from "react";
-import { inferQueryOutput } from "../../utils/trpc";
 import { Select } from "./controls/Select";
 import { Option } from "./controls/Option";
+import { inferProcedureOutput } from "@trpc/server";
+import { AppRouter } from "../../server/trpc/router";
 
-type Collections = inferQueryOutput<"collection.getByUser">;
+type Collections = inferProcedureOutput<AppRouter["collection"]["getAll"]>;
 
 type ComponentProps = {
   onSubmit: (data: CreateItemFormValues) => void;
   collections: Collections | undefined;
-}
+};
 
 const NftForm = ({ onSubmit, collections }: ComponentProps) => {
-
   const [file, setFile] = useState<File>();
   const {
     register,
@@ -25,28 +25,31 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
     formState: { errors, isValid },
   } = useForm<CreateItemFormValues>({
     mode: "onChange",
-    reValidateMode: "onChange" 
+    reValidateMode: "onChange",
   });
 
   const handleFileUploadOnChange = useCallback((file: File | undefined) => {
     setFile(file);
-  }, [])
- 
+  }, []);
+
   const onSubmitFormValues = async (data: CreateItemFormValues) => {
     if (file) {
       data.totalSupply = parseInt(data.totalSupply);
       data.file = file;
       onSubmit(data);
     }
-  }
+  };
 
   return (
     <>
       <div className="flex items-center my-1">
-        <FaAsterisk className="fill-red-500 mr-2" size={10}/>
+        <FaAsterisk className="fill-red-500 mr-2" size={10} />
         <label className="text-sm text-gray-400">Required fields</label>
       </div>
-      <FileUpload required={true} onChange={(file) => handleFileUploadOnChange(file)}/>
+      <FileUpload
+        required={true}
+        onChange={(file) => handleFileUploadOnChange(file)}
+      />
 
       <form onSubmit={handleSubmit(onSubmitFormValues)}>
         <Input
@@ -57,21 +60,26 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
           required
         />
 
-        {collections && 
-          <Select 
+        {collections && (
+          <Select
             label="Collection"
-            name="collectionId"    
+            name="collectionId"
             placeholder="Place the NFT in a collection"
             register={register}
-            setValue={setValue}            
+            setValue={setValue}
           >
             <>
-              {collections.map(collection => (
-                <Option key={collection.id} value={[collection.id, collection.name]}>{collection.name}</Option>
-                ))}            
+              {collections.map((collection) => (
+                <Option
+                  key={collection.id}
+                  value={[collection.id, collection.name]}
+                >
+                  {collection.name}
+                </Option>
+              ))}
             </>
           </Select>
-        }
+        )}
 
         <Input
           caption="Mage will include a link on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
@@ -81,10 +89,10 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
           register={register}
         />
 
-        <TextArea    
+        <TextArea
           caption="The description will be included on your item's detail page underneath its image."
           label="Description"
-          name="description"    
+          name="description"
           placeholder="Provide a detailed description of your item."
           register={register}
         />
@@ -99,7 +107,9 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
           required
         />
 
-        <button type="submit" disabled={!isValid || !file} 
+        <button
+          type="submit"
+          disabled={!isValid || !file}
           className="flex items-center justify-center space-x-4 py-4 px-10 
             hover:bg-blue-400 bg-blue-500 rounded font-semibold 
             disabled:bg-blue-200

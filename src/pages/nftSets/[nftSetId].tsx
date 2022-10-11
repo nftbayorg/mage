@@ -6,7 +6,7 @@ import NftSetDetail from "../../components/views/nfts/nftSetDetail";
 
 const NftSetDetailPage: NextPage = () => {
   const id = useRouter().query.nftSetId as string;
-  const nftSetQuery = trpc.useQuery(["nftSet.get", { id }]);
+  const nftSetQuery = trpc.nftSet.get.useQuery({ id });
 
   if (nftSetQuery.error) {
     return (
@@ -25,6 +25,5 @@ const NftSetDetailPage: NextPage = () => {
     </div>
   );
 };
-  
 
 export default NftSetDetailPage;

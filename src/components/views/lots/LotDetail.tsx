@@ -9,10 +9,11 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import Link from "next/link";
-import Image from '../../forms/controls/Image';
-import { inferQueryOutput } from "../../../utils/trpc";
+import Image from "../../forms/controls/Image";
+import { inferProcedureOutput } from "@trpc/server";
+import { AppRouter } from "../../../server/trpc/router";
 
-type Lot = inferQueryOutput<"lot.get">;
+type Lot = inferProcedureOutput<AppRouter["lot"]["get"]>;
 
 const LotHeader = ({
   collection,
@@ -27,7 +28,9 @@ const LotHeader = ({
 }) => {
   return (
     <div className="flex-col space-y-6 mb-4">
-      {collection &&  <div className="text-1xl text-blue-500 mb-3">{collection}</div>}
+      {collection && (
+        <div className="text-1xl text-blue-500 mb-3">{collection}</div>
+      )}
       <div className="text-3xl font-semibold mb-5 text-gray-700 dark:text-gray-400">
         {name}
       </div>
@@ -52,11 +55,11 @@ const LotHeader = ({
 };
 
 type ComponentProps = {
-  lot: Lot
-}
+  lot: Lot;
+};
 
 const LotDetail = ({ lot }: ComponentProps) => {
-  if (!lot) return <div>Loading...</div>
+  if (!lot) return <div>Loading...</div>;
 
   return (
     <section className="flex flex-col space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 m-10 pt-0 border-gray-200 dark:border-gray-600 ">

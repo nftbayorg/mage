@@ -4,7 +4,7 @@ import type {
   NextPage,
 } from "next";
 import { signIn } from "next-auth/react";
-import { getMageAuthSession } from "../server/common/get-server-session";
+import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { FaDiscord } from "react-icons/fa";
 
 const Login: NextPage = () => {
@@ -40,7 +40,7 @@ const Login: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  const session = await getMageAuthSession(ctx);
+  const session = await getServerAuthSession(ctx);
 
   if (session) {
     return {

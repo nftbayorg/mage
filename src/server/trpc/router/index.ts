@@ -1,19 +1,19 @@
 // src/server/trpc/router/index.ts
-import { t } from "../utils";
+import { router } from "../trpc";
 import { authRouter } from "./auth";
 import { collectionRouter } from "./collection";
-import { auctionRouter } from "./auction"
+import { auctionRouter } from "./auction";
 import { lotRouter } from "./lot";
 import { nftSetRouter } from "./nftSet";
 import { nftEditionRouter } from "./nftEdition";
 
-export const appRouter = t.router({
+export const appRouter = router({
   auth: authRouter,
   auction: auctionRouter,
   collection: collectionRouter,
   lot: lotRouter,
   nftEdition: nftEditionRouter,
-  nftSet: nftSetRouter
+  nftSet: nftSetRouter,
 });
 
 // export type definition of API
