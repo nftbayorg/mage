@@ -9,7 +9,7 @@ const Sidebar = () => {
   const salesTypes = ["Fixed Price", "Auction"];
   const categories = ["Premium", "Art", "Sports", "Entertainment", "Gaming", "Collectables", "Esports", ""];
 
-  const collections = trpc.proxy.collection.getAll.useQuery();
+  const collections = trpc.collection.getAll.useQuery();
 
   return (
     <nav className="hidden lg:flex p-5 w-72 h-screen overflow-scroll border-r border-gray-200 dark:border-gray-600">
