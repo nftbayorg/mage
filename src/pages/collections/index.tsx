@@ -1,12 +1,16 @@
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextApiRequest, NextApiResponse, NextPage } from "next";
 import Link from "next/link";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { trpc } from "../../utils/trpc";
 import { CollectionPanel } from "../../components/views/collections/CollectionPanel";
+import { createProxySSGHelpers } from "@trpc/react/ssg";
+import { appRouter } from "../../server/trpc/router";
+import { createContext } from "../../server/trpc/context";
+import superjson from 'superjson';
 
-const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
+const CollectionsPage: NextPage<AuthenticatedPageProps> = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let { data } = trpc.collection.getByUser.useQuery(
-    { user: session.user.id },
+    { user: props.userId },
     {
       refetchOnWindowFocus: false,
     }
@@ -65,9 +69,19 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createContext({ req: ctx.req as NextApiRequest, res: ctx.res as NextApiResponse }),
+    transformer: superjson,
+  });
+
+  await ssg.collection.getByUser.prefetch({ user: session.user?.id || '' })
+
   return {
     props: {
       session,
+      trpcState: ssg.dehydrate(),
+      userId: session.user?.id
     },
   };
 };
