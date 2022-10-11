@@ -2,7 +2,7 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { useState } from "react";
 
 type CollapsePanelProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   collapsible?: boolean;
   defaultState?: "expanded" | "collapsed";
   icon: React.ReactNode;

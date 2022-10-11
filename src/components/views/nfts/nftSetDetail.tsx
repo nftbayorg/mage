@@ -17,28 +17,97 @@ import { CollapsePanel } from "../../forms/controls/CollapsePanel";
 type NftSet = inferQueryOutput<"nftSet.get">;
 type Collection = inferQueryOutput<"collection.get">;
 
+const NftSetDetailSkeleton = () => (
+  <section className="flex flex-col w-full space-y-4 lg:flex-row lg:space-x-6 lg:w-5/6 p-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600 ">
+    <div className="lg:hidden">
+      <div className="flex flex-col gap-12 mt-4 mb-10">
+        <div className="text-4xl w-2/4 h-7 bg-blue-200 animate-pulse rounded-lg"/>
+        <div className="text-4xl w-2/4 h-7 bg-gray-200 animate-pulse rounded-lg"/>
+      </div>      
+    </div>
+
+    <div className="flex flex-col lg:w-2/5 space-y-4">
+      <section className="">
+        <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
+          <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-300" disabled>
+            <FaEthereum className="fill-blue-500 mr-2" size={20} />
+            Buy now
+          </button>
+          <button className="ml-auto hover:text-red-500  dark:hover:text-red-500" disabled>
+            <FaRegHeart size={20} className="fill-gray-400 mr-2" />
+          </button>
+        </div>
+        <div className="w-full h-[400px] md:h-[578px] rounded-b-xl bg-gray-200 dark:bg-gray-400 border-t-0 rounded-xl rounded-t-none animate-pulse"/>
+      </section>
+
+      <CollapsePanel
+        label="Description"
+        icon={<FaAlignLeft size={25} className="fill-gray-700 dark:fill-gray-400" />}
+        collapsible={true}
+        defaultState="collapsed"
+      />
+
+      <CollapsePanel
+        label="Properties"
+        icon={<FaTags size={25} className="fill-gray-700 dark:fill-gray-400 rotate-90" />}
+        collapsible={true}
+        defaultState="collapsed"
+      />
+    </div>
+
+    <section className="lg:w-3/5 flex flex-col gap-5">
+      <div className="hidden lg:block">
+        <div className="flex flex-col gap-12 mt-4 mb-10">
+          <div className="text-4xl w-2/4 h-7 bg-blue-200 animate-pulse rounded-lg"/>
+          <div className="text-4xl w-2/4 h-7 bg-gray-200 animate-pulse rounded-lg"/>
+        </div>      
+      </div>
+      
+      <CollapsePanel
+        icon={<FaChartLine size={25} className="fill-gray-700 dark:fill-gray-400 font-light" />}
+        label="Price History"
+        collapsible={true}
+        defaultState="collapsed"
+      />
+
+      <CollapsePanel 
+        label="Listings"
+        icon={<FaTag size={25} className="fill-gray-700 dark:fill-gray-400" />}
+        collapsible={true}
+        defaultState="collapsed"
+      />
+
+      <CollapsePanel 
+        label="Offers"
+        icon={<FaListUl size={25} className="fill-gray-700 dark:fill-gray-400" />}
+        collapsible={true}
+        defaultState="collapsed"
+      />
+    </section>
+  </section>
+)
+
 const NftSetHeader = ({
   collection,
   name,
 }: {
-  collection?: Collection | null;
+  collection: Collection;
   name: string;
-}) => {
-  if (!collection) return <></>
-
-  return (
-    <div className="flex-col space-y-6 mb-4 w-full">
-      {collection &&  
-        <Link href={`/collections/${collection?.id}`}>
-          <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">{collection.name}</div>
-        </Link>
+}) => (
+    <>
+      {collection && 
+        <div className="flex-col space-y-6 mb-4 w-full">
+          <Link href={`/collections/${collection?.id}`}>
+            <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">{collection.name}</div>
+          </Link>
+          <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
+            {name}
+          </div>
+        </div>
       }
-      <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
-        {name}
-      </div>
-    </div>
+    </>
   );
-};
+
 
 type ComponentProps = {
   nftSet: NftSet | undefined;
@@ -47,35 +116,7 @@ type ComponentProps = {
 const NftSetDetail = ({ nftSet }: ComponentProps) => {
 
   if (!nftSet) {
-    nftSet = {
-      name: "Awaiting data",
-      collection: {
-        id: "",
-        blockChainId: "Awaiting data",
-        name: "Awaiting data",
-        description: "Awaiting data",
-        bannerImageUrl: "",
-        logoImageUrl: "",
-        featureImageUrl: "",
-        explicitContent: false,
-        createdAt: new Date(),
-        userId: "",
-        displayThemee: "",
-        updatedAt: new Date(),
-        published: true,
-        visible: true 
-      },
-      imageUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg==",
-      blockchainId: "",
-      collectionId: "",
-      createdAt: new Date(),
-      creatorId: "",
-      description: "Awaiting data",
-      id: "",
-      link: "",
-      properties: [],
-      updatedAt: new Date()
-    }
+    return <NftSetDetailSkeleton/>
   }
 
   return (
