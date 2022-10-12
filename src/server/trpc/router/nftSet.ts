@@ -32,7 +32,11 @@ export const nftSetRouter = t.router({
         collectionId: z.string().optional(),
         totalSupply: z.number(),
         creator: z.string(),
-        file: z.string()
+        file: z.string(),
+        properties: z.array(z.object({
+          type: z.string(),
+          name: z.string()
+        })).optional()
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -105,6 +109,9 @@ export const nftSetRouter = t.router({
           collectionId,
           nftEditions: {
             create: nftEditionObjArray
+          },
+          properties: {
+            create: input.properties
           }
         }
       });

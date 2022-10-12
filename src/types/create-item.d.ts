@@ -1,3 +1,9 @@
+type CreateItemPropertyFormValues = {
+  id: string;
+  type: string; 
+  name: string;
+}
+
 type CreateItemFormValues = {
   file: File;
   name: string;
@@ -5,6 +11,7 @@ type CreateItemFormValues = {
   link?: string;
   description?: string;
   collectionId: string;
+  properties?: CreateItemPropertyFormValues[]
 };
 
 type CreateCollectionFormValues = {

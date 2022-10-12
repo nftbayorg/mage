@@ -4,14 +4,14 @@ import { FaAsterisk } from "react-icons/fa";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   caption?: string;
   name: string;
-  label: string;
+  label?: string;
   register: any
 }
 
-const classes = "p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 font-normal text-xl focus:outline-none focus:border-gray-500";
+const classes = "p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 font-normal text-xl focus:outline-none focus:border-gray-500 w-full";
 
 const Input = ({ caption, name, label, required, register, ...rest }: InputProps) => (
-  <div className="flex flex-col my-6">
+  <div className="flex flex-col my-3 md:my-6 w-full">
     <div className="flex items-center my-1">
       <label className="text-xl" htmlFor={name}>{label}</label>
       {required ? <FaAsterisk className="fill-red-500 ml-2" size={10}/> : null}

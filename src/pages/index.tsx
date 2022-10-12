@@ -1,30 +1,31 @@
-import type { NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, NextPage, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import { trpc } from "../utils/trpc";
 import { CollectionPanel } from "../components/views/collections/CollectionPanel";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { prisma } from "../server/db/client";
 
-const Home: NextPage = () => {
-  const [sorted, setSorted] = useState(false);
-  const collections = trpc.collection.getAll.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-  });
+const Home: NextPage = ({ collections }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [sortedData, setSortedData] = useState<[] | undefined>(undefined);
 
-  let { data } = collections;
+  const setData = useCallback((unsortedData: [] | undefined) => {
+    if (!unsortedData) return unsortedData;
+    setSortedData(unsortedData.sort(() => .5 - Math.random()));
+    return ;
+  }, []);
 
-  if (!data) {
-    data = Array(6);
+  const getCollectibles = () => {
+    return sortedData?.slice(3) || [];
   }
 
-  useEffect(() => {
-    if (!data) {
-      data = Array(6);
-    } else {
-      setSorted(true);
-    }
-  }, [data])
+  const getNewAndNoteable = useCallback(() => {
+    return sortedData?.slice(0,3) || [];
+  }, [sortedData])
 
-  if (!sorted) <></>
+  useEffect(() => {
+    if (collections) {
+      setData(collections as []);
+    }
+  }, [collections, setData])
 
   return (
     <div className="my-10">
@@ -41,22 +42,50 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-start justify-center w-full pt-10 md:pt-6 text-2xl">
           <div className="text-3xl md:text-4xl text-gr">New and noteable</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
-            {data && [data[0], data[1], data[2]].map((collection, idx) => {
+            {sortedData && getNewAndNoteable().map((collection, idx) => {
               return <CollectionPanel key={idx} collection={collection} />;
             })}
+            <>
+              <CollectionPanel/>
+              <CollectionPanel/>
+              <CollectionPanel/>
+            </>
           </div>
         </div>
         <div className="flex flex-col items-start justify-center w-full md:pt-6 text-2xl">
           <div className="text-3xl md:text-4xl">Collectibles</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
-            {data && [data[3], data[4], data[5]].map((collection, idx) => {
+            {getCollectibles().map((collection, idx) => {
               return <CollectionPanel key={idx} collection={collection} />;
             })}
+            <>
+              <CollectionPanel/>
+              <CollectionPanel/>
+              <CollectionPanel/>
+            </>
           </div>
         </div>
       </main>
     </div>
   );
 };
+
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const collections = await prisma.collection.findMany({
+    where: {
+      visible: true
+    }
+  });
+
+  return {
+    props: {
+      collections: JSON.parse(JSON.stringify(collections))
+    },
+  };
+};
+
 
 export default Home;

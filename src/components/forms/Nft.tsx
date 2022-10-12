@@ -1,13 +1,16 @@
 import { useForm } from "react-hook-form";
 import Input from "./controls/Input";
 import TextArea from "./controls/TextArea";
-import { FaAsterisk } from "react-icons/fa";
+import { FaAsterisk, FaList } from "react-icons/fa";
 import FileUpload from "./controls/FileUpload";
 import { useCallback, useState } from "react";
 import { Select } from "./controls/Select";
 import { Option } from "./controls/Option";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../server/trpc/router";
+import { CollapsePanel } from "./controls/CollapsePanel";
+import NftPropertiesForm from "./NftProperties";
+import { nanoid } from 'nanoid'
 
 type Collections = inferProcedureOutput<AppRouter["collection"]["getAll"]>;
 
@@ -18,6 +21,8 @@ type ComponentProps = {
 
 const NftForm = ({ onSubmit, collections }: ComponentProps) => {
   const [file, setFile] = useState<File>();
+  const [properties, setProperties] = useState<CreateItemPropertyFormValues[]>();
+  
   const {
     register,
     handleSubmit,
@@ -33,12 +38,26 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
   }, []);
 
   const onSubmitFormValues = async (data: CreateItemFormValues) => {
+    console.log('A')
+
     if (file) {
       data.totalSupply = parseInt(data.totalSupply);
       data.file = file;
+      data.properties = properties;
+      console.log('B')
       onSubmit(data);
     }
   };
+
+  const onSubmitPropertyFormValues = async (data: CreateItemPropertyFormValues) => {
+    setProperties(prev => {
+      return prev ? [...prev, {...data, id: nanoid()} ] : [{...data, id: nanoid() }];
+    });
+  };
+
+  const removeProperty = (property: CreateItemPropertyFormValues) => {
+    setProperties(prev => prev?.filter(p => p.id !== property.id));
+  }
 
   return (
     <>
@@ -51,7 +70,7 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
         onChange={(file) => handleFileUploadOnChange(file)}
       />
 
-      <form onSubmit={handleSubmit(onSubmitFormValues)}>
+      <form>
         <Input
           label="Name"
           name="name"
@@ -97,34 +116,52 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
           register={register}
         />
 
-        <Input
-          label="Total supply"
-          name="totalSupply"
-          register={register}
-          type="number"
-          defaultValue={1}
-          min={1}
-          required
-        />
 
-        <button
-          type="submit"
-          disabled={!isValid || !file}
-          className="flex items-center justify-center space-x-4 py-4 px-10 
-            hover:bg-blue-400 bg-blue-500 rounded font-semibold 
-            disabled:bg-blue-200
-            dark:border
-            dark:border-gray-300
-            dark:bg-white dark:bg-opacity-0
-            dark:hover:bg-opacity-10
-            dark:disabled:bg-opacity-0
-            text-white
-            dark:disabled:text-gray-700
-          "
-        >
-          <div>Create Item</div>
-        </button>
       </form>
+      <CollapsePanel
+        label="Properties"
+        collapsible={true}
+        icon={<FaList size={25} className="fill-gray-700 dark:fill-gray-300"/>}
+      >
+        <div className="flex flex-col gap-5">
+          <div className="text-xl font-normal">
+            Properties show up underneath your item, are clickable, and can be filtered in your collection&apos;s sidebar
+          </div>
+
+          <div className="w-full flex flex-col">
+            <>
+              <NftPropertiesForm onSubmit={onSubmitPropertyFormValues} />
+            </>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 w-full gap-2 flex-wrap">
+            {properties && properties.map((property, idx) => (
+              <div className="border border-blue-300 bg-blue-50 w-full md:w-56 h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
+                <div className="text-blue-400 text-sm absolute right-1 top-1 p-1 cursor-pointer" onClick={() => removeProperty(property)}>X</div>
+                <div className="text-blue-400 text-md">{property.type}</div>
+                <div className="text-gray-700">{property.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </CollapsePanel>
+      <button
+        onClick={handleSubmit(onSubmitFormValues)}
+        disabled={!isValid || !file}
+        className="flex items-center justify-center space-x-4 py-4 px-10 w-fit
+          hover:bg-blue-400 bg-blue-500 rounded font-semibold 
+          disabled:bg-blue-200
+          dark:border
+          dark:border-gray-300
+          dark:bg-white dark:bg-opacity-0
+          dark:hover:bg-opacity-10
+          dark:disabled:bg-opacity-0
+          text-white
+          dark:disabled:text-gray-700
+          mt-10
+        "
+      >
+        <div>Create Item</div>
+      </button>
     </>
   );
 };
