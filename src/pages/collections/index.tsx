@@ -1,20 +1,13 @@
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextApiRequest, NextApiResponse, NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import Link from "next/link";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
-import { trpc } from "../../utils/trpc";
 import { CollectionPanel } from "../../components/views/collections/CollectionPanel";
+import { prisma } from "../../server/db/client";
+import { Collection } from "prisma/prisma-client";
 
-const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
-  let { data } = trpc.collection.getByUser.useQuery(
-    { user: session.user.id },
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ collections }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
-  if (!data) {
-    data = Array(6);
-  }
+  const data = collections as Collection[];
 
   return (
     <div className="p-5 mb-10 flex items-center justify-center h-full overflow-y-scroll overflow-x-hidden">
@@ -43,8 +36,8 @@ const CollectionsPage: NextPage<AuthenticatedPageProps> = ({ session }) => {
         </Link>
         {data && data.length && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data.map((collection, idx) => (
-              <CollectionPanel key={idx} collection={collection} />
+            {data.map((collection) => (
+              <CollectionPanel key={collection.id} collection={collection} />
             ))}
           </div>
         )}
@@ -65,9 +58,15 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
+  const collections = await prisma.collection.findMany({
+    where: {
+      visible: true
+    }
+  });
+
   return {
     props: {
-      session,
+      collections: JSON.parse(JSON.stringify(collections)) as Collection[]
     },
   };
 };
