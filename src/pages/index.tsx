@@ -1,10 +1,10 @@
-import { GetServerSideProps, GetServerSidePropsContext, NextPage, InferGetServerSidePropsType } from "next";
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { CollectionPanel } from "../components/views/collections/CollectionPanel";
 import { useCallback, useEffect, useState } from "react";
 import { prisma } from "../server/db/client";
 
-const Home: NextPage = ({ collections }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = ({ collections }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [sortedData, setSortedData] = useState<[] | undefined>(undefined);
 
   const setData = useCallback((unsortedData: [] | undefined) => {
@@ -71,9 +71,7 @@ const Home: NextPage = ({ collections }: InferGetServerSidePropsType<typeof getS
 };
 
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
+export const getStaticProps: GetStaticProps = async () => {
   const collections = await prisma.collection.findMany({
     where: {
       visible: true
