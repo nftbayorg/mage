@@ -54,6 +54,14 @@ export const collectionRouter = t.router({
     })
   )
   .mutation(async ({ input, ctx }) => {
+    const authenticatedUserId = ctx.session?.user?.id;
+
+    if (!authenticatedUserId) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Must be authenticated to create Collection.",
+      });
+    }
 
     if (input.logoImageFile) {
       const logoImageCid = await uploadBase64ToIpfs(input.logoImageFile);
@@ -65,16 +73,16 @@ export const collectionRouter = t.router({
         });
       }
 
-      const nftSet = await ctx.prisma.collection.create({
+      const collection = await ctx.prisma.collection.create({
         data: {
           description: input.description,
           name: input.name,
           logoImageUrl: logoImageCid,
-          userId: input.userId,
+          userId: authenticatedUserId,
         }
       });
 
-      return nftSet;
+      return collection;
     } else {
       throw new TRPCError({
         code: "BAD_REQUEST",
@@ -92,6 +100,22 @@ export const collectionRouter = t.router({
     })
   )
   .mutation(async ({ input, ctx }) => {
+
+    const authenticatedUserId = ctx.session?.user?.id;
+
+    const validCollectionCheck = await ctx.prisma.collection.findFirst({
+      where: {
+        id: input.id,
+        userId: authenticatedUserId
+      }
+    })
+
+    if (!validCollectionCheck) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Invalid collection.",
+      });
+    }
 
     const logoImageCid = await uploadBase64ToIpfs(input.logoImageFile);
     const bannerImageCid = await uploadBase64ToIpfs(input.bannerImageFile);

@@ -1,6 +1,7 @@
 import { t } from "../utils";
 import { z } from "zod";
 import { NFTStorage, Blob } from 'nft.storage';
+import { TRPCError } from "@trpc/server";
 
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
@@ -42,8 +43,18 @@ export const nftSetRouter = t.router({
     .mutation(async ({ input, ctx }) => {
       const authenticatedUserId = ctx.session?.user?.id;
 
-      if (!authenticatedUserId) return "Must be authenticated to create NFT";
-      if (!input.file) return "No file present";
+      if (!authenticatedUserId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Must authenticated to create NFT.",
+        });
+      }
+      if (!input.file) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No file present.",
+        });
+      }
 
       let creatorWallet = await ctx.prisma.wallet.findFirst({
         where: {
@@ -61,7 +72,12 @@ export const nftSetRouter = t.router({
         })
       }
 
-      if (!creatorWallet) return "No wallet located for creator";
+      if (!creatorWallet) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No wallet located for creator.",
+        });
+      } 
 
       const base64 = Buffer.from(
         input.file.replace(/^data:image\/\w+;base64,/, ""),
@@ -97,7 +113,12 @@ export const nftSetRouter = t.router({
         }
       })
 
-      if (!validCollectionCheck) return "Invalid collection";
+      if (!validCollectionCheck) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid collection.",
+        });
+      }
 
       const nftEditionObjArray = [];
       for (let index = 0; index < input.totalSupply; index++) {
