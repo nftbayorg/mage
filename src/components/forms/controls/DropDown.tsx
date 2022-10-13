@@ -1,8 +1,8 @@
 import { useState } from "react";
 import React from "react";
-import { useOnClickOutside } from "../../hooks/useOnClickOutside";
+import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
 
-type NavMenuProps = {
+type DropDownProps = {
   caption?: string;
   children: React.ReactNode;
   icon?: React.ReactElement;
@@ -10,13 +10,13 @@ type NavMenuProps = {
   position: "left" | "right";
 }
 
-type NavMenuItemProps = {
+type DropDownItemProps = {
   caption: string;
   icon?: React.ReactElement;
   onClick: () => void;
 }
 
-export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
+export const DropDownItem = ({ caption, icon, onClick }: DropDownItemProps) => (
   <div 
     className="
       border-b 
@@ -35,7 +35,7 @@ export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
       hover:fill-blue-500
       dark:hover:text-white
       dark:hover:fill-white
-      last:border-0
+        last:border-0
       text-gray-700 dark:text-gray-300
       font-bold
     " 
@@ -48,7 +48,7 @@ export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
   </div>
 );
 
-export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) => {
+export const DropDown = ({ caption, children, icon, activeIcon }: DropDownProps) => {
 
   const [active, setActive] = useState(false);
   const ref = React.createRef<HTMLDivElement>();

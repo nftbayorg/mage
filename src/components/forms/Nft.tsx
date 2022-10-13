@@ -3,7 +3,7 @@ import Input from "./controls/Input";
 import TextArea from "./controls/TextArea";
 import { FaAsterisk, FaList } from "react-icons/fa";
 import FileUpload from "./controls/FileUpload";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Select } from "./controls/Select";
 import { Option } from "./controls/Option";
 import { inferProcedureOutput } from "@trpc/server";
@@ -17,9 +17,10 @@ type Collections = inferProcedureOutput<AppRouter["collection"]["getAll"]>;
 type ComponentProps = {
   onSubmit: (data: CreateItemFormValues) => void;
   collections: Collections | undefined;
+  defaultCollection: Collections[0] | undefined;
 };
 
-const NftForm = ({ onSubmit, collections }: ComponentProps) => {
+const NftForm = ({ onSubmit, collections, defaultCollection }: ComponentProps) => {
   const [file, setFile] = useState<File>();
   const [properties, setProperties] = useState<CreateItemPropertyFormValues[]>();
   
@@ -82,6 +83,7 @@ const NftForm = ({ onSubmit, collections }: ComponentProps) => {
         {collections && (
           <Select
             label="Collection"
+            initialValue={defaultCollection && { key: defaultCollection?.id, value: defaultCollection?.name }}
             name="collectionId"
             placeholder="Place the NFT in a collection"
             register={register}

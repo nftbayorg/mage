@@ -147,7 +147,7 @@ const NavBar = () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
       router.events.off('routeChangeError', handleRouteChangeComplete);
       }
-  }, []);
+  }, [router.events]);
 
   return (
     <nav className="relative container mx-auto p-6 border-b border-gray-200 dark:border-gray-600">

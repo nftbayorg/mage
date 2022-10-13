@@ -3,20 +3,31 @@ import Image from "../../forms/controls/Image";
 import NftSetSummary from "../nfts/nftSetSummary";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
+import { DropDown, DropDownItem } from "../../forms/controls/DropDown";
+import { FaEllipsisH, FaPlus } from "react-icons/fa";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
 type CollectionHeaderProps = {
   bannerImageUrl?: string | undefined | null;
-  logoImageUrl?: string;
+  collectionId: string | undefined;
   isLoading: boolean;
+  logoImageUrl?: string;
+  owner: string | undefined;
 };
 
 const CollectionHeader = ({
   bannerImageUrl,
-  logoImageUrl,
+  collectionId,
   isLoading,
+  logoImageUrl,
+  owner,
 }: CollectionHeaderProps) => {
+  const router = useRouter();
+  const { data: session } = useSession();
+
   return (
     <div className="flex-col w-full h-full mb-14 md:mb-24">
       {logoImageUrl && !isLoading ? (
@@ -44,6 +55,20 @@ const CollectionHeader = ({
               />
             </div>
           </div>
+          {(session && session.user?.id === owner) &&
+            <div className="absolute right-16 -bottom-10 md:-bottom-16">
+              <DropDown
+                icon={<FaEllipsisH size={25} className="fill-gray-700 dark:fill-gray-300"/>}
+                position="left"
+              >
+                <DropDownItem 
+                  icon={<FaPlus size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+                  caption="Add Item" 
+                  onClick={() => router.push(`/nfts/create?collectionId=${collectionId}`)}
+                />
+              </DropDown>
+            </div>
+          }
         </div>
       ) : (
         <div className="h-48 md:h-96 w-full relative">
@@ -88,9 +113,11 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
   return (
     <section className="flex flex-col gap-y-5 w-full text-lg font-normal dark:text-gray-300 text-gray-700">
       <CollectionHeader
-        logoImageUrl={logoImageUrl}
         bannerImageUrl={bannerImageUrl}
+        collectionId={collection?.id}
         isLoading={collection ? false : true}
+        logoImageUrl={logoImageUrl}
+        owner={collection?.userId}
       />
       <section>
         <section className="flex flex-col mb-10 px-10">

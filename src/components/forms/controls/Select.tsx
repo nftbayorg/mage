@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useCallback } from "react";
+import React, { InputHTMLAttributes, useCallback, useEffect } from "react";
 import { useState } from "react";
 import { 
   FaAsterisk,
@@ -12,6 +12,10 @@ import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
 interface SelectProps extends InputHTMLAttributes<HTMLInputElement> {
   caption?: string;
   children: React.ReactNode;
+  initialValue?: {
+    key: string;
+    value: any;
+  };
   label: string;
   name: string;
   register: any;
@@ -20,7 +24,7 @@ interface SelectProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const classes = " w-full p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 font-normal text-xl focus:outline-none focus:border-gray-500";
 
-export const Select = ({ caption, children, label, name, placeholder, required, register, setValue, ...rest }: SelectProps) => {
+export const Select = ({ caption, children, initialValue, label, name, placeholder, required, register, setValue, ...rest }: SelectProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const showDropdownHandler = () => {
@@ -37,6 +41,13 @@ export const Select = ({ caption, children, label, name, placeholder, required, 
     setSelectedOption(option.value);
     setShowDropdown(false);
   }, [name, setValue]);
+
+  useEffect(() => {
+    if (initialValue) {
+      setValue(name, initialValue?.key);
+      setSelectedOption(initialValue?.value);
+    }
+  }, [initialValue, name, setValue, setSelectedOption])
 
   return (
 

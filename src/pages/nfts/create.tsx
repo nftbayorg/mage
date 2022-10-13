@@ -5,7 +5,7 @@ import type {
 } from "next";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaCheck, FaRedo } from "react-icons/fa";
 import CreateItem from "../../components/forms/Nft";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
@@ -20,9 +20,15 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nftSetCreated, setNftSetCreated] = useState(false);
 
+  const { collectionId } = router.query;
+
+
   const collections = trpc.collection.getByUser.useQuery({
     user: session.user?.id || "",
   });
+
+  const collection = useMemo(() => collections?.data?.find(collection => collection.id === collectionId), [collectionId, collections?.data]);
+
   const createNftSet = trpc.nftSet.create.useMutation();
 
   const readFiles = async (files: Array<File | undefined>) => {
@@ -106,6 +112,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
             <CreateItem
               onSubmit={handleOnSumbit}
               collections={collections.data}
+              defaultCollection={collection}
             />
           </div>
         </>
