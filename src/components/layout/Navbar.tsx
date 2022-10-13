@@ -176,7 +176,7 @@ const NavBar = () => {
                 />
             </div>
             <span className={`
-              ml-3
+              ml-4 md:ml-0
               text-4xl text-gray-700 font-medium 
               dark:text-gray-300
               cursor-pointer 
