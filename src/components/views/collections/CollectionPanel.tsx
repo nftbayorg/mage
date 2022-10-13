@@ -16,7 +16,7 @@ const CollectionSkeleton = () => {
   return (
     <div className="
         flex flex-col items-center justify-center 
-        w-full h-80 
+        w-full h-80 lg:h-96 
         rounded-lg 
         hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 
         cursor-pointer 
@@ -37,14 +37,14 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name }: Collecti
   <Link href={`/collections/${id}`}>
     <div className="
         flex flex-col items-center justify-center 
-        w-full h-80 
+        w-full h-80 md:h-96 2xl:h-96 
         rounded-lg 
         hover:shadow-lg hover:shadow-gray-500/50 border border-gray-200 dark:border-gray-600 
         cursor-pointer 
         relative
     ">
       {logoImageUrl && (
-        <div className="w-full h-80 relative rounded-t-lg overflow-hidden">
+        <div className="w-full h-80 2xl:h-96 relative rounded-t-lg overflow-hidden">
           <Image
             alt="image"
             objectFit="cover"
@@ -64,7 +64,7 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name }: Collecti
         />
       </div>
 
-      <div className="flex justify-start items-center w-full p-5 pl-28 min-h-[50px] overflow-ellipsis">
+      <div className="flex justify-start items-center w-full p-5 pl-28 min-h-[50px] lg:min-h[80px] overflow-ellipsis">
         <div className="text-md">{name}</div>
       </div>
     </div>

@@ -9,6 +9,7 @@ module.exports = {
       'md': '660px',
       'lg': '1100px',
       'xl': '1400px',
+      '2xl': '2500px',
     }
   },
   plugins: [],

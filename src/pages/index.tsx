@@ -14,11 +14,11 @@ const Home: NextPage = ({ collections }: InferGetStaticPropsType<typeof getStati
   }, []);
 
   const getCollectibles = () => {
-    return sortedData?.slice(3) || [];
+    return sortedData?.slice(4, 8) || [];
   }
 
   const getNewAndNoteable = useCallback(() => {
-    return sortedData?.slice(0,3) || [];
+    return sortedData?.slice(0,4) || [];
   }, [sortedData])
 
   useEffect(() => {
@@ -41,28 +41,18 @@ const Home: NextPage = ({ collections }: InferGetStaticPropsType<typeof getStati
         <p>DeFi Trading Platform</p>
         <div className="flex flex-col items-start justify-center w-full pt-10 md:pt-6 text-2xl">
           <div className="text-3xl md:text-4xl text-gr">New and noteable</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 max-h-[740px] md:max-h-[430px] 2xl:max-h-fit gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
             {sortedData && getNewAndNoteable().map((collection, idx) => {
               return <CollectionPanel key={idx} collection={collection} />;
             })}
-            <>
-              <CollectionPanel/>
-              <CollectionPanel/>
-              <CollectionPanel/>
-            </>
           </div>
         </div>
-        <div className="flex flex-col items-start justify-center w-full md:pt-6 text-2xl">
+        <div className="flex flex-col items-start justify-center w-full pt-6 text-2xl">
           <div className="text-3xl md:text-4xl">Collectibles</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-h-96 gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 max-h-[740px] md:max-h-[430px] 2xl:max-h-fit gap-x-2 gap-y-10 justify-center w-full pt-6 text-2xl overflow-hidden">
             {getCollectibles().map((collection, idx) => {
               return <CollectionPanel key={idx} collection={collection} />;
             })}
-            <>
-              <CollectionPanel/>
-              <CollectionPanel/>
-              <CollectionPanel/>
-            </>
           </div>
         </div>
       </main>
