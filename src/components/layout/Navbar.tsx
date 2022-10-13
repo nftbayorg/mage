@@ -13,7 +13,7 @@ const MobileNav = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="mr-6 mt-2">
+    <div className="mr-7 mt-2">
       <NavMenu
         position="left"
         icon={<FaRegUserCircle size={30} className="fill-gray-700 dark:fill-gray-400"/>}
