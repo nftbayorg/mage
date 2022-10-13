@@ -123,7 +123,7 @@ const MenuItems = () => {
 
 const NavBar = () => {
 
-  const [transitioningPage, setTransitioningPage] = useState(false);
+  const [transitioningPage, setTransitioningPage] = useState(true);
   const router = useRouter();
 
 
@@ -169,7 +169,7 @@ const NavBar = () => {
             <div className="hidden md:block">
               <FaCircleNotch size={20} className={`
                 mr-3
-                mt-3
+                mt-4
                 dark:fill-gray-300 
                 fill-gray-700 
                 ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
@@ -187,7 +187,7 @@ const NavBar = () => {
             <div className="md:hidden">
               <FaCircleNotch size={15} className={`
                 ml-3
-                mt-3
+                mt-6
                 dark:fill-gray-300 
                 fill-gray-700 
                 ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
