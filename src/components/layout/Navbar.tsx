@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FaBars, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaWallet } from "react-icons/fa";
+import { FaBars, FaCircleNotch, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaWallet } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { NavMenu, NavMenuItem  } from "./NavMenu";
 import dynamic from "next/dynamic";
@@ -123,7 +123,7 @@ const MenuItems = () => {
 
 const NavBar = () => {
 
-  const [transitioningPage, setTransitioningPage] = useState(false);
+  const [transitioningPage, setTransitioningPage] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -150,14 +150,37 @@ const NavBar = () => {
   }, [router.events]);
 
   return (
-    <nav className="relative container mx-auto p-6 border-b border-gray-200 dark:border-gray-600">
+    <nav className="relative container mx-auto p-6 pl-0 border-b border-gray-200 dark:border-gray-600">
       
       <div className="flex items-center justify-between">
         <Link href="/" passHref>
           <div className="flex items-center">
-            <span className={`text-4xl text-gray-700 font-medium dark:text-gray-300 cursor-pointer ${transitioningPage ? "animate-pulse" : ""}`}>
+            <div className="hidden md:block">
+              <FaCircleNotch size={20} className={`
+                mr-3
+                mt-3
+                dark:fill-gray-300 
+                fill-gray-700 
+                ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
+                />
+            </div>
+            <span className={`
+              ml-3
+              text-4xl text-gray-700 font-medium 
+              dark:text-gray-300
+              cursor-pointer 
+              `}>
               Mage
             </span>
+            <div className="md:hidden">
+              <FaCircleNotch size={15} className={`
+                ml-3
+                mt-3
+                dark:fill-gray-300 
+                fill-gray-700 
+                ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
+                />
+            </div>
           </div>
         </Link>
         <div className="w-full hidden md:block">
