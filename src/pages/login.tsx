@@ -11,8 +11,9 @@ const Login: NextPage = () => {
   return (
     <>
       <div className="container flex flex-col items-center justify-center min-h-[calc(100vh-350px)] p-4 mx-auto">
-        <h1 className="text-4xl md:text-5xl text-gray-700 font-medium dark:text-gray-300">
-          Welcome to Mage
+        <h1 className="text-4xl md:text-5xl text-gray-700 font-medium dark:text-gray-300 flex gap-2">
+          <div>Welcome to</div>
+          <div className="font-silkscreen text-5xl">Mage</div>
         </h1>
         <button
           className="
