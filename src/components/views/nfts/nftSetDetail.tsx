@@ -207,7 +207,14 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           }
           collapsible={true}
         >
-          <div className="flex flex-col items-start justify-start"></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
+          {nftSet.properties && nftSet.properties.map((property, idx) => (
+            <div className="border border-blue-300 bg-blue-50 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
+              <div className="text-blue-400 text-md">{property.type}</div>
+              <div className="text-gray-700">{property.name}</div>
+            </div>
+          ))}
+        </div>
         </CollapsePanel>
       </div>
 
