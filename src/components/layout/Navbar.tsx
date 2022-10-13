@@ -123,7 +123,7 @@ const MenuItems = () => {
 
 const NavBar = () => {
 
-  const [transitioningPage, setTransitioningPage] = useState(true);
+  const [transitioningPage, setTransitioningPage] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
