@@ -68,6 +68,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
       name: data.name,
       totalSupply: 1,
       link: data.link,
+      properties: data.properties,
       ...hasCollection,
     });
 
@@ -77,7 +78,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
   };
 
   return (
-    <div className="p-5 mb-10 flex items-center justify-center w-full h-full min-h-fit">
+    <div className="p-5 mb-10 flex items-center justify-center w-full h-full min-h-[calc(100vh-370px)]">
       {isSubmitting ? (
         <div className="w-full md:w-1/2 md:p-4 text-2xl flex flex-col h-[calc(100vh-490px)] text-gray-700 font-medium dark:text-gray-300 items-start justify-center">
           <div className="flex flex-col text-xl md:text-2xl gap-5 h-full w-full justify-start">
