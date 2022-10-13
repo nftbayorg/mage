@@ -6,7 +6,7 @@ const Footer = () => (
       <div className="flex justify-between">
         <Link href="/" passHref>
           <div className="flex items-center">
-            <span className="text-4xl font-medium">
+            <span className="text-5xl font-silkscreen">
               Mage
             </span>
           </div>
@@ -33,7 +33,7 @@ const Footer = () => (
         <span>
           All right reserved
         </span>
-        <div>© Mage.com</div>
+        <div className="font-silkscreen">© Mage.com</div>
       </div>
     </div>
   </div>
