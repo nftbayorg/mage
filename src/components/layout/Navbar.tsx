@@ -16,8 +16,8 @@ const MobileNav = () => {
     <div className="mr-6 mt-2">
       <NavMenu
         position="left"
-        icon={<FaRegUserCircle size={30} className="fill-gray-700 dark:fill-gray-300"/>}
-        activeIcon={<FaTimes size={30} className="fill-gray-700 dark:fill-gray-300"/>}
+        icon={<FaRegUserCircle size={30} className="fill-gray-700 dark:fill-gray-400"/>}
+        activeIcon={<FaTimes size={30} className="fill-gray-700 dark:fill-gray-400"/>}
       >
         <NavMenuItem
           icon={<FaDollarSign size={20} className="fill-gray-700 dark:fill-gray-300"/>}

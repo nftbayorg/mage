@@ -64,7 +64,7 @@ export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) =
       <div className="w-14 h-14 absolute -left-4 -top-4 cursor-pointer" onClick={toggle} >
         <div className="absolute top-0 left-3">
           {!activeIcon && icon && React.cloneElement(icon, { 
-            className: `${icon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
+            className: `${icon.props.classes} fill-gray-700 dark:fill-gray-300 hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {activeIcon && !active && icon && React.cloneElement(icon, { 
             className: `${icon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
