@@ -34,7 +34,7 @@ const Home: NextPage = ({ collections }: InferGetStaticPropsType<typeof getStati
         <meta name="description" content="NFT DeFi Platform" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container flex flex-col md:gap-5 items-center justify-center min-h-[calc(100vh-350px)] p-4 mx-auto dark:text-gray-300 text-2xl text-gray-700">
+      <main className="container flex flex-col md:gap-5 items-center justify-center min-h-[calc(100vh-350px)] p-4 mx-auto dark:text-gray-300 text-2xl text-gray-700 md:min-w-[calc(83%)]">
         <h1 className="text-3xl md:text-6xl lg:text-[5rem] leading-normal font-extrabold">
           Trade and stake NFTs
         </h1>
