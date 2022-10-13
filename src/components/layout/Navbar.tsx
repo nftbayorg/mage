@@ -126,12 +126,20 @@ const NavBar = () => {
   const [transitioningPage, setTransitioningPage] = useState(false);
   const router = useRouter();
 
+
   useEffect(() => {
+    let startTimeout: NodeJS.Timeout;
     const handleRouteChangeStart = (url: URL) => {
-      setTransitioningPage(true);
+      startTimeout = setTimeout(() => {
+        setTransitioningPage(true);
+      }, 500);
     }
 
     const handleRouteChangeComplete = (url: URL) => {
+      if (startTimeout) {
+        clearTimeout(startTimeout);
+      }
+
       setTransitioningPage(false);
     }
 
@@ -139,14 +147,17 @@ const NavBar = () => {
     router.events.on('routeChangeComplete', handleRouteChangeComplete);
     router.events.on('routeChangeError', handleRouteChangeComplete);
 
-
     // If the component is unmounted, unsubscribe
     // from the event with the `off` method:
     return () => {
       router.events.off('routeChangeStart', handleRouteChangeStart);
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
       router.events.off('routeChangeError', handleRouteChangeComplete);
+
+      if (startTimeout) {
+        clearTimeout(startTimeout);
       }
+    }
   }, [router.events]);
 
   return (
