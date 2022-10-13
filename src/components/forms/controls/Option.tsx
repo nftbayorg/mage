@@ -18,7 +18,15 @@ export const Option = ({ children, value }: OptionProps) => {
         items-center 
         justify-start 
         cursor-pointer 
-        hover:shadow-[0px_0px_15px_5px_rgba(186,186,186,0.57)]" 
+        dark:hover:shadow-none
+        bg-black bg-opacity-0
+        dark:bg-white dark:bg-opacity-0
+        dark:hover:bg-opacity-10
+        hover:bg-opacity-10
+        hover:text-blue-500
+        dark:hover:fill-white
+        dark:hover:text-white
+      " 
       value={value}
       onClick={() => changeSelectedOption({ key: value[0], value: value[1] })}
     >

@@ -33,8 +33,8 @@ export const NavMenuItem = ({ caption, icon, onClick }: NavMenuItemProps) => (
       hover:bg-opacity-5
       hover:text-blue-500
       hover:fill-blue-500
-      dark:hover:text-gray-400
-      dark:hover:fill-gray-500
+      dark:hover:text-white
+      dark:hover:fill-white
 
       text-gray-700 dark:text-gray-300
       font-bold

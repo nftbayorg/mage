@@ -58,7 +58,15 @@ export const Select = ({ caption, children, label, name, placeholder, required, 
         </div>
     
         <div className={`absolute left-0 top-[100%] ${showDropdown ? "" : "hidden"} transition-all ease-in-out delay-150 w-full pb-10 h-40 z-20`}>
-          <ul className="bg-white dark:bg-slate-700 overflow-scroll h-96 rounded-md shadow-[0px_0px_15px_5px_rgba(186,186,186,0.57)] dark:shadow-none">
+          <ul className="
+            bg-white 
+            overflow-scroll h-96 rounded-md 
+            shadow-[0px_0px_15px_5px_rgba(186,186,186,0.57)] 
+            dark:shadow-none
+            dark:border
+          dark:border-gray-300 dark:bg-slate-800
+            transition-opacity ease-in-out delay-150 
+          ">
             {children}
           </ul>
         </div>
