@@ -40,13 +40,15 @@ export const nftSetRouter = t.router({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const authenticatedUserId = ctx.session?.user?.id;
 
+      if (!authenticatedUserId) return "Must be authenticated to create NFT";
       if (!input.file) return "No file present";
 
       let creatorWallet = await ctx.prisma.wallet.findFirst({
         where: {
           virtual: true,
-          userId: input.creator,
+          userId: authenticatedUserId,
         }
       })
 
@@ -54,7 +56,7 @@ export const nftSetRouter = t.router({
         creatorWallet = await ctx.prisma.wallet.create({
           data: {
             virtual: true,
-            userId: input.creator
+            userId: authenticatedUserId
           }
         })
       }
@@ -81,12 +83,21 @@ export const nftSetRouter = t.router({
             logoImageUrl: `https://nftstorage.link/ipfs/${imageCid}`,
             name: `Untitled Collection #${count +1}`,
             description: 'Welcome to the home of Untitled Collection on Mage. Discover the best items in this collection.',
-            userId: input.creator
+            userId: authenticatedUserId
           }
         });
 
         collectionId = newCollection.id;
       }
+
+      const validCollectionCheck = await ctx.prisma.collection.findFirst({
+        where: {
+          id: collectionId,
+          userId: authenticatedUserId
+        }
+      })
+
+      if (!validCollectionCheck) return "Invalid collection";
 
       const nftEditionObjArray = [];
       for (let index = 0; index < input.totalSupply; index++) {
@@ -100,7 +111,7 @@ export const nftSetRouter = t.router({
 
       const nftSet = await ctx.prisma.nFTSet.create({
         data: {
-          creatorId: input.creator,
+          creatorId: authenticatedUserId,
           name: input.name,
           description: input.description,
           blockchainId: "Ethereum",
