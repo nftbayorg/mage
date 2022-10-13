@@ -61,7 +61,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
       : {};
 
     const fileReaderResults = await readFiles([data.file]);
-    await createNftSet.mutateAsync({
+    const nftSet = await createNftSet.mutateAsync({
       creator: session.user?.id || "",
       file: determineResult(fileReaderResults[0]),
       description: data.description,
@@ -74,7 +74,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
 
     setNftSetCreated(true);
 
-    router.push("/collections");
+    router.push(`/nftSets/${nftSet.id}`);
   };
 
   return (

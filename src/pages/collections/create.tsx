@@ -99,8 +99,7 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
 
     setCollectionCreated(true);
 
-    router.push("/collections");
-    console.log("New collection", collection);
+    router.push(`/collections/${collection.id}`);
   };
 
   return (
