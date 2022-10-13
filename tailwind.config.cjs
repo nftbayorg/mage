@@ -1,9 +1,15 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        silkscreen: ['Silkscreen', ...defaultTheme.fontFamily.sans]
+      }
+    },
     screens: {
       'sm': '500px',
       'md': '660px',

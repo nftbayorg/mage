@@ -161,7 +161,7 @@ const NavBar = () => {
   }, [router.events]);
 
   return (
-    <nav className="relative container mx-auto p-6 pl-0 border-b border-gray-200 dark:border-gray-600">
+    <nav className="relative container mx-auto p-6 py-5 pl-0 border-b border-gray-200 dark:border-gray-600">
       
       <div className="flex items-center justify-between">
         <Link href="/" passHref>
@@ -177,9 +177,10 @@ const NavBar = () => {
             </div>
             <span className={`
               ml-4 md:ml-0
-              text-4xl text-gray-700 font-medium 
+              text-5xl text-gray-700 font-medium 
               dark:text-gray-300
-              cursor-pointer 
+              cursor-pointer
+              font-silkscreen
               `}>
               Mage
             </span>
