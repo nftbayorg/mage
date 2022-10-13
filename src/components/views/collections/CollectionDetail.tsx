@@ -35,11 +35,7 @@ const CollectionHeader = ({
           <Image
             src={bannerImageUrl || logoImageUrl}
             alt="image"
-            objectFit="cover"
-            layout="fill"
-            placeholder="blur"
-            blurDataURL="/images/AwaitingImage1400x350.png"
-            fallbackImage="/images/AwaitingImage1400x350.png"
+            className="w-full overflow-hidden"
           />
           <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-0.5 md:p-1">
             <div className="w-full h-full p-1 relative rounded-xl">
@@ -72,9 +68,9 @@ const CollectionHeader = ({
         </div>
       ) : (
         <div className="h-48 md:h-96 w-full relative">
-          <div className="flex w-full h-full empty:bg-gray-100" />
+          <div className="flex w-full h-full empty:bg-gray-100 animate-pulse" />
           <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg p-1 md:p-2 shadow-md">
-            <div className="w-full h-full bg-gray-100 rounded-lg" />
+            <div className="w-full h-full bg-gray-100 rounded-lg animate-pulse" />
           </div>
         </div>
       )}
