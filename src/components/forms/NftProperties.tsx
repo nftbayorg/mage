@@ -56,7 +56,7 @@ const NftPropertiesForm = ({ onSubmit }: ComponentProps) => {
             dark:disabled:text-gray-700
           "
         >
-          <div>Add more</div>
+          <div>Add Property</div>
         </button>
       </form>
     </>
