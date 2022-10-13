@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FaBars, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaWallet } from "react-icons/fa";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavMenu, NavMenuItem  } from "./NavMenu";
 import dynamic from "next/dynamic";
 
@@ -122,13 +122,40 @@ const MenuItems = () => {
 }
 
 const NavBar = () => {
+
+  const [transitioningPage, setTransitioningPage] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChangeStart = (url: URL) => {
+      setTransitioningPage(true);
+    }
+
+    const handleRouteChangeComplete = (url: URL) => {
+      setTransitioningPage(false);
+    }
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+    router.events.on('routeChangeError', handleRouteChangeComplete);
+
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+      router.events.off('routeChangeError', handleRouteChangeComplete);
+      }
+  }, []);
+
   return (
     <nav className="relative container mx-auto p-6 border-b border-gray-200 dark:border-gray-600">
       
       <div className="flex items-center justify-between">
         <Link href="/" passHref>
           <div className="flex items-center">
-            <span className="text-4xl text-gray-700 font-medium dark:text-gray-300 cursor-pointer">
+            <span className={`text-4xl text-gray-700 font-medium dark:text-gray-300 cursor-pointer ${transitioningPage ? "animate-pulse" : ""}`}>
               Mage
             </span>
           </div>
