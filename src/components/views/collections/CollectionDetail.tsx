@@ -29,7 +29,7 @@ const CollectionHeader = ({
   const { data: session } = useSession();
 
   return (
-    <div className="flex-col w-full h-full mb-14 md:mb-24">
+    <div className="flex-col w-full h-full mb-14 md:mt-3 md:mb-24">
       {logoImageUrl && !isLoading ? (
         <div className="h-48 md:h-96 w-full relative">
           <Image
