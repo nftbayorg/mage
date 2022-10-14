@@ -161,48 +161,51 @@ const NavBar = () => {
   }, [router.events]);
 
   return (
-    <nav className="relative container mx-auto p-6 py-5 pl-0 border-b border-gray-200 dark:border-gray-600">
-      
-      <div className="flex items-center justify-between">
-        <Link href="/" passHref>
-          <div className="flex items-center">
-            <div className="hidden md:block">
-              <FaCircleNotch size={20} className={`
-                mr-3
-                mt-4
-                dark:fill-gray-300 
-                fill-gray-700 
-                ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
-                />
+    <div className="top-0 left-0 w-full fixed z-[20000] bg-white dark:bg-slate-800">
+
+      <nav className="relative container mx-auto px-6 py-2 md:p-6 md:py-3 pl-0 border-b border-gray-200 dark:border-gray-600">
+        
+        <div className="flex items-center justify-between">
+          <Link href="/" passHref>
+            <div className="flex items-center">
+              <div className="hidden md:block">
+                <FaCircleNotch size={20} className={`
+                  mr-3
+                  mt-4
+                  dark:fill-gray-300 
+                  fill-gray-700 
+                  ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
+                  />
+              </div>
+              <span className={`
+                ml-4 md:ml-0
+                text-5xl text-gray-700 font-medium 
+                dark:text-gray-300
+                cursor-pointer
+                font-silkscreen
+                `}>
+                Mage
+              </span>
+              <div className="md:hidden">
+                <FaCircleNotch size={15} className={`
+                  ml-3
+                  mt-6
+                  dark:fill-gray-300 
+                  fill-gray-700 
+                  ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
+                  />
+              </div>
             </div>
-            <span className={`
-              ml-4 md:ml-0
-              text-5xl text-gray-700 font-medium 
-              dark:text-gray-300
-              cursor-pointer
-              font-silkscreen
-              `}>
-              Mage
-            </span>
-            <div className="md:hidden">
-              <FaCircleNotch size={15} className={`
-                ml-3
-                mt-6
-                dark:fill-gray-300 
-                fill-gray-700 
-                ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
-                />
-            </div>
+          </Link>
+          <div className="w-full hidden md:block">
+            <MenuItems/>
           </div>
-        </Link>
-        <div className="w-full hidden md:block">
-          <MenuItems/>
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
         </div>
-        <div className="md:hidden">
-          <MobileNav />
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };
 
