@@ -241,7 +241,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               By <div className="font-bold">{nftSet.creatorId}</div>
             </div>
             {nftSet.collection?.description && (
-              <div className="text-md text-gray-700 dark:text-gray-200">
+              <div className="font-light text-md text-gray-700 dark:text-gray-200">
                 {nftSet.description || nftSet.collection?.description}
               </div>
             )}
@@ -260,32 +260,31 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         >
         <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
           {nftSet.properties && nftSet.properties.map((property, idx) => (
-            <div className="border border-blue-300 bg-blue-50 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
+            <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
               <div className="text-blue-400 text-md">{property.type}</div>
-              <div className="text-gray-700">{property.name}</div>
+              <div className="text-gray-700 dark:text-gray-300">{property.name}</div>
             </div>
           ))}
         </div>
         </CollapsePanel>
 
-        {nftSet.description && 
-          <CollapsePanel
-            label={`About ${nftSet.collection?.name}`}
-            icon={
-              <FaTags
-                size={25}
-                className="fill-gray-700 dark:fill-gray-400 rotate-90"
-              />
-            }
-            collapsible={true}
-          >
-            <div className="flex flex-col items-start justify-start gap-3">
-              <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
-                {nftSet.collection?.description}
-              </div>
+        <CollapsePanel
+          label={`About ${nftSet.collection?.name}`}
+          icon={
+            <FaTags
+              size={25}
+              className="fill-gray-700 dark:fill-gray-400 rotate-90"
+            />
+          }
+          collapsible={true}
+          defaultState="collapsed"
+        >
+          <div className="flex flex-col items-start justify-start gap-3">
+            <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
+              {nftSet.collection?.description}
             </div>
-          </CollapsePanel>
-        }    
+          </div>
+        </CollapsePanel>
       </div>
 
       <section className="lg:w-3/5 flex flex-col gap-5">
@@ -329,7 +328,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               className="rounded-xl w-[150px] h-[100px]"
               hideLoadingIndicator={true}
             />
-            <div className="text-gray-700 dark:text-gray-200 text-xl">
+            <div className="text-gray-700 dark:text-gray-200 text-xl font-light">
               No listings yet
             </div>
           </div>
@@ -352,7 +351,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
               className="rounded-xl w-[150px] h-[100px]"
               hideLoadingIndicator={true}
             />
-            <div className="text-gray-700 dark:text-gray-200 text-xl">
+            <div className="text-gray-700 dark:text-gray-200 text-xl font-light">
               No offers yet
             </div>
           </div>
