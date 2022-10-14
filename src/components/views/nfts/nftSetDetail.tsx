@@ -8,6 +8,7 @@ import {
   FaTags,
   FaAlignLeft,
   FaListUl,
+  FaStream,
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "../../forms/controls/Image";
@@ -271,9 +272,9 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         <CollapsePanel
           label={`About ${nftSet.collection?.name}`}
           icon={
-            <FaTags
+            <FaStream
               size={25}
-              className="fill-gray-700 dark:fill-gray-400 rotate-90"
+              className="fill-gray-700 dark:fill-gray-400"
             />
           }
           collapsible={true}

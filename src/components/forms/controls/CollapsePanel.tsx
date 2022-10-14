@@ -17,10 +17,10 @@ export const CollapsePanel = ({ children, collapsible, defaultState, icon, label
     <section>
       <div 
         onClick={() => setPanelCollapsed(prev => !prev)} 
-        className={`${panelCollapsed && "rounded-b-xl"} ${collapsible && "cursor-pointer"} flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center`}
+        className={`${panelCollapsed && "rounded-b-xl"} ${collapsible && "cursor-pointer"} flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center justify-start`}
       >
-        {icon}
-        <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
+        <div className="min-w-1/5">{icon}</div>
+        <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-300 truncate pr-4">
           {label}
         </div>
         {collapsible && 
@@ -30,7 +30,14 @@ export const CollapsePanel = ({ children, collapsible, defaultState, icon, label
           </div>
         }
       </div>
-      <div className={`${panelCollapsed ? "max-h-0 border-0" : "max-h-fit p-5 md:p-10"} transition-[height] ease-in-out delay-100 flex-col border border-t-0 border-gray-200 dark:border-gray-600 rounded-b-xl items-start justify-start bg-gray-50 dark:bg-gray-700 overflow-hidden`}>
+      <div className={`
+        ${panelCollapsed ? "max-h-0 border-0" : "max-h-fit p-5 md:p-10"} 
+        transition-[height] ease-in-out delay-100 
+        flex flex-col items-center justify-center
+        border border-t-0 border-gray-200 dark:border-gray-600 
+        rounded-b-xl bg-gray-50 dark:bg-gray-700 
+        overflow-hidden`
+      }>
         {children}
       </div>
     </section>
