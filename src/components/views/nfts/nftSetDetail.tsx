@@ -17,6 +17,7 @@ import { AppRouter } from "../../../server/trpc/router";
 import { useSession } from "next-auth/react";
 import { User } from "next-auth";
 import { NFTSet, NFTEdition, Wallet, NFTSetProperties } from "prisma/prisma-client";
+import { ToolTip } from "../../forms/controls/Tooltip";
 
 type DetailedNFTSet = NFTSet & {
   nftEditions: (NFTEdition & {
@@ -195,11 +196,19 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
       <div className="flex flex-col lg:w-2/5 space-y-4">
         <section className="">
           <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
-            <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-300">
+            <ToolTip
+              label="Blockchain: Ethereum"
+              position="top"
+            >
               <FaEthereum className="fill-blue-500 mr-2" size={20} />
-            </button>
+            </ToolTip>
             <button className="ml-auto hover:text-red-500  dark:hover:text-red-500">
-              <FaRegHeart size={20} className="fill-gray-400 mr-2" />
+              <ToolTip
+                label="Favorite"
+                position="top"
+              >
+                <FaRegHeart size={20} className="fill-gray-400 mr-2 hover:fill-red-500" />
+              </ToolTip>
             </button>
           </div>
           <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none">
