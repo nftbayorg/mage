@@ -17,7 +17,7 @@ export const CollapsePanel = ({ children, collapsible, defaultState, icon, label
     <section>
       <div 
         onClick={() => setPanelCollapsed(prev => !prev)} 
-        className={`${panelCollapsed ? "rounded-b-xl" : ""} cursor-pointer flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center`}
+        className={`${panelCollapsed && "rounded-b-xl"} ${collapsible && "cursor-pointer"} flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center`}
       >
         {icon}
         <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-300">

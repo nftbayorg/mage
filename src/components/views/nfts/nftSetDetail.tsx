@@ -173,7 +173,6 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
             <button className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-300">
               <FaEthereum className="fill-blue-500 mr-2" size={20} />
-              Buy now
             </button>
             <button className="ml-auto hover:text-red-500  dark:hover:text-red-500">
               <FaRegHeart size={20} className="fill-gray-400 mr-2" />
@@ -204,13 +203,13 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
             />
           }
         >
-          <div className="flex flex-col items-start justify-start">
+          <div className="flex flex-col items-start justify-start gap-3">
             <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
               By <div className="font-bold">{nftSet.creatorId}</div>
             </div>
             {nftSet.collection?.description && (
               <div className="text-md text-gray-700 dark:text-gray-200">
-                {nftSet.collection?.description}
+                {nftSet.description || nftSet.collection?.description}
               </div>
             )}
           </div>
@@ -235,6 +234,25 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           ))}
         </div>
         </CollapsePanel>
+
+        {nftSet.description && 
+          <CollapsePanel
+            label={`About ${nftSet.collection?.name}`}
+            icon={
+              <FaTags
+                size={25}
+                className="fill-gray-700 dark:fill-gray-400 rotate-90"
+              />
+            }
+            collapsible={true}
+          >
+            <div className="flex flex-col items-start justify-start gap-3">
+              <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
+                {nftSet.collection?.description}
+              </div>
+            </div>
+          </CollapsePanel>
+        }    
       </div>
 
       <section className="lg:w-3/5 flex flex-col gap-5">
