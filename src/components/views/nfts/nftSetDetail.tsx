@@ -146,13 +146,13 @@ const NftSetHeader = ({
         <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
           {name}
         </div>
-        <div className="flex items-center gap-10">
+        <div className="flex flex-col md:flex-row items-start md:items-center md:gap-10">
           <div className="flex items-center gap-2">
             <div className="text-lg text-gray-600 dark:text-gray-400">Owned By</div>
             <Link href={`/${owner}`}>
-              <div className="text-lg text-blue-500 my-3 cursor-pointer">
-                {owner === session?.user?.id && "You"}
-                {owner !== session?.user?.id && owner}
+              <div className="text-lg text-blue-500 my-3 cursor-pointer truncate max-w-[140px] md:max-w-fit">
+                {/* {owner === session?.user?.id && "You"} */}
+                {owner === session?.user?.id && owner}
               </div>
             </Link>
           </div>
