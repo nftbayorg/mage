@@ -80,7 +80,7 @@ export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) =
             border dark:border-gray-300 bg-white dark:bg-slate-800
             transition-opacity ease-in-out delay-150 
             h-fit w-72
-            absolute md:relative top-12 -left-60 
+            absolute md:relative top-9 -left-60 
             rounded-lg shadow-lg 
             overflow-hidden
           `}
