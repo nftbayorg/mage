@@ -67,10 +67,10 @@ export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) =
             className: `${icon.props.classes} fill-gray-700 dark:fill-gray-300 hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {activeIcon && !active && icon && React.cloneElement(icon, { 
-            className: `${icon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
+            className: `${icon.props.classes} fill-gray-700 dark:fill-gray-300 hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {activeIcon && active && activeIcon && React.cloneElement(activeIcon, { 
-            className: `${activeIcon.props.classes} hover:fill-blue-500 dark:hover:fill-gray-500`
+            className: `${activeIcon.props.classes} fill-gray-700 dark:fill-gray-300 hover:fill-blue-500 dark:hover:fill-gray-500`
           })}
           {caption && caption}
         </div>

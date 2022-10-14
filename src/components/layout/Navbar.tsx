@@ -72,7 +72,7 @@ const MenuItems = () => {
       w-full h-full
       dark:text-gray-300 text-gray-700 font-bold
     ">
-      <div className="flex gap-x-6 w-full items-center justify-center md:mr-[55px]">
+      <div className="flex gap-x-6 w-full items-center justify-center ml-auto lg:mr-[110px] mt-2">
         <Link href="/trade" >
           <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500 ">
             Trade
@@ -84,7 +84,7 @@ const MenuItems = () => {
           </a>
         </Link>}
       </div>
-      <div className="flex justify-end md:flex-row md:ml-auto min-w-fit h-full mr-7">
+      <div className="flex justify-end md:flex-row md:ml-auto min-w-fit h-full mr-9 mt-2">
         <NavMenu 
           icon={<FaRegUserCircle size={30}/>} 
           position="left"
