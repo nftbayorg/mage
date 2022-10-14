@@ -15,8 +15,20 @@ import { CollapsePanel } from "../../forms/controls/CollapsePanel";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
 import { useSession } from "next-auth/react";
+import { User } from "next-auth";
+import { NFTSet, NFTEdition, Wallet, NFTSetProperties } from "prisma/prisma-client";
 
-type NftSet = inferProcedureOutput<AppRouter["nftSet"]["get"]>;
+type DetailedNFTSet = NFTSet & {
+  nftEditions: (NFTEdition & {
+      owner: Wallet & {
+          user: User;
+      };
+  })[];
+  collection: Collection | null;
+  properties: NFTSetProperties[];
+}
+
+
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
 const NftSetDetailSkeleton = () => (
@@ -113,10 +125,12 @@ const NftSetHeader = ({
   collection,
   name,
   owner,
+  views
 }: {
   collection: Collection;
   name: string;
   owner: string;
+  views: number;
 }) => {
   const { data: session } = useSession();
 
@@ -132,14 +146,23 @@ const NftSetHeader = ({
         <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
           {name}
         </div>
-        <div className="flex items-center gap-2">
-          <div className="text-lg text-gray-600 dark:text-gray-400">Owned By</div>
-          <Link href={`/${owner}`}>
-            <div className="text-lg text-blue-500 my-3 cursor-pointer">
-              {owner === session?.user?.id && "You"}
-              {owner !== session?.user?.id && owner}
+        <div className="flex items-center gap-10">
+          <div className="flex items-center gap-2">
+            <div className="text-lg text-gray-600 dark:text-gray-400">Owned By</div>
+            <Link href={`/${owner}`}>
+              <div className="text-lg text-blue-500 my-3 cursor-pointer">
+                {owner === session?.user?.id && "You"}
+                {owner !== session?.user?.id && owner}
+              </div>
+            </Link>
+          </div>
+          <div className="flex gap-x-2 items-center">
+            <FaEye className="fill-gray-700 dark:fill-gray-400" size={20} />
+            <div className="text-1xl text-gray-700 dark:text-gray-400">
+              {views}
             </div>
-          </Link>
+          </div>
+
         </div>
       </div>
     )}
@@ -147,7 +170,7 @@ const NftSetHeader = ({
 }
 
 type ComponentProps = {
-  nftSet: NftSet | undefined;
+  nftSet: NftSetWithViewCount<DetailedNFTSet> | undefined;
 };
 
 const NftSetDetail = ({ nftSet }: ComponentProps) => {
@@ -165,6 +188,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           collection={nftSet.collection as Collection}
           name={nftSet.name}
           owner={owner || ''}
+          views={nftSet.viewCount}
         />
       </div>
 
@@ -261,6 +285,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
             collection={nftSet.collection as Collection}
             name={nftSet.name}
             owner={owner || ''}
+            views={nftSet.viewCount}
           />
         </div>
 

@@ -45,7 +45,8 @@ model NFTSet {
   creatorId     String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  
+  views         String[]    @default([])
+  likes         String[]    @default([])
   nftEditions   NFTEdition[]
   properties    NFTSetProperties[]
   creator       User        @relation(fields: [creatorId], references: [id])

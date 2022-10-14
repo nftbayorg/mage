@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "NFTSet" ADD COLUMN     "likes" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN     "views" TEXT[] DEFAULT ARRAY[]::TEXT[];
