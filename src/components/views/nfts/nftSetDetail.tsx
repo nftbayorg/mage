@@ -151,8 +151,8 @@ const NftSetHeader = ({
             <div className="text-lg text-gray-600 dark:text-gray-400">Owned By</div>
             <Link href={`/${owner}`}>
               <div className="text-lg text-blue-500 my-3 cursor-pointer truncate max-w-[140px] md:max-w-fit">
-                {/* {owner === session?.user?.id && "You"} */}
-                {owner === session?.user?.id && owner}
+                {owner === session?.user?.id && "You"}
+                {owner !== session?.user?.id && owner}
               </div>
             </Link>
           </div>
