@@ -120,8 +120,6 @@ const NftSetHeader = ({
 }) => {
   const { data: session } = useSession();
 
-  console.log('user', session?.user?.id)
-
   return (
   <>
     {collection && (
@@ -158,13 +156,15 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
     return <NftSetDetailSkeleton />;
   }
 
+  const owner = nftSet.nftEditions[0]?.owner?.userId;
+
   return (
     <section className="flex flex-col w-full space-y-4 lg:flex-row lg:gap-x-6 lg:w-5/6 p-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600">
       <div className="lg:hidden">
         <NftSetHeader
           collection={nftSet.collection as Collection}
           name={nftSet.name}
-          owner={nftSet.nftEditions[0]?.ownerId || ''}
+          owner={owner || ''}
         />
       </div>
 
@@ -242,7 +242,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           <NftSetHeader
             collection={nftSet.collection as Collection}
             name={nftSet.name}
-            owner={nftSet.nftEditions[0]?.ownerId || ''}
+            owner={owner || ''}
           />
         </div>
 

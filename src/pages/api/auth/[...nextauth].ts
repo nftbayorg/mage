@@ -10,37 +10,11 @@ import { env } from "../../../env/server.mjs";
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
+    async session({ session, token, user }) {
       if (session.user) {
         session.user.id = user.id;
       }
       return session;
-    },
-    async signIn({ user }) {
-
-      // if (user && user.id) {
-      //   let userWallet = await prisma.wallet.findFirst({
-      //     where: {
-      //       userId: user.id,
-      //       virtual: true
-      //     }
-      //   })
-  
-      //   if (!userWallet) {
-      //     userWallet = await prisma.wallet.create({
-      //       data: {
-      //         virtual: true,
-      //         userId: user.id
-      //       }
-      //     })
-      //   }
-  
-      //   if (!userWallet) {
-      //     return "Could not sign in - no wallet located"
-      //   }
-      // }
-
-      return true;
     }
   },
   // Configure one or more authentication providers

@@ -24,7 +24,15 @@ export const getServerSideProps: GetServerSideProps = async (
     },
     include: {
       collection: true,
-      nftEditions: true,
+      nftEditions: {
+        include: {
+          owner: {
+            include: {
+              user: true
+            }
+          }
+        }
+      },
       properties: true
     },
   });

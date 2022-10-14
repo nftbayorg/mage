@@ -114,7 +114,6 @@ export const lotRouter = t.router({
         },
         where: { id: input.id },
       });
-      console.log("Lot", lot);
       return lot;
     }),
 });

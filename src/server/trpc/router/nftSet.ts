@@ -20,7 +20,15 @@ export const nftSetRouter = t.router({
       },
       include: {
         collection: true,
-        nftEditions: true,
+        nftEditions: {
+          include: {
+            owner: {
+              include: {
+                user: true
+              }
+            }
+          }  
+        },
         properties: true
       },
     });

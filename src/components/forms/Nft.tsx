@@ -39,13 +39,11 @@ const NftForm = ({ onSubmit, collections, defaultCollection }: ComponentProps) =
   }, []);
 
   const onSubmitFormValues = async (data: CreateItemFormValues) => {
-    console.log('A')
 
     if (file) {
       data.totalSupply = parseInt(data.totalSupply);
       data.file = file;
       data.properties = properties;
-      console.log('B')
       onSubmit(data);
     }
   };
