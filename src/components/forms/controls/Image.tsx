@@ -14,7 +14,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
   const [attempts, setAttempts] = useState(1);
   const [loadingIndicator] = useState(!hideLoadingIndicator);
   const setTimeoutId = useRef<NodeJS.Timeout>();
-  const imageRef = useRef<HTMLImageElement>();
+  const imageRef = useRef<HTMLImageElement>(null);
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
@@ -34,14 +34,10 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
   }, [attempts]);
 
   useEffect(() => {
-    setTimeoutId.current = setTimeout(() => {
-      if (!imageRef.current?.complete) {
-        setLoading(true);
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(setTimeoutId.current);
+    if (imageRef.current?.complete) {
+      setLoading(false);
+    } else {
+      setLoading(true);
     }
   }, [])
 
