@@ -1,33 +1,32 @@
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
+  InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { Session } from "next-auth";
 import { useRouter } from "next/router";
+import { Session } from "next-auth";
 import { useMemo, useState } from "react";
 import { FaCheck, FaRedo } from "react-icons/fa";
 import CreateItem from "../../components/forms/Nft";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { trpc } from "../../utils/trpc";
+import { prisma } from "../../server/db/client";
+import { Collection } from "prisma/prisma-client";
 
-type PageProps = {
-  session: Session;
-};
+type CreateNftPageProps = {
+  session: Session,
+  collections: Collection[]
+}
 
-const CreateNftPage: NextPage<PageProps> = ({ session }) => {
+const CreateNftPage: NextPage<CreateNftPageProps> = ({ session, collections }: CreateNftPageProps) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nftSetCreated, setNftSetCreated] = useState(false);
 
   const { collectionId } = router.query;
 
-
-  const collections = trpc.collection.getByUser.useQuery({
-    user: session.user?.id || "",
-  });
-
-  const collection = useMemo(() => collections?.data?.find(collection => collection.id === collectionId), [collectionId, collections?.data]);
+  const collection = useMemo(() => collections.find(collection => collection.id === collectionId), [collectionId, collections]);
 
   const createNftSet = trpc.nftSet.create.useMutation();
 
@@ -111,7 +110,7 @@ const CreateNftPage: NextPage<PageProps> = ({ session }) => {
             <h1 className="text-4xl my-5">Create New Item</h1>
             <CreateItem
               onSubmit={handleOnSumbit}
-              collections={collections.data}
+              collections={collections}
               defaultCollection={collection}
             />
           </div>
@@ -133,9 +132,17 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
+  const collections = await prisma.collection.findMany({
+    where: {
+      userId: session.user?.id,
+      visible: true
+    }
+  });
+
   return {
     props: {
-      session,
+      session: session as Session,
+      collections: JSON.parse(JSON.stringify(collections)) as Collection[],
     },
   };
 };

@@ -14,6 +14,7 @@ import Image from "../../forms/controls/Image";
 import { CollapsePanel } from "../../forms/controls/CollapsePanel";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
+import { useSession } from "next-auth/react";
 
 type NftSet = inferProcedureOutput<AppRouter["nftSet"]["get"]>;
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
@@ -111,13 +112,20 @@ const NftSetDetailSkeleton = () => (
 const NftSetHeader = ({
   collection,
   name,
+  owner,
 }: {
   collection: Collection;
   name: string;
-}) => (
+  owner: string;
+}) => {
+  const { data: session } = useSession();
+
+  console.log('user', session?.user?.id)
+
+  return (
   <>
     {collection && (
-      <div className="flex-col space-y-6 mb-4 w-full">
+      <div className="flex-col gap-y-6 w-full">
         <Link href={`/collections/${collection?.id}`}>
           <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">
             {collection.name}
@@ -126,16 +134,26 @@ const NftSetHeader = ({
         <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
           {name}
         </div>
+        <div className="flex items-center gap-2">
+          <div className="text-lg text-gray-600 dark:text-gray-400">Owned By</div>
+          <Link href={`/${owner}`}>
+            <div className="text-lg text-blue-500 my-3 cursor-pointer">
+              {owner === session?.user?.id && "You"}
+              {owner !== session?.user?.id && owner}
+            </div>
+          </Link>
+        </div>
       </div>
     )}
-  </>
-);
+  </>);
+}
 
 type ComponentProps = {
   nftSet: NftSet | undefined;
 };
 
 const NftSetDetail = ({ nftSet }: ComponentProps) => {
+
   if (!nftSet) {
     return <NftSetDetailSkeleton />;
   }
@@ -146,6 +164,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         <NftSetHeader
           collection={nftSet.collection as Collection}
           name={nftSet.name}
+          owner={nftSet.nftEditions[0]?.ownerId || ''}
         />
       </div>
 
@@ -223,6 +242,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           <NftSetHeader
             collection={nftSet.collection as Collection}
             name={nftSet.name}
+            owner={nftSet.nftEditions[0]?.ownerId || ''}
           />
         </div>
 

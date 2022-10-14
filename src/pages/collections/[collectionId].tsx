@@ -1,31 +1,35 @@
-import type { NextPage } from "next";
-import NextError from "next/error";
-import { useRouter } from "next/router";
-import { trpc } from "../../utils/trpc";
+import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
+import { Collection } from "prisma/prisma-client";
+import { prisma } from "../../server/db/client";
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
 
-const CollectionDetailPage: NextPage = () => {
-  const id = useRouter().query.collectionId as string;
-  const collectionQuery = trpc.collection.get.useQuery({ id }, {
-    refetchOnWindowFocus: false
-  });
-
-  if (collectionQuery.error) {
-    return (
-      <NextError
-        title={collectionQuery.error.message}
-        statusCode={collectionQuery.error.data?.httpStatus ?? 500}
-      />
-    );
-  }
-
-  const collection = collectionQuery.data;
-
+const CollectionDetailPage: NextPage = ({ collection }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <CollectionDetail collection={collection} />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+
+  const collection = await prisma.collection.findFirst({
+    where: {
+      id: ctx.params?.collectionId as string || '',
+      visible: true
+    },
+    include: {
+      nftSets: true,
+    },
+  });
+
+  return {
+    props: {
+      collection: JSON.parse(JSON.stringify(collection)) as Collection
+    },
+  };
 };
 
 export default CollectionDetailPage;

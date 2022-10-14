@@ -9,7 +9,7 @@ type MageImageProps = ImageProps & {
 }
 
 export default function ImageFallback({ alt, className, src, fallbackImage, hideLoadingIndicator, width, height }: MageImageProps) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
   const [attempts, setAttempts] = useState(1);
   const [loadingIndicator] = useState(!hideLoadingIndicator);
@@ -54,6 +54,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
                 src={src as string} 
                 style={{ height: `100%`, width: `100%` }} 
                 onLoad={() => setLoading(false)}
+                onLoadStart={() => setLoading(true)}
                 onError={handleError}
               />
             }

@@ -127,9 +127,9 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
             {createdAt && (
               <div className="flex gap-2">
                 <div className="">Created</div>
-                <div className="font-bold">{`${DateAsMonthYearAsWords(
+                {/* <div className="font-bold">{`${DateAsMonthYearAsWords(
                   createdAt
-                )}`}</div>
+                )}`}</div> */}
               </div>
             )}
           </div>
