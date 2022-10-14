@@ -1,5 +1,5 @@
 import { ImageProps } from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MdImageNotSupported } from "react-icons/md";
 import { BiLoaderAlt } from 'react-icons/bi';
 
@@ -13,6 +13,8 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
   const [loadingError, setLoadingError] = useState(false);
   const [attempts, setAttempts] = useState(1);
   const [loadingIndicator] = useState(!hideLoadingIndicator);
+  const setTimeoutId = useRef<NodeJS.Timeout>();
+  const imageRef = useRef<HTMLImageElement>();
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
@@ -20,11 +22,28 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
     setAttempts(prev => prev+1);
   },[]);
 
+  const handleLoadingComplete = useCallback(() => {
+    setLoading(false);
+    clearTimeout(setTimeoutId.current);
+  }, [])
+
   useEffect(() => {
     if (attempts > 3) {
       setLoadingError(true);
     }
   }, [attempts]);
+
+  useEffect(() => {
+    setTimeoutId.current = setTimeout(() => {
+      if (!imageRef.current?.complete) {
+        setLoading(true);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(setTimeoutId.current);
+    }
+  }, [])
 
   return (
     <>
@@ -50,11 +69,11 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
             { // eslint-disable-next-line @next/next/no-img-element 
               <img 
                 alt={alt}
+                ref={imageRef}
                 className={`${className} object-cover`}
                 src={src as string} 
                 style={{ height: `100%`, width: `100%` }} 
-                onLoad={() => setLoading(false)}
-                onLoadStart={() => setLoading(true)}
+                onLoad={handleLoadingComplete}
                 onError={handleError}
               />
             }
