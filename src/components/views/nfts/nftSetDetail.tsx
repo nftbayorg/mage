@@ -137,7 +137,7 @@ const NftSetHeader = ({
   return (
   <>
     {collection && (
-      <div className="flex-col gap-y-6 w-full">
+      <div className="flex-col gap-y-6 w-full mt-5 md:mt-0">
         <Link href={`/collections/${collection?.id}`}>
           <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">
             {collection.name}
