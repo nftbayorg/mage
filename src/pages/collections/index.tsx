@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   return {
     props: {
-      collections: JSON.parse(JSON.stringify(collections)) as Collection[]
+      collections: collections as Collection[]
     },
   };
 };

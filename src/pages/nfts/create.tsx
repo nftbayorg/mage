@@ -142,7 +142,7 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       session: session as Session,
-      collections: JSON.parse(JSON.stringify(collections)) as Collection[],
+      collections: collections as Collection[],
     },
   };
 };

@@ -101,8 +101,10 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
         description: "",
       };
 
+  console.log('Coll', collection);
+
   function pluralize(word: string, value: number): string {
-    const plural = value && (value > 0 || value === 0) ? "" : "s";
+    const plural = value && (value > 0 || value === 0) ? "s" : "";
     return `${word}${plural}`;
   }
 
@@ -120,16 +122,16 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
           <div className="text-2xl md:text-3xl font-semibold">{name}</div>
           <div className="flex gap-3 font-gray-500 my-5">
             <div className="flex gap-2">
-              <div className="">{`${pluralize("Item", nftSets.length)}`}</div>
               <div className="font-bold">{`${nftSets.length}`}</div>
+              <div className="">{`${pluralize("Item", nftSets.length)}`}</div>
             </div>
             <div className="">-</div>
             {createdAt && (
               <div className="flex gap-2">
                 <div className="">Created</div>
-                {/* <div className="font-bold">{`${DateAsMonthYearAsWords(
+                <div className="font-bold">{`${DateAsMonthYearAsWords(
                   createdAt
-                )}`}</div> */}
+                )}`}</div>
               </div>
             )}
           </div>

@@ -1,3 +1,4 @@
+import superjson from 'superjson';
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import { Collection } from "prisma/prisma-client";
 import { prisma } from "../../server/db/client";
@@ -27,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   return {
     props: {
-      collection: JSON.parse(JSON.stringify(collection)) as Collection
+      collection: collection as Collection
     },
   };
 };

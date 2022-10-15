@@ -70,7 +70,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      collections: JSON.parse(JSON.stringify(collections))
+      collections: collections
     },
   };
 };

@@ -87,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   return {
     props: {
-      nftSet: JSON.parse(JSON.stringify(nftSetWithViewCount)) as DetailedNFTSet
+      nftSet: nftSetWithViewCount
     },
   };
 };
