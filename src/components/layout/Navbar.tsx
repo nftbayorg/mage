@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FaBars, FaCircleNotch, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaWallet } from "react-icons/fa";
+import { FaCircleNotch, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaWallet } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { NavMenu, NavMenuItem  } from "./NavMenu";
 import dynamic from "next/dynamic";
@@ -24,19 +24,19 @@ const MobileNav = () => {
           caption="Trade"
           onClick={() => router.push("/trade")}
         />
+        <NavMenuItem
+          icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          caption="Create"
+          onClick={() => router.push("/nfts/create")}
+        />
+        <NavMenuItem 
+          icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          caption="My Collections" 
+          onClick={() => router.push('/collections')}
+        />
+        <SetTheme/>
         {session &&
           <>
-            <NavMenuItem
-              icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-              caption="Create"
-              onClick={() => router.push("/nfts/create")}
-            />
-            <NavMenuItem 
-              icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-              caption="My Collections" 
-              onClick={() => router.push('/collections')}
-            />
-            <SetTheme/>
             <NavMenuItem 
               icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
               caption="Sign Out" 
@@ -44,21 +44,10 @@ const MobileNav = () => {
             />
           </>
         }
-        {!session && 
-          <>
-            <SetTheme/>
-            <NavMenuItem 
-              icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
-              caption="Log In" 
-              onClick={() => router.push('/login')}
-            />
-          </>
-        }
       </NavMenu>
     </div>
   )
 }
-
 
 const MenuItems = () => {
   const router = useRouter();
@@ -78,39 +67,29 @@ const MenuItems = () => {
             Trade
           </a>
         </Link>
-        {session && <Link href="/nfts/create">
+        <Link href="/nfts/create">
           <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500">
             Create
           </a>
-        </Link>}
+        </Link>
       </div>
       <div className="flex justify-end md:flex-row md:ml-auto min-w-fit h-full mr-9 mt-2">
         <NavMenu 
           icon={<FaRegUserCircle size={30}/>} 
           position="left"
         >
+          <NavMenuItem 
+            icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+            caption="My Collections" 
+            onClick={() => router.push('/collections')}
+          />
           {session && (
             <>
-              <NavMenuItem 
-                icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-                caption="My Collections" 
-                onClick={() => router.push('/collections')}
-              />
               <SetTheme/>
               <NavMenuItem 
                 icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
                 caption="Sign Out" 
                 onClick={() => signOut()}
-              />
-            </>
-          )}
-          {!session && (
-            <>
-              <SetTheme/>
-              <NavMenuItem 
-                icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
-                caption="Log In" 
-                onClick={() => router.push('/login')}
               />
             </>
           )}

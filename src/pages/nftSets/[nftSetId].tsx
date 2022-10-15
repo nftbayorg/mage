@@ -27,7 +27,7 @@ function computeViewCount<NFTSet extends NftSetViews>(
 
 const NftSetDetailPage: NextPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[calc(100vh-350px)]">
+    <div className="flex flex-col items-center justify-center w-full min-h-[calc(100vh-310px)]">
       <NftSetDetail nftSet={nftSet} />
     </div>
   );
