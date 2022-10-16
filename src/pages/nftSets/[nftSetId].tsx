@@ -16,12 +16,13 @@ type DetailedNFTSet = NFTSet & {
 
 function computeViewCount<NFTSet extends NftSetViews>(
   nftSet: NFTSet
-): NftSetWithViewCount<Omit<NFTSet, 'views'>> {
-  const { views, ...rest } = nftSet;
+): NftSetWithViewCount<Omit<NFTSet, 'views' | 'likes'>> {
+  const { views, likes,  ...rest } = nftSet;
 
   return {
     ...rest,
     viewCount: views.length,
+    likeCount: likes.length
   }
 }
 
