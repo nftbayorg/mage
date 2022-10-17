@@ -140,8 +140,6 @@ export const nftSetRouter = t.router({
         true  
       );
 
-      t.
-
       return nftSetWithViewCount;
 
     }),
