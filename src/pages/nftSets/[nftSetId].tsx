@@ -11,13 +11,13 @@ const NftSetDetailPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServ
   const [nft, setNft] = useState<NFTSetWithMeta>(nftSet);
 
   const likeMutation = trpc.nftSet.like.useMutation({
-    onSuccess(nft) {
+    onSuccess(nft: NFTSetWithMeta) {
       setNft(nft);
     }
   });
 
   const unLikeMutation = trpc.nftSet.unLike.useMutation({
-    onSuccess(nft) {
+    onSuccess(nft: NFTSetWithMeta) {
       setNft(nft);
     }
   });
