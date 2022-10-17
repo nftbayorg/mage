@@ -12,7 +12,7 @@ const MyApp = ({ Component, pageProps }: AppProps<{ session: Session }>) => {
 
   return (
     <SessionProvider session={pageProps.session}>
-      <ThemeProvider attribute="class">
+      <ThemeProvider attribute="class" defaultTheme="dark">
         <Layout>
           <Component {...pageProps} />
         </Layout>
