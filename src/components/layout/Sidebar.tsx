@@ -1,15 +1,15 @@
-import { trpc } from "../../utils/trpc";
-
-import { GiAbstract116 } from "react-icons/gi";
 import Link from "next/link";
 import Image from "../forms/controls/Image";
+import { Collection } from "prisma/prisma-client";
 
-const Sidebar = () => {
+type SidebarProps = {
+  collections: Collection[];
+}
+
+const Sidebar = ({ collections }: SidebarProps) => {
 
   const salesTypes = ["Fixed Price", "Auction"];
   const categories = ["Premium", "Art", "Sports", "Entertainment", "Gaming", "Collectables", "Esports", ""];
-
-  const collections = trpc.collection.getAll.useQuery();
 
   return (
     <nav className="hidden lg:flex p-5 w-72 h-screen overflow-scroll border-r border-gray-200 dark:border-gray-600">
@@ -18,7 +18,7 @@ const Sidebar = () => {
           Collections
         </div>
         <div className="mt-5 ml-2 flex-col overflow-y-scroll max-h-50 w-full">
-          {collections.data && collections.data.map(item => {
+          {collections.map(item => {
             return (
               <Link href={`collections/${item.id}`} key={item.id}>
                 {/* <GiAbstract116 color={item.color || "white"}/> */}

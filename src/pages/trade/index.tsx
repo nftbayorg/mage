@@ -1,12 +1,14 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 
 import Sidebar from "../../components/layout/Sidebar";
 import LotSummary from "../../components/views/lots/LotSummary";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { useRestoreScroll } from "../../hooks/useRestoreScroll";
+import { Collection } from "prisma/prisma-client";
+import { prisma } from "../../server/db/client";
 
-const TradePage: NextPage = () => {
+const TradePage: NextPage = ({ collections }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [listRef] = useRestoreScroll<HTMLDivElement>();
 
   const results = trpc.auction.getInfiniteAuctions.useInfiniteQuery(
@@ -31,7 +33,7 @@ const TradePage: NextPage = () => {
 
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar collections={collections}/>
       <div
         ref={listRef}
         className="md:p-4 text-2xl flex-1 h-screen text-gray-700 font-medium dark:text-gray-300 overflow-y-scroll"
@@ -70,5 +72,23 @@ const TradePage: NextPage = () => {
     </div>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+
+  const collections = await prisma.collection.findMany({
+    where: {
+      visible: true
+    }
+  });
+
+  return {
+    props: {
+      collections: collections as Collection[]
+    },
+  };
+};
+
 
 export default TradePage;
