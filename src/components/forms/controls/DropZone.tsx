@@ -38,7 +38,7 @@ export const DropZone = React.memo((props: React.PropsWithChildren<DropZoneProps
 
   // Create helper method to map file list to array of files:
   const mapFileListToArray = (files: FileList) => {
-    const array = []
+    const array = Array();
 
     for (let i = 0; i < files.length; i++) {
       array.push(files.item(i))

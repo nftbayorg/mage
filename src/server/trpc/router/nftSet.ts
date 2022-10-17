@@ -270,7 +270,7 @@ export const nftSetRouter = t.router({
         });
       }
 
-      const nftEditionObjArray = [];
+      const nftEditionObjArray = Array();
       for (let index = 0; index < input.totalSupply; index++) {
         nftEditionObjArray.push(
           {
