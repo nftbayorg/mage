@@ -3,6 +3,7 @@ import { z } from "zod";
 import { NFTStorage, Blob } from 'nft.storage';
 import { TRPCError } from "@trpc/server";
 import { computeViewLikeCount, DetailedNFTSet } from "../../../utils/computed-properties";
+import { trpc } from "../../../utils/trpc";
 
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
@@ -14,26 +15,59 @@ export const nftSetRouter = t.router({
       },
     });
   }),
-  get: t.procedure.input(z.object({ id: z.string() })).query(({ input, ctx }) => {
-    return ctx.prisma?.nFTSet.findFirst({
-      where: {
-        id: input?.id,
-      },
-      include: {
-        collection: true,
-        nftEditions: {
-          include: {
-            owner: {
-              include: {
-                user: true
-              }
-            }
-          }  
+  get: t.procedure
+    .input(z.object({ id: z.string() }))
+    .query(async({ input, ctx }) => {
+      const nftSet = await ctx.prisma?.nFTSet.findFirst({
+        where: {
+          id: input?.id,
         },
-        properties: true
-      },
-    });
+        include: {
+          collection: true,
+          nftEditions: {
+            include: {
+              owner: {
+                include: {
+                  user: true
+                }
+              }
+            }  
+          },
+          properties: true
+        },
+      });
+
+      const nftSetWithViewCount = computeViewLikeCount(
+        nftSet as DetailedNFTSet, 
+        true  
+      );
+
+      return nftSetWithViewCount;
   }),
+  getFavorites: authedProcedure
+    .query(async({ ctx }) => {
+
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          id: ctx.session.user?.id
+        }
+      });
+    
+      let favorites;
+    
+      if (user) {
+    
+        favorites = await ctx.prisma.nFTSet.findMany({
+          where: {
+            id: {
+              in: user.liked
+            }
+          }
+        });
+      }
+
+      return favorites;
+   }),
   like: authedProcedure
     .input(
       z.object({
@@ -106,6 +140,8 @@ export const nftSetRouter = t.router({
         true  
       );
 
+      t.
+
       return nftSetWithViewCount;
 
     }),
@@ -147,7 +183,6 @@ export const nftSetRouter = t.router({
             properties: true
           },
         });
-
 
         const nftSetId = nftSet.id;
 

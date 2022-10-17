@@ -5,10 +5,20 @@ import { getServerAuthSession } from "../../server/common/get-server-auth-sessio
 import { trpc } from "../../utils/trpc";
 import { computeViewLikeCount, DetailedNFTSet, NFTSetWithMeta } from "../../utils/computed-properties";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const NftSetDetailPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const [nft, setNft] = useState<NFTSetWithMeta>(nftSet);
+
+  const id = useRouter().query.nftSetId as string;
+  
+  trpc.nftSet.get.useQuery({ id }, { 
+    initialData: nftSet,
+    onSuccess(nft) {
+      setNft(nft)
+    }
+  });
 
   const likeMutation = trpc.nftSet.like.useMutation({
     onSuccess(nft: NFTSetWithMeta) {
