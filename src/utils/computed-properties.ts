@@ -11,17 +11,20 @@ export type DetailedNFTSet = NFTSet & {
   liked: boolean;
 }
 
+export type NFTSetWithMeta = DetailedNFTSet & NftSetWithViewLikeCount<Omit<NFTSet, "views" | "likes">>;
 
-export const computeViewLikeCount = <NFTSet extends NftSetViews>(
-  nftSet: NFTSet,
+export const computeViewLikeCount = (
+  nftSet: DetailedNFTSet,
   liked: boolean
-): NftSetWithViewLikeCount<Omit<NFTSet, "views" | "likes">> => {
+): NFTSetWithMeta => {
   const { views, likes, ...rest } = nftSet;
 
   return {
     ...rest,
     viewCount: views.length,
     likeCount: likes.length,
+    views,
+    likes,
     liked,
   };
 }

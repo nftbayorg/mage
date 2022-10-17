@@ -1,4 +1,3 @@
-import { DateAsWord } from "../../../utils/date";
 import {
   FaEye,
   FaChartLine,
@@ -17,22 +16,10 @@ import { CollapsePanel } from "../../forms/controls/CollapsePanel";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
 import { useSession } from "next-auth/react";
-import { User } from "next-auth";
-import { NFTSet, NFTEdition, Wallet, NFTSetProperties } from "prisma/prisma-client";
 import { ToolTip } from "../../forms/controls/Tooltip";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-type DetailedNFTSet = NFTSet & {
-  nftEditions: (NFTEdition & {
-      owner: Wallet & {
-          user: User;
-      };
-  })[];
-  collection: Collection | null;
-  properties: NFTSetProperties[];
-}
-
+import { NFTSetWithMeta } from "../../../utils/computed-properties";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -175,7 +162,7 @@ const NftSetHeader = ({
 }
 
 type ComponentProps = {
-  nftSet: NftSetWithViewLikeCount<DetailedNFTSet> | undefined;
+  nftSet: NFTSetWithMeta | undefined;
   onLike: () => void;
   onUnLike: () => void;
 };
