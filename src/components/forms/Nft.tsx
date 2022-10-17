@@ -123,7 +123,7 @@ const NftForm = ({ onSubmit, collections, defaultCollection }: ComponentProps) =
         collapsible={true}
         icon={<FaList size={25} className="fill-gray-700 dark:fill-gray-300"/>}
       >
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 w-full">
           <div className="text-xl font-normal">
             Properties show up underneath your item, are clickable, and can be filtered in your collection&apos;s sidebar
           </div>
@@ -135,11 +135,11 @@ const NftForm = ({ onSubmit, collections, defaultCollection }: ComponentProps) =
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 w-full gap-2 flex-wrap">
             {properties && properties.map((property, idx) => (
-              <div className="border border-blue-300 bg-blue-50 w-full md:w-56 h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
+              <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
                 <div className="text-blue-400 text-sm absolute right-1 top-1 p-1 cursor-pointer" onClick={() => removeProperty(property)}>X</div>
                 <div className="text-blue-400 text-md">{property.type}</div>
-                <div className="text-gray-700">{property.name}</div>
-              </div>
+                <div className="text-gray-700 dark:text-gray-300">{property.name}</div>
+              </div>            
             ))}
           </div>
         </div>

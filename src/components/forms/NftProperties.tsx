@@ -17,13 +17,15 @@ const NftPropertiesForm = ({ onSubmit }: ComponentProps) => {
   });
 
   const onSubmitFormValues = async (data: CreateItemPropertyFormValues) => {
+    data.name = data.name.toLocaleUpperCase();
+    data.type = data.type.toLocaleUpperCase();
     onSubmit(data);
     reset();
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmitFormValues)}>
+      <form className="w-full" onSubmit={handleSubmit(onSubmitFormValues)}>
          <div className="flex flex-col md:flex-row md:gap-1 w-full">
           <Input
             label="Type"
@@ -53,7 +55,7 @@ const NftPropertiesForm = ({ onSubmit }: ComponentProps) => {
             dark:hover:bg-opacity-10
             dark:disabled:bg-opacity-0
               text-white
-            dark:disabled:text-gray-700
+            dark:disabled:text-gray-900
           "
         >
           <div>Add Property</div>
