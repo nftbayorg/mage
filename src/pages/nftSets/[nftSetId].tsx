@@ -1,35 +1,42 @@
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import NftSetDetail from "../../components/views/nfts/nftSetDetail";
 import { prisma } from "../../server/db/client";
-import { Collection, NFTEdition, NFTSet, NFTSetProperties, User, Wallet } from "prisma/prisma-client";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
-
-type DetailedNFTSet = NFTSet & {
-  nftEditions: (NFTEdition & {
-      owner: Wallet & {
-          user: User;
-      };
-  })[];
-  collection: Collection | null;
-  properties: NFTSetProperties[];
-}
-
-function computeViewCount<NFTSet extends NftSetViews>(
-  nftSet: NFTSet
-): NftSetWithViewCount<Omit<NFTSet, 'views' | 'likes'>> {
-  const { views, likes,  ...rest } = nftSet;
-
-  return {
-    ...rest,
-    viewCount: views.length,
-    likeCount: likes.length
-  }
-}
+import { trpc } from "../../utils/trpc";
+import { computeViewLikeCount, DetailedNFTSet } from "../../utils/computed-properties";
+import { useState } from "react";
 
 const NftSetDetailPage: NextPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+
+  const [nft, setNft] = useState(nftSet);
+
+  const likeMutation = trpc.nftSet.like.useMutation({
+    onSuccess(nft) {
+      setNft(nft);
+    }
+  });
+
+  const unLikeMutation = trpc.nftSet.unLike.useMutation({
+    onSuccess(nft) {
+      setNft(nft);
+    }
+  });
+
+  const handleLikeNft = async () => {
+    await likeMutation.mutateAsync({
+      id: nftSet.id,
+    });
+  }
+
+  const handleUnLikeNft = async () => {
+    await unLikeMutation.mutateAsync({
+      id: nftSet.id,
+    });
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-[calc(100vh-310px)]">
-      <NftSetDetail nftSet={nftSet} />
+      <NftSetDetail nftSet={nft} onLike={handleLikeNft} onUnLike={handleUnLikeNft}/>
     </div>
   );
 };
@@ -38,6 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   const session = await getServerAuthSession(ctx);
+  const authenticatedUserId = session?.user?.id || '';
 
   let nftSet = await prisma.nFTSet.findFirst({
     where: {
@@ -58,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (
     },
   });
 
-  if (session?.user?.id && !nftSet?.views.find(userId => session.user?.id === userId)) {
+  if (session?.user?.id && !nftSet?.views.find(userId => authenticatedUserId === userId)) {
     nftSet = await prisma.nFTSet.update({
       where: {
         id: ctx.params?.nftSetId as string || '',
@@ -84,7 +92,10 @@ export const getServerSideProps: GetServerSideProps = async (
     });
   }
 
-  const nftSetWithViewCount = computeViewCount(nftSet as DetailedNFTSet);
+  const nftSetWithViewCount = computeViewLikeCount(
+    nftSet as DetailedNFTSet, 
+    nftSet?.likes.find(userId => authenticatedUserId === userId) ? true : false  
+  );
 
   return {
     props: {

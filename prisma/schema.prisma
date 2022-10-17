@@ -166,6 +166,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  liked         String[]  @default([])
 
   wallets       Wallet[]
   auctions      Auction[]

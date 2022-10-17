@@ -1,5 +1,4 @@
 export const DateAsMonthYearAsWords = (date: Date) => {
-  console.log("Date", date);
   const longEnUSFormatter = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",

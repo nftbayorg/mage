@@ -1,7 +1,8 @@
-import { t } from "../utils";
+import { t, authedProcedure } from "../utils";
 import { z } from "zod";
 import { NFTStorage, Blob } from 'nft.storage';
 import { TRPCError } from "@trpc/server";
+import { computeViewLikeCount, DetailedNFTSet } from "../../../utils/computed-properties";
 
 const client = new NFTStorage({ token: process.env.NFTSTORAGE_API_TOKEN || '' })
 
@@ -33,7 +34,153 @@ export const nftSetRouter = t.router({
       },
     });
   }),
-  create: t.procedure
+  like: authedProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ input, ctx }) => { 
+
+      let nftSet = await ctx.prisma.nFTSet.findFirst({
+        where: {
+          id: input.id
+        }
+      });
+    
+      if (!nftSet?.likes.find(userId => ctx.session.user?.id === userId)) {
+        nftSet = await ctx.prisma.nFTSet.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            likes: {
+              push: ctx.session.user.id
+            }
+          },
+          include: {
+            collection: true,
+            nftEditions: {
+              include: {
+                owner: {
+                  include: {
+                    user: true
+                  }
+                }
+              }
+            },
+            properties: true
+          },
+        });
+
+        const nftSetId = nftSet.id;
+
+        if (ctx.session.user) {
+          const user = await ctx.prisma.user.findFirst({
+            where: {
+              id: ctx.session.user.id
+            }
+          });
+
+          if (user) {
+            const userLikes = user?.liked.find(nftId =>  nftId === nftSetId)
+
+            if (!userLikes) {
+              await ctx.prisma.user.update({
+                where: {
+                  id: ctx.session.user.id
+                },
+                data: {
+                  liked: {
+                    push: nftSetId
+                  }
+                }
+              })
+            }
+          }
+        }
+      }
+      
+      const nftSetWithViewCount = computeViewLikeCount(
+        nftSet as DetailedNFTSet, 
+        true  
+      );
+
+      return nftSetWithViewCount;
+
+    }),
+    unLike: authedProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ input, ctx }) => { 
+
+      let nftSet = await ctx.prisma.nFTSet.findFirst({
+        where: {
+          id: input.id
+        }
+      });
+    
+      if (nftSet && nftSet?.likes.find(userId => ctx.session.user?.id === userId)) {
+        const updatedLikes = nftSet.likes.filter(userId => ctx.session.user?.id !== userId) 
+
+        nftSet = await ctx.prisma.nFTSet.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            likes: updatedLikes
+          },
+          include: {
+            collection: true,
+            nftEditions: {
+              include: {
+                owner: {
+                  include: {
+                    user: true
+                  }
+                }
+              }
+            },
+            properties: true
+          },
+        });
+
+
+        const nftSetId = nftSet.id;
+
+        if (ctx.session.user) {
+          const user = await ctx.prisma.user.findFirst({
+            where: {
+              id: ctx.session.user.id
+            }
+          });
+
+          if (user) {
+            const userLikes = user?.liked.filter(nftId =>  nftId !== nftSetId)
+            await ctx.prisma.user.update({
+              where: {
+                id: ctx.session.user.id
+              },
+              data: {
+                liked: userLikes
+              }
+            });
+          }
+        }
+      }
+      
+      const nftSetWithViewCount = computeViewLikeCount(
+        nftSet as DetailedNFTSet, 
+        true  
+      );
+
+      return nftSetWithViewCount;
+
+    }),
+  create: authedProcedure
     .input(
       z.object({ 
         name: z.string(),
@@ -52,12 +199,6 @@ export const nftSetRouter = t.router({
     .mutation(async ({ input, ctx }) => {
       const authenticatedUserId = ctx.session?.user?.id;
 
-      if (!authenticatedUserId) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Must authenticated to create NFT.",
-        });
-      }
       if (!input.file) {
         throw new TRPCError({
           code: "BAD_REQUEST",

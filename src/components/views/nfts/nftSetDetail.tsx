@@ -9,6 +9,7 @@ import {
   FaAlignLeft,
   FaListUl,
   FaStream,
+  FaHeart,
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "../../forms/controls/Image";
@@ -19,6 +20,8 @@ import { useSession } from "next-auth/react";
 import { User } from "next-auth";
 import { NFTSet, NFTEdition, Wallet, NFTSetProperties } from "prisma/prisma-client";
 import { ToolTip } from "../../forms/controls/Tooltip";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 type DetailedNFTSet = NFTSet & {
   nftEditions: (NFTEdition & {
@@ -172,25 +175,49 @@ const NftSetHeader = ({
 }
 
 type ComponentProps = {
-  nftSet: NftSetWithViewCount<DetailedNFTSet> | undefined;
+  nftSet: NftSetWithViewLikeCount<DetailedNFTSet> | undefined;
+  onLike: () => void;
+  onUnLike: () => void;
 };
 
-const NftSetDetail = ({ nftSet }: ComponentProps) => {
+const NftSetDetail = ({ nftSet, onLike, onUnLike }: ComponentProps) => {
 
-  if (!nftSet) {
+  const [nft, setNft] = useState(nftSet);
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  if (!nft) {
     return <NftSetDetailSkeleton />;
   }
 
-  const owner = nftSet.nftEditions[0]?.owner?.userId;
+  const owner = nft.nftEditions[0]?.owner?.userId;
+
+  const handleLike = () => {
+    if (!session?.user) {
+      router.push('/login');
+    } else {
+      setNft(prev => {
+        if (prev) {
+          if (prev.liked) {
+            onUnLike();
+            return {...prev, likeCount: prev?.likeCount-1, liked: false}
+          } else {
+            onLike();
+            return {...prev, likeCount: prev?.likeCount+1, liked: true}
+          }
+        }
+      });
+    }
+  }
 
   return (
     <section className="flex flex-col w-full space-y-4 lg:flex-row lg:gap-x-6 lg:w-5/6 p-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600">
       <div className="lg:hidden">
         <NftSetHeader
-          collection={nftSet.collection as Collection}
-          name={nftSet.name}
+          collection={nft.collection as Collection}
+          name={nft.name}
           owner={owner || ''}
-          views={nftSet.viewCount}
+          views={nft.viewCount}
         />
       </div>
 
@@ -203,19 +230,29 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
             >
               <FaEthereum className="fill-blue-500 mr-2" size={20} />
             </ToolTip>
-            <button className="ml-auto hover:text-red-500  dark:hover:text-red-500">
-              <ToolTip
-                label="Favorite"
-                position="top"
+
+            <div className="ml-auto flex justify-end gap-3">
+              <div className="dark:text-gray-400">{nft.likeCount}</div>
+
+              <button 
+                onClick={handleLike}
               >
-                <FaRegHeart size={20} className="fill-gray-400 mr-2 hover:fill-red-500" />
-              </ToolTip>
-            </button>
+                <ToolTip
+                  label="Favorite"
+                  position="top"
+                >
+                  <>
+                    {!nft.liked && <FaRegHeart size={20} className="fill-gray-400 mr-2 hover:fill-red-500" />} 
+                    {nft.liked && <FaHeart size={20} className="fill-red-500 mr-2" />}
+                  </>
+                </ToolTip>
+              </button>
+            </div>
           </div>
           <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none">
             <Image
-              src={nftSet.imageUrl}
-              alt={nftSet.name}
+              src={nft.imageUrl}
+              alt={nft.name}
               layout="intrinsic"
               priority={true}
               width="800"
@@ -239,11 +276,11 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         >
           <div className="flex flex-col items-start justify-start gap-3">
             <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
-              By <div className="font-bold">{nftSet.creatorId}</div>
+              By <div className="font-bold">{nft.creatorId}</div>
             </div>
-            {nftSet.collection?.description && (
+            {nft.collection?.description && (
               <div className="font-light text-md text-gray-700 dark:text-gray-200">
-                {nftSet.description || nftSet.collection?.description}
+                {nft.description || nft.collection?.description}
               </div>
             )}
           </div>
@@ -260,7 +297,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
           collapsible={true}
         >
         <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
-          {nftSet.properties && nftSet.properties.map((property, idx) => (
+          {nft.properties && nft.properties.map((property, idx) => (
             <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
               <div className="text-blue-400 text-md">{property.type}</div>
               <div className="text-gray-700 dark:text-gray-300">{property.name}</div>
@@ -270,7 +307,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         </CollapsePanel>
 
         <CollapsePanel
-          label={`About ${nftSet.collection?.name}`}
+          label={`About ${nft.collection?.name}`}
           icon={
             <FaStream
               size={25}
@@ -282,7 +319,7 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
         >
           <div className="flex flex-col items-start justify-start gap-3">
             <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
-              {nftSet.collection?.description}
+              {nft.collection?.description}
             </div>
           </div>
         </CollapsePanel>
@@ -291,10 +328,10 @@ const NftSetDetail = ({ nftSet }: ComponentProps) => {
       <section className="lg:w-3/5 flex flex-col gap-5">
         <div className="hidden lg:block">
           <NftSetHeader
-            collection={nftSet.collection as Collection}
-            name={nftSet.name}
+            collection={nft.collection as Collection}
+            name={nft.name}
             owner={owner || ''}
-            views={nftSet.viewCount}
+            views={nft.viewCount}
           />
         </div>
 

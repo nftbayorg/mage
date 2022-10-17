@@ -4,7 +4,6 @@ import type {
   NextPage,
 } from "next";
 import { Session } from "next-auth";
-import { useS3Upload } from "next-s3-upload";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FaCheck, FaRedo } from "react-icons/fa";
@@ -26,8 +25,6 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
   const [featuredImageUploaded, setFeaturedImageUploaded] = useState(false);
   const [hasBannerImage, setHasBannerImage] = useState(false);
   const [hasFeaturedImage, setHasFearturedImage] = useState(false);
-
-  let { uploadToS3 } = useS3Upload();
 
   const createCollection = trpc.collection.create.useMutation();
   const updateImages = trpc.collection.updateImages.useMutation();

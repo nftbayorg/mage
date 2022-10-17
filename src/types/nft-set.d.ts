@@ -4,7 +4,9 @@ type NftSetViews = {
   likes: string[];
 }
   
-type NftSetWithViewCount<T> = T & {
-  viewCount: number
+type NftSetWithViewLikeCount<T> = T & {
+  viewCount: number;
+  likeCount: number;
+  liked: boolean;
 }
   
