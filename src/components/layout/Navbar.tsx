@@ -30,6 +30,11 @@ const MobileNav = () => {
           onClick={() => router.push("/nfts/create")}
         />
         <NavMenuItem 
+          icon={<FaRegHeart size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          caption="Favorites" 
+          onClick={() => router.push('/favorites')}
+        />
+        <NavMenuItem 
           icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
           caption="My Collections" 
           onClick={() => router.push('/collections')}
@@ -79,14 +84,14 @@ const MenuItems = () => {
           position="left"
         >
           <NavMenuItem 
-            icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-            caption="My Collections" 
-            onClick={() => router.push('/collections')}
-          />
-          <NavMenuItem 
             icon={<FaRegHeart size={20} className="fill-gray-700 dark:fill-gray-300"/>}
             caption="Favorites" 
             onClick={() => router.push('/favorites')}
+          />
+          <NavMenuItem 
+            icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+            caption="My Collections" 
+            onClick={() => router.push('/collections')}
           />
           {session && (
             <>
