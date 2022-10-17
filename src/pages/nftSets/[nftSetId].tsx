@@ -3,12 +3,12 @@ import NftSetDetail from "../../components/views/nfts/nftSetDetail";
 import { prisma } from "../../server/db/client";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { trpc } from "../../utils/trpc";
-import { computeViewLikeCount, DetailedNFTSet } from "../../utils/computed-properties";
+import { computeViewLikeCount, DetailedNFTSet, NFTSetWithMeta } from "../../utils/computed-properties";
 import { useState } from "react";
 
-const NftSetDetailPage: NextPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const NftSetDetailPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
-  const [nft, setNft] = useState(nftSet);
+  const [nft, setNft] = useState<NFTSetWithMeta>(nftSet);
 
   const likeMutation = trpc.nftSet.like.useMutation({
     onSuccess(nft) {
@@ -41,7 +41,11 @@ const NftSetDetailPage: NextPage = ({ nftSet }: InferGetServerSidePropsType<type
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
+type NftPageProps = {
+  nftSet: NFTSetWithMeta
+}
+
+export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
   ctx: GetServerSidePropsContext
 ) => {
   const session = await getServerAuthSession(ctx);
