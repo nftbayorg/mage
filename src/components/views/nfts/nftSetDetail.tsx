@@ -18,9 +18,10 @@ import { AppRouter } from "../../../server/trpc/router";
 import { useSession } from "next-auth/react";
 import { ToolTip } from "../../forms/controls/Tooltip";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { NFTSetWithMeta } from "../../../utils/computed-properties";
 import { NftSetHistory } from "./nftSetHistory";
+import { NFTSetProperties } from "prisma/prisma-client";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -164,15 +165,30 @@ const NftSetHeader = ({
 
 type ComponentProps = {
   nftSet: NFTSetWithMeta | undefined;
+  collectionProperties: collectionProperties;
   onLike: () => void;
   onUnLike: () => void;
 };
 
-const NftSetDetail = ({ nftSet, onLike, onUnLike }: ComponentProps) => {
+const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: ComponentProps) => {
+
+  console.log('Collection Props', collectionProperties);
 
   const [nft, setNft] = useState(nftSet);
   const { data: session } = useSession();
   const router = useRouter();
+
+  const calcTraitPercentage = useCallback((property: NFTSetProperties) => {
+    const { nftSetsInCollection, propertyCounts } = collectionProperties;
+
+    if (!nftSetsInCollection || !propertyCounts) return 0;
+
+    const countedProperty = propertyCounts.find(p => p.name === property.name && p.type === property.type);
+
+    if (!countedProperty) return 0;
+
+    return countedProperty._count.name / nftSetsInCollection * 100;
+  }, [collectionProperties])
 
   if (!nft) {
     return <NftSetDetailSkeleton />;
@@ -197,6 +213,7 @@ const NftSetDetail = ({ nftSet, onLike, onUnLike }: ComponentProps) => {
       });
     }
   }
+
 
   return (
     <section className="flex flex-col w-full gap-y-4 lg:w-5/6 p-2 md:p-10">
@@ -289,7 +306,8 @@ const NftSetDetail = ({ nftSet, onLike, onUnLike }: ComponentProps) => {
             {nft.properties && nft.properties.map((property, idx) => (
               <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
                 <div className="text-blue-400 text-md">{property.type}</div>
-                <div className="text-gray-700 dark:text-gray-300">{property.name}</div>
+                <div className="text-gray-700 dark:text-gray-200">{property.name}</div>
+                <div className="text-gray-700 dark:text-gray-400 md:text-sm">{`${calcTraitPercentage(property)}% have this trait`}</div>
               </div>
             ))}
           </div>

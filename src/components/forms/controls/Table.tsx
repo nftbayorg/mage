@@ -10,13 +10,13 @@ type TableContentProps = {
 
 
 export const TableHeader = ({ children }: TableContentProps) => (
-  <div className={`absolute top-0 left-0 grid grid-cols-5 gap-5 p-2 dark:bg-gray-900 items-center w-max md:w-full`}>
+  <div className={`absolute top-0 left-0 grid grid-cols-5 gap-5 py-2 px-4 dark:bg-gray-900 items-center w-max md:w-full`}>
     {children}
   </div>
 )
 
 export const Row = ({ children }: TableContentProps) => (
-  <div className={`grid grid-cols-5 gap-5 h-10 px-2 w-max lg:w-full`}>
+  <div className={`grid grid-cols-5 gap-5 h-10 px-4 w-max lg:w-full`}>
     {children}
   </div>
 )

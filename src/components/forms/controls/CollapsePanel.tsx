@@ -18,7 +18,7 @@ export const CollapsePanel = ({ children, classesOverride, collapsible, defaultS
     <section>
       <div 
         onClick={() => setPanelCollapsed(prev => !prev)} 
-        className={`${panelCollapsed && "rounded-b-xl"} ${collapsible && "cursor-pointer"} flex p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center justify-start`}
+        className={`${panelCollapsed && "rounded-b-xl"} ${collapsible && "cursor-pointer"} flex py-7 px-4 md:p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center justify-start`}
       >
         <div className="min-w-1/5">{icon}</div>
         <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-300 truncate pr-4">

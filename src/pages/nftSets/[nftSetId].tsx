@@ -5,20 +5,10 @@ import { getServerAuthSession } from "../../server/common/get-server-auth-sessio
 import { trpc } from "../../utils/trpc";
 import { computeViewLikeCount, DetailedNFTSet, NFTSetWithMeta } from "../../utils/computed-properties";
 import { useState } from "react";
-import { useRouter } from "next/router";
 
-const NftSetDetailPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const NftSetDetailPage = ({ nftSet, collectionProperties }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const [nft, setNft] = useState<NFTSetWithMeta>(nftSet);
-
-  const id = useRouter().query.nftSetId as string;
-  
-  trpc.nftSet.get.useQuery({ id }, { 
-    initialData: nftSet,
-    onSuccess(nft) {
-      setNft(nft)
-    }
-  });
 
   const likeMutation = trpc.nftSet.like.useMutation({
     onSuccess(nft: NFTSetWithMeta) {
@@ -46,13 +36,14 @@ const NftSetDetailPage = ({ nftSet }: InferGetServerSidePropsType<typeof getServ
 
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-[calc(100vh-310px)]">
-      <NftSetDetail nftSet={nft} onLike={handleLikeNft} onUnLike={handleUnLikeNft}/>
+      <NftSetDetail nftSet={nft} onLike={handleLikeNft} onUnLike={handleUnLikeNft} collectionProperties={collectionProperties}/>
     </div>
   );
 };
 
 type NftPageProps = {
-  nftSet: NFTSetWithMeta
+  nftSet: NFTSetWithMeta;
+  collectionProperties: collectionProperties;
 }
 
 export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
@@ -116,6 +107,34 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
     });
   }
 
+  let collectionProperties;
+  let nftSetsInCollection = Array();
+
+  if (nftSet?.collection) {
+    nftSetsInCollection = await prisma.nFTSet.findMany({
+      where: {
+        collectionId: nftSet?.collection.id
+      },
+      select: {
+        id: true
+      }
+    })
+
+    nftSetsInCollection = nftSetsInCollection.map(n => n.id);
+
+    collectionProperties = await prisma.nFTSetProperties.groupBy({
+      by: ['type', 'name'],
+      where: {
+         nftSetId: {
+           in: nftSetsInCollection
+         }
+      },
+      _count: {
+        name: true,
+      }
+    })
+  }
+
   const nftSetWithViewCount = computeViewLikeCount(
     nftSet as DetailedNFTSet, 
     nftSet?.likes.find(userId => authenticatedUserId === userId) ? true : false  
@@ -123,7 +142,11 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
 
   return {
     props: {
-      nftSet: nftSetWithViewCount
+      nftSet: nftSetWithViewCount,
+      collectionProperties: { 
+        nftSetsInCollection: nftSetsInCollection.length,
+        propertyCounts: collectionProperties
+      }
     },
   };
 };
