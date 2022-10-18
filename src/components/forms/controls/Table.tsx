@@ -16,13 +16,13 @@ export const TableHeader = ({ children }: TableContentProps) => (
 )
 
 export const Row = ({ children }: TableContentProps) => (
-  <div className={`grid grid-cols-5 gap-5 h-10 px-2 w-max md:w-full`}>
+  <div className={`grid grid-cols-5 gap-5 h-10 px-2 w-max lg:w-full`}>
     {children}
   </div>
 )
 
 export const Column = ({ children }: TableContentProps) => (
-  <div className="w-full overflow-hidden">
+  <div className="w-40 md:w-full overflow-hidden">
     {children}
   </div>
 )
