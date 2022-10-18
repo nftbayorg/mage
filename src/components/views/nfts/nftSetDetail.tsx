@@ -9,6 +9,7 @@ import {
   FaListUl,
   FaStream,
   FaHeart,
+  FaTh,
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "../../forms/controls/Image";
@@ -18,10 +19,12 @@ import { AppRouter } from "../../../server/trpc/router";
 import { useSession } from "next-auth/react";
 import { ToolTip } from "../../forms/controls/Tooltip";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NFTSetWithMeta } from "../../../utils/computed-properties";
 import { NftSetHistory } from "./nftSetHistory";
 import { NFTSetProperties } from "prisma/prisma-client";
+import NftSetSummary from "./nftSetSummary";
+import { number } from "zod";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -172,11 +175,13 @@ type ComponentProps = {
 
 const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: ComponentProps) => {
 
-  console.log('Collection Props', collectionProperties);
-
   const [nft, setNft] = useState(nftSet);
   const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    setNft(nftSet);
+  }, [nftSet])
 
   const calcTraitPercentage = useCallback((property: NFTSetProperties) => {
     const { nftSetsInCollection, propertyCounts } = collectionProperties;
@@ -187,7 +192,7 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
 
     if (!countedProperty) return 0;
 
-    return countedProperty._count.name / nftSetsInCollection * 100;
+    return (countedProperty._count.name / nftSetsInCollection * 100).toFixed(0);
   }, [collectionProperties])
 
   if (!nft) {
@@ -406,6 +411,41 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
       </section>
       <section className="">
         {nftSet && <NftSetHistory history={nftSet?.history} />}
+      </section>
+      <section>
+        <CollapsePanel
+          label="More From This Collection"
+          icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-400"/>}
+          classesOverride="p-6 md:p-1"
+          collapsible={true}
+        >
+          <div className="grid grid-col-1 md:grid-cols-5 gap-2 w-full">
+            {nftSet?.collection?.nftSets && nftSet?.collection?.nftSets.filter(n => n.id !== nftSet.id).map(nft => (
+              <NftSetSummary key={nft.id} nftSet={nft} />
+            ))}
+          </div>
+          {nftSet?.collection?.nftSets && 
+            <div className="flex w-full items-center justify-center border-t dark:border-gray-600 pt-2 mt-2">
+              <Link href={`/collections/${nftSet.collection.id}`}>
+                <a
+                  className="
+                  md:max-w-fit 
+                  flex items-center justify-center 
+                  dark:text-gray-300 py-4 px-10 hover:bg-blue-400 bg-blue-500 disabled:bg-blue-200 text-white
+                  dark:border
+                  dark:border-gray-300
+                  dark:bg-white dark:bg-opacity-0
+                  dark:hover:bg-opacity-10
+                  rounded
+                  font-semibold 
+                "
+                >
+                  View collection
+                </a>
+              </Link>
+            </div>
+          }
+        </CollapsePanel>
       </section>
     </section>
   );

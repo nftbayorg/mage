@@ -4,11 +4,15 @@ import { prisma } from "../../server/db/client";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { trpc } from "../../utils/trpc";
 import { computeViewLikeCount, DetailedNFTSet, NFTSetWithMeta } from "../../utils/computed-properties";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NftSetDetailPage = ({ nftSet, collectionProperties }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const [nft, setNft] = useState<NFTSetWithMeta>(nftSet);
+
+  useEffect(() => {
+    setNft(nftSet);
+  }, [nftSet]);
 
   const likeMutation = trpc.nftSet.like.useMutation({
     onSuccess(nft: NFTSetWithMeta) {
@@ -57,7 +61,11 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
       id: ctx.params?.nftSetId as string || '',
     },
     include: {
-      collection: true,
+      collection: {
+        include: {
+          nftSets: true
+        }
+      },
       nftEditions: {
         include: {
           owner: {
@@ -87,7 +95,11 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
         }
       },
       include: {
-        collection: true,
+        collection: {
+          include: {
+            nftSets: true
+          }
+        },
         nftEditions: {
           include: {
             owner: {
@@ -133,12 +145,17 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
         name: true,
       }
     })
+
   }
 
   const nftSetWithViewCount = computeViewLikeCount(
     nftSet as DetailedNFTSet, 
     nftSet?.likes.find(userId => authenticatedUserId === userId) ? true : false  
   );
+
+  if (nftSet?.collection?.nftSets) {
+    nftSet.collection.nftSets = nftSet.collection.nftSets.splice(0, 10);
+  }
 
   return {
     props: {

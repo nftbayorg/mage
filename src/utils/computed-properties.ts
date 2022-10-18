@@ -1,12 +1,16 @@
 import { Collection, NFTEdition, NFTSet, NFTSetHistory, NFTSetProperties, User, Wallet } from "prisma/prisma-client";
 
+type CollectionWithNftSets = Collection & {
+  nftSets: NFTSet[]
+}
+
 export type DetailedNFTSet = NFTSet & {
   nftEditions: (NFTEdition & {
       owner: Wallet & {
           user: User;
       };
   })[];
-  collection: Collection | null;
+  collection: CollectionWithNftSets | null;
   properties: NFTSetProperties[];
   history: NFTSetHistory[];
   liked: boolean;

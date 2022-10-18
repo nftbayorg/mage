@@ -23,7 +23,11 @@ export const nftSetRouter = t.router({
           id: input?.id,
         },
         include: {
-          collection: true,
+          collection: {
+            include: {
+              nftSets: true
+            }
+          },
           nftEditions: {
             include: {
               owner: {
