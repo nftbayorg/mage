@@ -33,7 +33,12 @@ export const nftSetRouter = t.router({
               }
             }  
           },
-          properties: true
+          properties: true,
+          history: {
+            orderBy: {
+              createdAt: 'desc'
+            }
+          } 
         },
       });
 
@@ -103,7 +108,12 @@ export const nftSetRouter = t.router({
                 }
               }
             },
-            properties: true
+            properties: true,
+            history: {
+              orderBy: {
+                createdAt: 'desc'
+              }
+            } 
           },
         });
 
@@ -143,7 +153,7 @@ export const nftSetRouter = t.router({
       return nftSetWithViewCount;
 
     }),
-    unLike: authedProcedure
+  unLike: authedProcedure
     .input(
       z.object({
         id: z.string()
@@ -178,7 +188,12 @@ export const nftSetRouter = t.router({
                 }
               }
             },
-            properties: true
+            properties: true,
+            history: {
+              orderBy: {
+                createdAt: 'desc'
+              }
+            } 
           },
         });
 
@@ -262,6 +277,7 @@ export const nftSetRouter = t.router({
         });
       } 
 
+
       const base64 = Buffer.from(
         input.file.replace(/^data:image\/\w+;base64,/, ""),
         "base64"
@@ -327,6 +343,16 @@ export const nftSetRouter = t.router({
           },
           properties: {
             create: input.properties
+          },
+          history: {
+            create: {
+              currency: "Eth",
+              eventType: "Minted",
+              price: 0,
+              quantity: input.totalSupply,
+              fromAdminWallet: true,
+              walletToId: creatorWallet.id,
+            }
           }
         }
       });

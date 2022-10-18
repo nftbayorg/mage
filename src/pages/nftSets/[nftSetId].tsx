@@ -76,7 +76,12 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
           }
         }
       },
-      properties: true
+      properties: true,
+      history: {
+        orderBy: {
+          createdAt: 'desc'
+        }
+      } 
     },
   });
 
@@ -101,7 +106,12 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
             }
           }
         },
-        properties: true
+        properties: true,
+        history: {
+          orderBy: {
+            createdAt: 'desc'
+          }
+        } 
       },
     });
   }

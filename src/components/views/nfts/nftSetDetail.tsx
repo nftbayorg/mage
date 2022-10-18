@@ -20,6 +20,7 @@ import { ToolTip } from "../../forms/controls/Tooltip";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { NFTSetWithMeta } from "../../../utils/computed-properties";
+import { NftSetHistory } from "./nftSetHistory";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -198,122 +199,9 @@ const NftSetDetail = ({ nftSet, onLike, onUnLike }: ComponentProps) => {
   }
 
   return (
-    <section className="flex flex-col w-full space-y-4 lg:flex-row lg:gap-x-6 lg:w-5/6 p-5 md:m-10 pt-0 border-gray-200 dark:border-gray-600">
-      <div className="lg:hidden">
-        <NftSetHeader
-          collection={nft.collection as Collection}
-          name={nft.name}
-          owner={owner || ''}
-          views={nft.viewCount}
-        />
-      </div>
-
-      <div className="flex flex-col lg:w-2/5 space-y-4">
-        <section className="">
-          <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
-            <ToolTip
-              label="Blockchain: Ethereum"
-              position="top"
-            >
-              <FaEthereum className="fill-blue-500 mr-2" size={20} />
-            </ToolTip>
-
-            <div className="ml-auto flex justify-end gap-3">
-              <div className="dark:text-gray-400">{nft.likeCount}</div>
-
-              <button 
-                onClick={handleLike}
-              >
-                <ToolTip
-                  label="Favorite"
-                  position="top"
-                >
-                  <>
-                    {!nft.liked && <FaRegHeart size={20} className="fill-gray-400 mr-2 hover:fill-red-500" />} 
-                    {nft.liked && <FaHeart size={20} className="fill-red-500 mr-2" />}
-                  </>
-                </ToolTip>
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none">
-            <Image
-              src={nft.imageUrl}
-              alt={nft.name}
-              layout="intrinsic"
-              priority={true}
-              width="800"
-              height="800"
-              objectFit="contain"
-              className="rounded-b-xl"
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
-            />
-          </div>
-        </section>
-
-        <CollapsePanel
-          label="Description"
-          icon={
-            <FaAlignLeft
-              size={25}
-              className="fill-gray-700 dark:fill-gray-400"
-            />
-          }
-        >
-          <div className="flex flex-col items-start justify-start gap-3">
-            <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
-              By <div className="font-bold">{nft.creatorId}</div>
-            </div>
-            {nft.collection?.description && (
-              <div className="font-light text-md text-gray-700 dark:text-gray-200">
-                {nft.description || nft.collection?.description}
-              </div>
-            )}
-          </div>
-        </CollapsePanel>
-
-        <CollapsePanel
-          label="Properties"
-          icon={
-            <FaTags
-              size={25}
-              className="fill-gray-700 dark:fill-gray-400 rotate-90"
-            />
-          }
-          collapsible={true}
-        >
-        <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
-          {nft.properties && nft.properties.map((property, idx) => (
-            <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
-              <div className="text-blue-400 text-md">{property.type}</div>
-              <div className="text-gray-700 dark:text-gray-300">{property.name}</div>
-            </div>
-          ))}
-        </div>
-        </CollapsePanel>
-
-        <CollapsePanel
-          label={`About ${nft.collection?.name}`}
-          icon={
-            <FaStream
-              size={25}
-              className="fill-gray-700 dark:fill-gray-400"
-            />
-          }
-          collapsible={true}
-          defaultState="collapsed"
-        >
-          <div className="flex flex-col items-start justify-start gap-3">
-            <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
-              {nft.collection?.description}
-            </div>
-          </div>
-        </CollapsePanel>
-      </div>
-
-      <section className="lg:w-3/5 flex flex-col gap-5">
-        <div className="hidden lg:block">
+    <section className="flex flex-col w-full gap-y-4 lg:w-5/6 p-2 md:p-10">
+      <section className="flex flex-col w-full gap-y-4 lg:flex-row lg:gap-x-6">
+        <div className="lg:hidden">
           <NftSetHeader
             collection={nft.collection as Collection}
             name={nft.name}
@@ -322,65 +210,183 @@ const NftSetDetail = ({ nftSet, onLike, onUnLike }: ComponentProps) => {
           />
         </div>
 
-        <CollapsePanel
-          icon={
-            <FaChartLine
-              size={25}
-              className="fill-gray-700 dark:fill-gray-400 font-light"
-            />
-          }
-          label="Price History"
-          collapsible={true}
-          defaultState="collapsed"
-        >
-          <div className="flex-col space-y-3"></div>
-        </CollapsePanel>
+        <div className="flex flex-col lg:w-2/5 space-y-4">
+          <section className="">
+            <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
+              <ToolTip
+                label="Blockchain: Ethereum"
+                position="top"
+              >
+                <FaEthereum className="fill-blue-500 mr-2" size={20} />
+              </ToolTip>
 
-        <CollapsePanel
-          label="Listings"
-          icon={
-            <FaTag size={25} className="fill-gray-700 dark:fill-gray-400" />
-          }
-          collapsible={true}
-        >
-          <div className="flex flex-col justify-center items-center space-y-3 ">
-            <Image
-              src="/images/empty.png"
-              alt="Empty listings"
-              width="150"
-              height="100"
-              objectFit="cover"
-              className="rounded-xl w-[150px] h-[100px]"
-              hideLoadingIndicator={true}
-            />
-            <div className="text-gray-700 dark:text-gray-200 text-xl font-light">
-              No listings yet
-            </div>
-          </div>
-        </CollapsePanel>
+              <div className="ml-auto flex justify-end gap-3">
+                <div className="dark:text-gray-400">{nft.likeCount}</div>
 
-        <CollapsePanel
-          label="Offers"
-          icon={
-            <FaListUl size={25} className="fill-gray-700 dark:fill-gray-400" />
-          }
-          collapsible={true}
-        >
-          <div className="flex flex-col justify-center items-center space-y-3 ">
-            <Image
-              src="/images/empty.png"
-              alt="Empty listings"
-              width="150"
-              height="100"
-              objectFit="cover"
-              className="rounded-xl w-[150px] h-[100px]"
-              hideLoadingIndicator={true}
-            />
-            <div className="text-gray-700 dark:text-gray-200 text-xl font-light">
-              No offers yet
+                <button 
+                  onClick={handleLike}
+                >
+                  <ToolTip
+                    label="Favorite"
+                    position="top"
+                  >
+                    <>
+                      {!nft.liked && <FaRegHeart size={20} className="fill-gray-400 mr-2 hover:fill-red-500" />} 
+                      {nft.liked && <FaHeart size={20} className="fill-red-500 mr-2" />}
+                    </>
+                  </ToolTip>
+                </button>
+              </div>
             </div>
+            <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none">
+              <Image
+                src={nft.imageUrl}
+                alt={nft.name}
+                layout="intrinsic"
+                priority={true}
+                width="800"
+                height="800"
+                objectFit="contain"
+                className="rounded-b-xl"
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
+              />
+            </div>
+          </section>
+
+          <CollapsePanel
+            label="Description"
+            icon={
+              <FaAlignLeft
+                size={25}
+                className="fill-gray-700 dark:fill-gray-400"
+              />
+            }
+          >
+            <div className="flex flex-col items-start justify-start gap-3">
+              <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
+                By <div className="font-bold">{nft.creatorId}</div>
+              </div>
+              {nft.collection?.description && (
+                <div className="font-light text-md text-gray-700 dark:text-gray-200">
+                  {nft.description || nft.collection?.description}
+                </div>
+              )}
+            </div>
+          </CollapsePanel>
+
+          <CollapsePanel
+            label="Properties"
+            icon={
+              <FaTags
+                size={25}
+                className="fill-gray-700 dark:fill-gray-400 rotate-90"
+              />
+            }
+            collapsible={true}
+          >
+          <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
+            {nft.properties && nft.properties.map((property, idx) => (
+              <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
+                <div className="text-blue-400 text-md">{property.type}</div>
+                <div className="text-gray-700 dark:text-gray-300">{property.name}</div>
+              </div>
+            ))}
           </div>
-        </CollapsePanel>
+          </CollapsePanel>
+
+          <CollapsePanel
+            label={`About ${nft.collection?.name}`}
+            icon={
+              <FaStream
+                size={25}
+                className="fill-gray-700 dark:fill-gray-400"
+              />
+            }
+            collapsible={true}
+            defaultState="collapsed"
+          >
+            <div className="flex flex-col items-start justify-start gap-3">
+              <div className="flex gap-2 w-full h-full text-md text-gray-700 dark:text-gray-200">
+                {nft.collection?.description}
+              </div>
+            </div>
+          </CollapsePanel>
+        </div>
+
+        <section className="lg:w-3/5 flex flex-col gap-5">
+          <div className="hidden lg:block">
+            <NftSetHeader
+              collection={nft.collection as Collection}
+              name={nft.name}
+              owner={owner || ''}
+              views={nft.viewCount}
+            />
+          </div>
+
+          <CollapsePanel
+            icon={
+              <FaChartLine
+                size={25}
+                className="fill-gray-700 dark:fill-gray-400 font-light"
+              />
+            }
+            label="Price History"
+            collapsible={true}
+            defaultState="collapsed"
+          >
+            <div className="flex-col space-y-3"></div>
+          </CollapsePanel>
+
+          <CollapsePanel
+            label="Listings"
+            icon={
+              <FaTag size={25} className="fill-gray-700 dark:fill-gray-400" />
+            }
+            collapsible={true}
+          >
+            <div className="flex flex-col justify-center items-center space-y-3 ">
+              <Image
+                src="/images/empty.png"
+                alt="Empty listings"
+                width="150"
+                height="100"
+                objectFit="cover"
+                className="rounded-xl w-[150px] h-[100px]"
+                hideLoadingIndicator={true}
+              />
+              <div className="text-gray-700 dark:text-gray-200 text-xl font-light">
+                No listings yet
+              </div>
+            </div>
+          </CollapsePanel>
+
+          <CollapsePanel
+            label="Offers"
+            icon={
+              <FaListUl size={25} className="fill-gray-700 dark:fill-gray-400" />
+            }
+            collapsible={true}
+          >
+            <div className="flex flex-col justify-center items-center space-y-3 ">
+              <Image
+                src="/images/empty.png"
+                alt="Empty listings"
+                width="150"
+                height="100"
+                objectFit="cover"
+                className="rounded-xl w-[150px] h-[100px]"
+                hideLoadingIndicator={true}
+              />
+              <div className="text-gray-700 dark:text-gray-200 text-xl font-light">
+                No offers yet
+              </div>
+            </div>
+          </CollapsePanel>
+        </section>
+      </section>
+      <section className="">
+        {nftSet && <NftSetHistory history={nftSet?.history} />}
       </section>
     </section>
   );

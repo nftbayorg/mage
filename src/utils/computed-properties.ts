@@ -1,4 +1,4 @@
-import { Collection, NFTEdition, NFTSet, NFTSetProperties, User, Wallet } from "prisma/prisma-client";
+import { Collection, NFTEdition, NFTSet, NFTSetHistory, NFTSetProperties, User, Wallet } from "prisma/prisma-client";
 
 export type DetailedNFTSet = NFTSet & {
   nftEditions: (NFTEdition & {
@@ -8,6 +8,7 @@ export type DetailedNFTSet = NFTSet & {
   })[];
   collection: Collection | null;
   properties: NFTSetProperties[];
+  history: NFTSetHistory[];
   liked: boolean;
 }
 

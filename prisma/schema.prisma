@@ -15,120 +15,143 @@ datasource db {
 }
 
 model Collection {
-  id              String    @id @default(cuid())
+  id              String   @id @default(cuid())
   name            String
   description     String?
   logoImageUrl    String
   featureImageUrl String?
   bannerImageUrl  String?
-  blockChainId    String?   @default("Ethereum")
-  explicitContent Boolean?  @default(false)
-  displayThemee   String?   @default("contained")
+  blockChainId    String?  @default("Ethereum")
+  explicitContent Boolean? @default(false)
+  displayThemee   String?  @default("contained")
   userId          String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  published       Boolean   @default(false)
-  visible         Boolean   @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  published       Boolean  @default(false)
+  visible         Boolean  @default(true)
 
-  nftSets         NFTSet[]
-  user            User      @relation(fields: [userId], references: [id])
+  nftSets NFTSet[]
+  user    User     @relation(fields: [userId], references: [id])
+
+  @@index([visible], type: BTree)
 }
 
 model NFTSet {
-  id            String      @id @default(cuid())
-  name          String
-  imageUrl      String
-  blockchainId  String
-  link          String?
-  description   String?
-  collectionId  String?
-  creatorId     String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  views         String[]    @default([])
-  likes         String[]    @default([])
-  nftEditions   NFTEdition[]
-  properties    NFTSetProperties[]
-  creator       User        @relation(fields: [creatorId], references: [id])
-  collection    Collection? @relation(fields: [collectionId], references: [id])
+  id           String             @id @default(cuid())
+  name         String
+  imageUrl     String
+  blockchainId String
+  link         String?
+  description  String?
+  collectionId String?
+  creatorId    String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  views        String[]           @default([])
+  likes        String[]           @default([])
+  nftEditions  NFTEdition[]
+  properties   NFTSetProperties[]
+  history      NFTSetHistory[]
+  creator      User               @relation(fields: [creatorId], references: [id])
+  collection   Collection?        @relation(fields: [collectionId], references: [id])
 }
 
 model NFTSetProperties {
-  id            String    @id @default(cuid())
-  type          String
-  name          String  
-  nftSetId      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  type      String
+  name      String
+  nftSetId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  nftSet        NFTSet    @relation(fields: [nftSetId], references: [id])
+  nftSet NFTSet @relation(fields: [nftSetId], references: [id])
+}
+
+model NFTSetHistory {
+  id              String     @id @default(cuid())
+  eventType       String
+  price           Float
+  currency        String
+  quantity        Int
+  nftSetId        String
+  fromAdminWallet Boolean
+  walletFromId    String?
+  walletToId      String
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  nftSet          NFTSet     @relation(fields: [nftSetId], references: [id])
+  walletFrom      Wallet?    @relation(fields: [walletFromId], references: [id], name: "WalletFrom")
+  walletTo        Wallet     @relation(fields: [walletToId], references: [id], name: "WalletTo")
 }
 
 model NFTEdition {
-  id            String      @id @default(cuid())
+  id            String   @id @default(cuid())
   minted        Boolean
   ownerId       String
   nftSetId      String
   tokenAddress  String?
   adminWalletId String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  lots          Lot[]
-  adminWallet   AdminWallet? @relation(fields: [adminWalletId], references: [id])
-  owner         Wallet       @relation(fields: [ownerId], references: [id])
-  nftSet        NFTSet       @relation(fields: [nftSetId], references: [id])
+  lots        Lot[]
+  adminWallet AdminWallet? @relation(fields: [adminWalletId], references: [id])
+  owner       Wallet       @relation(fields: [ownerId], references: [id])
+  nftSet      NFTSet       @relation(fields: [nftSetId], references: [id])
 }
 
 model Lot {
-  id           String     @id @default(cuid())
+  id           String   @id @default(cuid())
   reservePrice Decimal
   sold         Boolean
-  views        Int        @default(0)
-  nftEditionId String    
+  views        Int      @default(0)
+  nftEditionId String
   auctionId    String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  nftEdition   NFTEdition @relation(fields: [nftEditionId], references: [id])
-  auction      Auction    @relation(fields: [auctionId], references: [id])
+  nftEdition NFTEdition @relation(fields: [nftEditionId], references: [id])
+  auction    Auction    @relation(fields: [auctionId], references: [id])
 
   @@unique([id], name: "lot_constraint")
 }
 
 model Auction {
-  id          String      @id @default(cuid())
-  fixed       Boolean
-  start       DateTime
-  end         DateTime
-  userId      String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        String   @id @default(cuid())
+  fixed     Boolean
+  start     DateTime
+  end       DateTime
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  lots        Lot[]
-  user        User        @relation(fields: [userId], references: [id])
+  lots Lot[]
+  user User  @relation(fields: [userId], references: [id])
 }
 
 model Wallet {
-  id          String       @id @default(cuid())
-  virtual     Boolean
-  userId      String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id        String   @id @default(cuid())
+  virtual   Boolean
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  nftEditions NFTEdition[]
-  adminWallet AdminWallet?
-  user        User         @relation(fields: [userId], references: [id])
+  transfersFrom NFTSetHistory[] @relation("WalletFrom")
+  transfersTo   NFTSetHistory[] @relation("WalletTo")
+  nftEditions   NFTEdition[]
+  adminWallet   AdminWallet?
+  user          User         @relation(fields: [userId], references: [id])
 }
 
 model AdminWallet {
-  id            String      @id @default(cuid())
-  userWalletId  String      @unique
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id           String   @id @default(cuid())
+  userWalletId String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  nftEditions   NFTEdition[]
-  userWallet    Wallet      @relation(fields: [userWalletId], references: [id])
+  nftEditions NFTEdition[]
+  userWallet  Wallet       @relation(fields: [userWalletId], references: [id])
 }
 
 // Necessary for Next auth
@@ -138,12 +161,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?  @db.Text
-  access_token      String?  @db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.Text
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -168,12 +191,12 @@ model User {
   updatedAt     DateTime  @updatedAt
   liked         String[]  @default([])
 
-  wallets       Wallet[]
-  auctions      Auction[]
-  accounts      Account[]
-  sessions      Session[]
-  collections   Collection[]
-  nftSets       NFTSet[]
+  wallets     Wallet[]
+  auctions    Auction[]
+  accounts    Account[]
+  sessions    Session[]
+  collections Collection[]
+  nftSets     NFTSet[]
 }
 
 model VerificationToken {

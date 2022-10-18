@@ -4,12 +4,13 @@ import { useState } from "react";
 type CollapsePanelProps = {
   children?: React.ReactNode;
   collapsible?: boolean;
+  classesOverride?: string;
   defaultState?: "expanded" | "collapsed";
   icon: React.ReactNode;
   label: string;
 }
 
-export const CollapsePanel = ({ children, collapsible, defaultState, icon, label }: CollapsePanelProps) => {
+export const CollapsePanel = ({ children, classesOverride, collapsible, defaultState, icon, label }: CollapsePanelProps) => {
 
   const [panelCollapsed, setPanelCollapsed] = useState(collapsible && defaultState === "collapsed")
 
@@ -36,7 +37,9 @@ export const CollapsePanel = ({ children, collapsible, defaultState, icon, label
         flex flex-col items-center justify-center
         border border-t-0 border-gray-200 dark:border-gray-600 
         rounded-b-xl bg-gray-50 dark:bg-gray-700 
-        overflow-hidden`
+        overflow-hidden
+        ${classesOverride}
+        `
       }>
         {children}
       </div>
