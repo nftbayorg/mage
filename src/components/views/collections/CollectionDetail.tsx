@@ -159,7 +159,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
             Items
           </div>
           <hr className="border border-gray-200" />
-          <div className="py-4 md:p-10 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
+          <div className="py-4 md:mt-4 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
             {collection?.nftSets.map((nftSet) => (
               <div key={nftSet.id}>
                 <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
