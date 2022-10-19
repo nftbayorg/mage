@@ -66,7 +66,7 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name, verified }
         />
       </div>
 
-      <div className="flex justify-start items-center w-full p-5 min-h-[90px] lg:min-h[80px] overflow-ellipsis gap-2">
+      <div className="flex justify-start items-center w-full px-5 pb-3 pt-7 min-h-[90px] lg:min-h[80px] overflow-ellipsis gap-2">
         <div className="md:text-md font-light text-ellipsis overflow-hidden whitespace-nowrap">
           {name}
         </div>
