@@ -10,6 +10,7 @@ import {
   FaStream,
   FaHeart,
   FaTh,
+  FaRegClock,
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "../../forms/controls/Image";
@@ -359,7 +360,11 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
             collapsible={true}
             defaultState="collapsed"
           >
-            <div className="flex-col space-y-3"></div>
+            <div className="flex flex-col space-y-3 items-center justify-center w-full">
+              <FaRegClock size={25} className="fill-gray-700 dark:fill-gray-400 font-light"/>
+              <div className="font-medium">No data yet</div>
+              <div>Check back later.</div>
+            </div>
           </CollapsePanel>
 
           <CollapsePanel
