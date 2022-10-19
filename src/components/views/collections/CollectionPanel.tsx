@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MdVerified } from "react-icons/md";
 import Image from "../../forms/controls/Image";
 
 type CollectionPanelContent = {
@@ -6,6 +7,7 @@ type CollectionPanelContent = {
   featureImageUrl: string | null;
   logoImageUrl: string;
   name: string;
+  verified: boolean;
 }
 
 type CollectionPanelProps = {
@@ -33,7 +35,7 @@ const CollectionSkeleton = () => {
   )
 }
 
-const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name }: CollectionPanelContent) => (
+const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name, verified }: CollectionPanelContent) => (
   <Link href={`/collections/${id}`}>
     <div className="
         flex flex-col items-center justify-center 
@@ -64,8 +66,18 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name }: Collecti
         />
       </div>
 
-      <div className="flex justify-start items-center w-full p-5 pl-28 min-h-[50px] lg:min-h[80px] overflow-ellipsis">
-        <div className="text-md">{name}</div>
+      <div className="flex justify-start items-center w-full p-5 pl-28 min-h-[50px] lg:min-h[80px] overflow-ellipsis gap-2">
+        <div className="md:text-md font-light my-3 text-ellipsis overflow-hidden whitespace-nowrap">
+          {name}
+        </div>
+          {verified && 
+            <span className="verified_icon">
+              <MdVerified size={20}/>
+              <div className="verified_icon_bg">
+                <MdVerified size={20} className=""/>
+              </div>
+            </span>
+          }
       </div>
     </div>
   </Link>
@@ -82,6 +94,7 @@ export const CollectionPanel = ({ collection }: CollectionPanelProps ) => {
         logoImageUrl={collection.logoImageUrl}
         featureImageUrl={collection.featureImageUrl}
         name={collection.name}
+        verified={collection.verified}
       />}
     </>
   );

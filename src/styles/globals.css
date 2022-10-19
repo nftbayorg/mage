@@ -12,3 +12,18 @@
     }
   }
   
+
+.verified_icon {
+  @apply inline-block relative
+    text-blue-500 z-10
+}
+.verified_icon svg {
+  @apply w-6 h-6
+}
+.verified_icon_bg{
+  @apply absolute inset-0 -z-10
+}
+.verified_icon_bg svg {
+  @apply h-3 w-3 ml-[0.44rem] mt-[0.44rem] 
+  text-white bg-white;
+}

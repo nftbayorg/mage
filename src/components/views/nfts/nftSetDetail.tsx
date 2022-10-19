@@ -25,7 +25,7 @@ import { NFTSetWithMeta } from "../../../utils/computed-properties";
 import { NftSetHistory } from "./nftSetHistory";
 import { NFTSetProperties } from "prisma/prisma-client";
 import NftSetSummary from "./nftSetSummary";
-import { number } from "zod";
+import { MdVerified } from "react-icons/md";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -137,8 +137,18 @@ const NftSetHeader = ({
     {collection && (
       <div className="flex-col gap-y-6 w-full mt-5 md:mt-0">
         <Link href={`/collections/${collection?.id}`}>
-          <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">
-            {collection.name}
+          <div className="flex items-center gap-2">
+            <div className="text-xl font-light text-blue-500 my-3 cursor-pointer">
+              {collection.name}
+            </div>
+            {collection.verified && 
+              <span className="verified_icon">
+                  <MdVerified size={20}/>
+                  <div className="verified_icon_bg">
+                    <MdVerified size={20} className=""/>
+                  </div>
+              </span>
+            }
           </div>
         </Link>
         <div className="text-4xl font-semibold py-5 text-gray-700 dark:text-gray-400">
@@ -219,7 +229,6 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
       });
     }
   }
-
 
   return (
     <section className="flex flex-col w-full gap-y-4 lg:w-5/6 p-2 md:p-10">
@@ -426,7 +435,7 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
         >
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 w-full">
             {nftSet?.collection?.nftSets && nftSet?.collection?.nftSets.map(nft => (
-              <NftSetSummary key={nft.id} nftSet={nft} />
+              <NftSetSummary key={nft.id} nftSet={nft} collection={nftSet.collection}/>
             ))}
           </div>
           {nftSet?.collection?.nftSets && 

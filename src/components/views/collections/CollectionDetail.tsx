@@ -7,6 +7,7 @@ import { DropDown, DropDownItem } from "../../forms/controls/DropDown";
 import { FaEllipsisH, FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { MdVerified } from "react-icons/md";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -90,6 +91,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
     nftSets,
     createdAt,
     description,
+    verified
   } = collection
     ? collection
     : {
@@ -99,6 +101,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
         nftSets: [],
         createdAt: undefined,
         description: "",
+        verified: false
       };
 
   function pluralize(word: string, value: number): string {
@@ -117,7 +120,20 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
       />
       <section className="px-4 md:px-0">
         <section className="flex flex-col mb-10 md:px-10">
-          <div className="text-2xl md:text-3xl font-semibold">{name}</div>
+          <div className="flex items-center gap-2">
+            <div className="text-2xl md:text-3xl font-semibold">
+              {name}
+            </div>
+            {verified && 
+              <span className="verified_icon">
+                  <MdVerified size={20}/>
+                  <div className="verified_icon_bg">
+                    <MdVerified size={20} className=""/>
+                  </div>
+              </span>
+            }
+          </div>
+
           <div className="flex gap-3 font-gray-500 my-5">
             <div className="flex gap-2">
               <div className="font-bold">{`${nftSets.length}`}</div>
@@ -146,7 +162,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
           <div className="py-4 md:p-10 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
             {collection?.nftSets.map((nftSet) => (
               <div key={nftSet.id}>
-                <NftSetSummary nftSet={nftSet} />
+                <NftSetSummary nftSet={nftSet} collection={collection}/>
               </div>
             ))}
           </div>

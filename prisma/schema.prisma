@@ -29,6 +29,7 @@ model Collection {
   updatedAt       DateTime @updatedAt
   published       Boolean  @default(false)
   visible         Boolean  @default(true)
+  verified        Boolean  @default(false)
 
   nftSets NFTSet[]
   user    User     @relation(fields: [userId], references: [id])
