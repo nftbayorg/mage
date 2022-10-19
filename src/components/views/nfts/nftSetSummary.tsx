@@ -4,13 +4,12 @@ import Image from "../../forms/controls/Image";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
 import { MdVerified } from "react-icons/md";
-import { CollectionWithNftSets } from "../../../utils/computed-properties";
 
 type NftSet = inferProcedureOutput<AppRouter["nftSet"]["getLean"]>;
 
-const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet, collection: CollectionWithNftSets | null }>(
-  (props: { nftSet: NftSet, collection: CollectionWithNftSets | null }, ref) => {
-    const { nftSet, collection } = props;
+const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet, collectionName: string | undefined, verified: boolean | undefined }>(
+  (props: { nftSet: NftSet, collectionName: string | undefined, verified: boolean | undefined }, ref) => {
+    const { nftSet, collectionName, verified } = props;
     if (!nftSet) return <div>Loading...</div>;
 
     return (
@@ -31,12 +30,12 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet, collect
           <div className="p-2 md:p-4 rounded-b-2xl">
             <div className="text-sm md:text-lg text-ellipsis overflow-hidden whitespace-nowrap">{nftSet.name}</div>
             <div>
-              {collection && 
+              {collectionName && 
                 <div className="flex items-center gap-2">
-                  <div className="text-xs md:text-sm font-light my-3 text-ellipsis overflow-hidden whitespace-nowrap">
-                    {collection.name}
+                  <div className="text-xs md:text-lg font-thin my-3 text-ellipsis overflow-hidden whitespace-nowrap">
+                    {collectionName}
                   </div>
-                  {collection.verified && 
+                  {verified && 
                     <span className="verified_icon">
                         <MdVerified size={20}/>
                         <div className="verified_icon_bg">

@@ -435,7 +435,7 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
         >
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 w-full">
             {nftSet?.collection?.nftSets && nftSet?.collection?.nftSets.map(nft => (
-              <NftSetSummary key={nft.id} nftSet={nft} collection={nftSet.collection}/>
+              <NftSetSummary key={nft.id} nftSet={nft} collectionName={nftSet.collection?.name} verified={nftSet.collection?.verified}/>
             ))}
           </div>
           {nftSet?.collection?.nftSets && 

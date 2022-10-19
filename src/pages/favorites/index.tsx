@@ -6,17 +6,14 @@ import NftSetSummary from "../../components/views/nfts/nftSetSummary";
 import { useState } from "react";
 import { trpc } from "../../utils/trpc";
 
-const FavoritesPage: NextPage<AuthenticatedPageProps> = ({ inCommingFavorites }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+type NFTSetWithLeanCollection = NFTSet & {
+  collection: {
+    name: string;
+    verified: boolean;
+  }
+}
 
-  const [favorites, setFavorites] = useState<NFTSet[]>(inCommingFavorites);
-
-  trpc.nftSet.getFavorites.useQuery(undefined, { 
-    initialData: inCommingFavorites,
-    
-    onSuccess(favs) {
-      setFavorites(favs);
-    }
-  });
+const FavoritesPage: NextPage<AuthenticatedPageProps> = ({ favorites }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   return (
     <div className="p-5 mb-10 flex items-center justify-center h-full overflow-y-scroll overflow-x-hidden">
@@ -25,7 +22,7 @@ const FavoritesPage: NextPage<AuthenticatedPageProps> = ({ inCommingFavorites }:
         {favorites && favorites.length && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {favorites.map((nft) => (
-              <NftSetSummary key={nft.id} nftSet={nft} />
+              <NftSetSummary key={nft.id} nftSet={nft} collectionName={nft.collection?.name} verified={nft.collection?.verified}/>
             ))}
           </div>
         )}
@@ -61,13 +58,21 @@ export const getServerSideProps: GetServerSideProps = async (
         id: {
           in: user.liked
         }
+      },
+      include: {
+        collection: {
+          select: {
+            name: true,
+            verified: true
+          }
+        }
       }
     });
   }
 
   return {
     props: {
-      favorites: favorites as NFTSet[]
+      favorites: favorites as NFTSetWithLeanCollection[]
     },
   };
 };
