@@ -16,7 +16,7 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet, collect
       <Link href={`/nftSets/${nftSet.id}`}>
         <div
           ref={ref}
-          className="flex flex-col h-[226px] md:h-[457px] hover:shadow-lg shadow-md  hover:shadow-gray-500/50 dark:border dark:border-gray-600 cursor-pointer rounded-2xl"
+          className="flex flex-col h-[256px] md:h-[457px] hover:shadow-lg shadow-md  hover:shadow-gray-500/50 dark:border dark:border-gray-600 cursor-pointer rounded-2xl"
         >
           <div className="relative flex items-center justify-center overflow-hidden rounded-t-2xl h-full">
             <Image
