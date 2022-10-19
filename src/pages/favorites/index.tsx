@@ -20,7 +20,7 @@ const FavoritesPage: NextPage<AuthenticatedPageProps> = ({ favorites }: InferGet
       <div className="md:p-4 text-2xl flex flex-col w-full h-screen text-gray-700 font-medium dark:text-gray-300 md:w-4/5">
         <h1 className="text-3xl md:text-5xl my-5">Favorited</h1>
         {favorites && favorites.length && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {favorites.map((nft) => (
               <NftSetSummary key={nft.id} nftSet={nft} collectionName={nft.collection?.name} verified={nft.collection?.verified}/>
             ))}

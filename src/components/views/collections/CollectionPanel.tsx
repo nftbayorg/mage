@@ -58,7 +58,7 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name, verified }
           />
         </div>
       )}
-      <div className="p-1 absolute rounded-xl left-3 bottom-3 h-20 w-20 bg-white">
+      <div className="p-1 absolute rounded-xl left-3 bottom-[65px] h-20 w-20 bg-white dark:bg-slate-800">
         <Image 
           className="rounded-lg"
           src={logoImageUrl} 
@@ -66,8 +66,8 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name, verified }
         />
       </div>
 
-      <div className="flex justify-start items-center w-full p-5 pl-28 min-h-[50px] lg:min-h[80px] overflow-ellipsis gap-2">
-        <div className="md:text-md font-light my-3 text-ellipsis overflow-hidden whitespace-nowrap">
+      <div className="flex justify-start items-center w-full p-5 min-h-[90px] lg:min-h[80px] overflow-ellipsis gap-2">
+        <div className="md:text-md font-light text-ellipsis overflow-hidden whitespace-nowrap">
           {name}
         </div>
           {verified && 
