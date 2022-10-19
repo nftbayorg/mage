@@ -1,5 +1,5 @@
 import { ImageProps } from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ReactEventHandler, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
 import { MdImageNotSupported } from "react-icons/md";
 import { BiLoaderAlt } from 'react-icons/bi';
 
@@ -15,6 +15,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
   const [loadingIndicator] = useState(!hideLoadingIndicator);
   const setTimeoutId = useRef<NodeJS.Timeout>();
   const imageRef = useRef<HTMLImageElement>(null);
+  const [imgDimensions, setImgDimensions] = useState({ height: '100%', width: '100%' })
 
   if (!fallbackImage) fallbackImage = "/images/AwaitingImage600x400.png";
 
@@ -22,7 +23,8 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
     setAttempts(prev => prev+1);
   },[]);
 
-  const handleLoadingComplete = useCallback(() => {
+  const handleLoadingComplete = useCallback((event: SyntheticEvent<HTMLImageElement, Event>) => {
+    setImgDimensions({ height: event.currentTarget.naturalHeight.toString(), width: event.currentTarget.naturalWidth.toString() });
     setLoading(false);
     clearTimeout(setTimeoutId.current);
   }, [])
@@ -44,7 +46,7 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
   return (
     <>
       <div 
-        className={`${className} w-full flex relative items-center justify-center bg-gray-100 dark:bg-neutral-500`}
+        className={`${className} w-full flex relative items-center justify-center bg-gray-100 dark:bg-slate-800`}
         style={{ 'height': `100%` }}
       >
         {!loadingError && 
@@ -66,9 +68,9 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
               <img 
                 alt={alt}
                 ref={imageRef}
-                className={`${className} object-cover`}
+                className={`object-cover ${className}`}
                 src={src as string} 
-                style={{ height: `100%`, width: `100%` }} 
+                style={imgDimensions} 
                 onLoad={handleLoadingComplete}
                 onError={handleError}
               />

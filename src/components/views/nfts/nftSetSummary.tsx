@@ -22,8 +22,6 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet, collect
             <Image
               src={nftSet.imageUrl}
               alt={nftSet.name}
-              height={500}
-              width={500}
               className="rounded-t-2xl transition transform-gpu hover:scale-125"
             />
           </div>

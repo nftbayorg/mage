@@ -270,18 +270,10 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
                 </button>
               </div>
             </div>
-            <div className="cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none overflow-hidden">
+            <div className="cursor-pointer w-full relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none overflow-hidden">
               <Image
                 src={nft.imageUrl}
                 alt={nft.name}
-                layout="intrinsic"
-                priority={true}
-                width="800"
-                height="800"
-                objectFit="contain"
-                className="rounded-b-xl"
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8c/JkPQAHpgLfeHeKHwAAAABJRU5ErkJggg=="
               />
             </div>
           </section>
@@ -387,9 +379,6 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
               <Image
                 src="/images/empty.png"
                 alt="Empty listings"
-                width="150"
-                height="100"
-                objectFit="cover"
                 className="rounded-xl w-[150px] h-[100px]"
                 hideLoadingIndicator={true}
               />
@@ -410,9 +399,6 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
               <Image
                 src="/images/empty.png"
                 alt="Empty listings"
-                width="150"
-                height="100"
-                objectFit="cover"
                 className="rounded-xl w-[150px] h-[100px]"
                 hideLoadingIndicator={true}
               />

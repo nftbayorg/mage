@@ -36,7 +36,7 @@ const CollectionHeader = ({
           <Image
             src={bannerImageUrl || logoImageUrl}
             alt="image"
-            className="w-full overflow-hidden"
+            className="w-full overflow-hidden object-contain"
           />
           <div className="w-24 h-24 md:w-48 md:h-48 bg-white dark:bg-slate-800 absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-0.5 md:p-1">
             <div className="w-full h-full p-1 relative rounded-xl">
@@ -44,11 +44,6 @@ const CollectionHeader = ({
                 className="rounded-lg"
                 src={logoImageUrl}
                 alt="image"
-                objectFit="cover"
-                layout="fill"
-                placeholder="empty"
-                blurDataURL="/images/AwaitingImage600x400.png"
-                fallbackImage="/images/AwaitingImage600x400.png"
               />
             </div>
           </div>
@@ -159,7 +154,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
             Items
           </div>
           <hr className="border border-gray-200" />
-          <div className="py-4 md:mt-4 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
+          <div className="py-4 md:mt-4 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-2 md:gap-4">
             {collection?.nftSets.map((nftSet) => (
               <div key={nftSet.id}>
                 <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>

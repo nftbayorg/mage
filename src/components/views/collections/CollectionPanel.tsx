@@ -49,11 +49,7 @@ const CollectionContent = ({ id, logoImageUrl, featureImageUrl, name, verified }
         <div className="w-full h-80 2xl:h-96 relative rounded-t-lg overflow-hidden">
           <Image
             alt="image"
-            objectFit="cover"
-            layout="fill"
             src={featureImageUrl || logoImageUrl}
-            placeholder="blur"
-            blurDataURL="/images/AwaitingImage600x400.png"
             className="rounded-t-lg transition transform-gpu hover:scale-125"
           />
         </div>
