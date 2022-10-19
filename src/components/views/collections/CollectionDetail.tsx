@@ -38,7 +38,7 @@ const CollectionHeader = ({
             alt="image"
             className="w-full overflow-hidden"
           />
-          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-0.5 md:p-1">
+          <div className="w-24 h-24 md:w-48 md:h-48 bg-white dark:bg-slate-800 absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-0.5 md:p-1">
             <div className="w-full h-full p-1 relative rounded-xl">
               <Image
                 className="rounded-lg"
