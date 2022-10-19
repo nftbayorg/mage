@@ -63,7 +63,15 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
     include: {
       collection: {
         include: {
-          nftSets: true
+          nftSets: {
+            where: {
+              id: {
+                not: {
+                  equals: ctx.params?.nftSetId as string || ''
+                }
+              }
+            }
+          }
         }
       },
       nftEditions: {
@@ -97,7 +105,15 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
       include: {
         collection: {
           include: {
-            nftSets: true
+            nftSets: {
+              where: {
+                id: {
+                  not: {
+                    equals: ctx.params?.nftSetId as string || ''
+                  }
+                }
+              }
+            }
           }
         },
         nftEditions: {
