@@ -15,7 +15,7 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet }>(
       <Link href={`/nftSets/${nftSet.id}`}>
         <div
           ref={ref}
-          className="flex flex-col h-[457px] hover:shadow-lg shadow-md  hover:shadow-gray-500/50 dark:border dark:border-gray-600 cursor-pointer rounded-2xl"
+          className="flex flex-col h-[226px] md:h-[457px] hover:shadow-lg shadow-md  hover:shadow-gray-500/50 dark:border dark:border-gray-600 cursor-pointer rounded-2xl"
         >
           <div className="relative flex items-center justify-center overflow-hidden rounded-t-2xl h-full">
             <Image
@@ -26,8 +26,8 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet }>(
               className="rounded-t-2xl transition transform-gpu hover:scale-125"
             />
           </div>
-          <div className="p-4 rounded-b-2xl">
-            <div className="text-md">{nftSet.name}</div>
+          <div className="p-2 md:p-4 rounded-b-2xl">
+            <div className="text-sm md:text-md text-ellipsis overflow-hidden whitespace-nowrap">{nftSet.name}</div>
           </div>
         </div>
       </Link>

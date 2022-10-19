@@ -260,7 +260,7 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-center cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none">
+            <div className="cursor-pointer w-full h-[400px] md:h-[578px] relative rounded-b-xl border border-gray-200 dark:border-gray-600 border-t-0 rounded-xl rounded-t-none overflow-hidden">
               <Image
                 src={nft.imageUrl}
                 alt={nft.name}
@@ -416,10 +416,10 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
         <CollapsePanel
           label="More From This Collection"
           icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-400"/>}
-          classesOverride="p-6 md:p-1"
+          classesOverride="px-1 md:px-1"
           collapsible={true}
         >
-          <div className="grid grid-col-1 md:grid-cols-5 gap-2 w-full">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 w-full">
             {nftSet?.collection?.nftSets && nftSet?.collection?.nftSets.filter(n => n.id !== nftSet.id).map(nft => (
               <NftSetSummary key={nft.id} nftSet={nft} />
             ))}
