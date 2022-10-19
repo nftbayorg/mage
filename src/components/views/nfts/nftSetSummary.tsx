@@ -32,7 +32,7 @@ const NftSetSummary = React.forwardRef<HTMLDivElement, { nftSet: NftSet, collect
             <div>
               {collectionName && 
                 <div className="flex items-center gap-2">
-                  <div className="text-xs md:text-lg font-thin my-3 text-ellipsis overflow-hidden whitespace-nowrap">
+                  <div className="text-xs md:text-lg font-light md:font-thin my-3 text-ellipsis overflow-hidden whitespace-nowrap">
                     {collectionName}
                   </div>
                   {verified && 
