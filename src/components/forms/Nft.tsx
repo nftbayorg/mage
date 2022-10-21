@@ -121,7 +121,7 @@ const NftForm = ({ onSubmit, collections, defaultCollection }: ComponentProps) =
       <CollapsePanel
         label="Properties"
         collapsible={true}
-        icon={<FaList size={25} className="fill-gray-700 dark:fill-gray-300"/>}
+        icon={<FaList size={25} className="fill-gray-700 dark:fill-gray-200"/>}
       >
         <div className="flex flex-col gap-5 w-full">
           <div className="text-xl font-normal">

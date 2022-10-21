@@ -17,11 +17,11 @@ export const CollapsePanel = ({ children, classesOverride, collapsible, defaultS
   return (
     <section>
       <div 
-        onClick={() => setPanelCollapsed(prev => !prev)} 
+        onClick={() => collapsible && setPanelCollapsed(prev => !prev)} 
         className={`${panelCollapsed && "rounded-b-xl"} ${collapsible && "cursor-pointer"} flex py-7 px-4 md:p-7 border border-gray-200 dark:border-gray-600 rounded-t-xl items-center justify-start`}
       >
         <div className="min-w-1/5">{icon}</div>
-        <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-300 truncate pr-4">
+        <div className="ml-5 text-xl font-semibold text-gray-700 dark:text-gray-200 truncate pr-4">
           {label}
         </div>
         {collapsible && 
@@ -32,13 +32,13 @@ export const CollapsePanel = ({ children, classesOverride, collapsible, defaultS
         }
       </div>
       <div className={`
-        ${panelCollapsed ? "max-h-0 border-0" : "max-h-fit p-5 md:p-10"} 
+        ${classesOverride}
+        ${panelCollapsed ? "max-h-0 border-0 p-0 md:p-0" : "max-h-fit p-5 md:p-10"} 
         transition-[height] ease-in-out delay-100 
         flex flex-col items-center justify-center
         border border-t-0 border-gray-200 dark:border-gray-600 
         rounded-b-xl bg-gray-50 dark:bg-gray-700 
         overflow-hidden
-        ${classesOverride}
         `
       }>
         {children}

@@ -42,7 +42,7 @@ const NftSetDetailSkeleton = () => (
       <section className="">
         <div className="flex p-3 dark:border-gray-600 border border-gray-200 border-b-0 rounded-xl rounded-b-none">
           <button
-            className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-300"
+            className="flex items-center hover:text-blue-500 dark:hover:text-blue-500 text-xl text-gray-700 dark:text-gray-200"
             disabled
           >
             <FaEthereum className="fill-blue-500 mr-2" size={20} />
@@ -179,7 +179,7 @@ const NftSetHeader = ({
 
 type ComponentProps = {
   nftSet: NFTSetWithMeta | undefined;
-  collectionProperties: collectionProperties;
+  collectionProperties: CollectionNftSetProperties | null;
   onLike: () => void;
   onUnLike: () => void;
 };
@@ -195,15 +195,17 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
   }, [nftSet])
 
   const calcTraitPercentage = useCallback((property: NFTSetProperties) => {
-    const { nftSetsInCollection, propertyCounts } = collectionProperties;
-
-    if (!nftSetsInCollection || !propertyCounts) return 0;
-
-    const countedProperty = propertyCounts.find(p => p.name === property.name && p.type === property.type);
-
-    if (!countedProperty) return 0;
-
-    return (countedProperty._count.name / nftSetsInCollection * 100).toFixed(0);
+    if (collectionProperties) {
+      const { nftSetsInCollection, propertyCounts } = collectionProperties;
+  
+      if (!nftSetsInCollection || !propertyCounts) return 0;
+  
+      const countedProperty = propertyCounts[property.type]?.find(p => p.name === property.name && p.type === property.type);
+  
+      if (!countedProperty) return 0;
+  
+      return (countedProperty._count / nftSetsInCollection * 100).toFixed(0);
+    }
   }, [collectionProperties])
 
   if (!nft) {
@@ -431,7 +433,7 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
                   className="
                   md:max-w-fit 
                   flex items-center justify-center 
-                  dark:text-gray-300 py-4 px-10 hover:bg-blue-400 bg-blue-500 disabled:bg-blue-200 text-white
+                  dark:text-gray-200 py-4 px-10 hover:bg-blue-400 bg-blue-500 disabled:bg-blue-200 text-white
                   dark:border
                   dark:border-gray-300
                   dark:bg-white dark:bg-opacity-0

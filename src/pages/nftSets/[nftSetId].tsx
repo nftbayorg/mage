@@ -47,7 +47,7 @@ const NftSetDetailPage = ({ nftSet, collectionProperties }: InferGetServerSidePr
 
 type NftPageProps = {
   nftSet: NFTSetWithMeta;
-  collectionProperties: collectionProperties;
+  collectionProperties: CollectionNftSetProperties | null;
 }
 
 export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
@@ -135,7 +135,7 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
     });
   }
 
-  let collectionProperties;
+  let collectionProperties: CollectionNftSetProperties | null = null;
   let nftSetsInCollection = Array();
 
   if (nftSet?.collection) {
@@ -150,7 +150,7 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
 
     nftSetsInCollection = nftSetsInCollection.map(n => n.id);
 
-    collectionProperties = await prisma.nFTSetProperties.groupBy({
+    const properties = await prisma.nFTSetProperties.groupBy({
       by: ['type', 'name'],
       where: {
          nftSetId: {
@@ -160,7 +160,18 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
       _count: {
         name: true,
       }
-    })
+    });
+
+    const resolveTypeValues = (typeValue: { _count: { name: number}, name: string; type:string }) => {
+      return { _count: typeValue._count.name, name: typeValue.name, type: typeValue.type }
+    }
+
+    collectionProperties = {
+      nftSetsInCollection: nftSetsInCollection.length,
+      propertyCounts: properties.reduce((prev, current) => {
+        return {...prev, [current.type]: prev[current.type] ? [...prev[current.type], resolveTypeValues(current)] : [resolveTypeValues(current)]}
+      }, {})
+    }   
 
   }
 
@@ -176,10 +187,7 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
   return {
     props: {
       nftSet: nftSetWithViewCount,
-      collectionProperties: { 
-        nftSetsInCollection: nftSetsInCollection.length,
-        propertyCounts: collectionProperties
-      }
+      collectionProperties
     },
   };
 };

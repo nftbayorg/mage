@@ -36,7 +36,7 @@ const TradePage: NextPage = ({ collections }: InferGetServerSidePropsType<typeof
       <Sidebar collections={collections}/>
       <div
         ref={listRef}
-        className="md:p-4 text-2xl flex-1 h-screen text-gray-700 font-medium dark:text-gray-300 overflow-y-scroll"
+        className="md:p-4 text-2xl flex-1 h-screen text-gray-700 font-medium dark:text-gray-200 overflow-y-scroll"
       >
         Trade
         <div className="p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">

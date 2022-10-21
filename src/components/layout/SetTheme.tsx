@@ -9,13 +9,13 @@ const SetTheme = () => {
     <>
       {theme === "dark" ? 
         <NavMenuItem
-          icon={<FaRegMoon size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          icon={<FaRegMoon size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Use Light Theme"
           onClick={() => setTheme("light")}
         />
        : 
         <NavMenuItem
-          icon={<FaRegMoon size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          icon={<FaRegMoon size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Use Dark Theme"
           onClick={() => setTheme("dark")}
         />

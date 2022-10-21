@@ -20,22 +20,22 @@ const MobileNav = () => {
         activeIcon={<FaTimes size={30} className="fill-gray-700 dark:fill-gray-400"/>}
       >
         <NavMenuItem
-          icon={<FaDollarSign size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          icon={<FaDollarSign size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Trade"
           onClick={() => router.push("/trade")}
         />
         <NavMenuItem
-          icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Create"
           onClick={() => router.push("/nfts/create")}
         />
         <NavMenuItem 
-          icon={<FaRegHeart size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          icon={<FaRegHeart size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Favorites" 
           onClick={() => router.push('/favorites')}
         />
         <NavMenuItem 
-          icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+          icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="My Collections" 
           onClick={() => router.push('/collections')}
         />
@@ -43,7 +43,7 @@ const MobileNav = () => {
         {session &&
           <>
             <NavMenuItem 
-              icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+              icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-200"/>}
               caption="Sign Out" 
               onClick={() => signOut()}
             />
@@ -53,7 +53,7 @@ const MobileNav = () => {
           <>
             <SetTheme/>
             <NavMenuItem 
-              icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
+              icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-200 "/>}
               caption="Log In" 
               onClick={() => router.push('/login')}
             />
@@ -73,7 +73,7 @@ const MenuItems = () => {
       text-md 
       flex gap-y-8 flex-row items-center 
       w-full h-full
-      dark:text-gray-300 text-gray-700 font-bold
+      dark:text-gray-200 text-gray-700 font-bold
     ">
       <div className="flex gap-x-6 w-full items-center justify-center ml-auto lg:mr-[110px] mt-2">
         <Link href="/trade" >
@@ -93,12 +93,12 @@ const MenuItems = () => {
           position="left"
         >
           <NavMenuItem 
-            icon={<FaRegHeart size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+            icon={<FaRegHeart size={20} className="fill-gray-700 dark:fill-gray-200"/>}
             caption="Favorites" 
             onClick={() => router.push('/favorites')}
           />
           <NavMenuItem 
-            icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+            icon={<FaTh size={20} className="fill-gray-700 dark:fill-gray-200"/>}
             caption="My Collections" 
             onClick={() => router.push('/collections')}
           />
@@ -106,7 +106,7 @@ const MenuItems = () => {
             <>
               <SetTheme/>
               <NavMenuItem 
-                icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-300"/>}
+                icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-200"/>}
                 caption="Sign Out" 
                 onClick={() => signOut()}
               />
@@ -116,7 +116,7 @@ const MenuItems = () => {
             <>
               <SetTheme/>
               <NavMenuItem 
-                icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-300 "/>}
+                icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-200 "/>}
                 caption="Log In" 
                 onClick={() => router.push('/login')}
               />
@@ -180,15 +180,14 @@ const NavBar = () => {
                 <FaCircleNotch size={20} className={`
                   mr-3
                   mt-4
-                  dark:fill-gray-300 
                   fill-gray-700 
-                  ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
+                  ${transitioningPage ? "animate-spin dark:fill-gray-200 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
                   />
               </div>
               <span className={`
                 ml-4 md:ml-0
                 text-5xl text-gray-700 font-medium 
-                dark:text-gray-300
+                dark:text-gray-200
                 cursor-pointer
                 font-silkscreen
                 `}>
@@ -196,11 +195,10 @@ const NavBar = () => {
               </span>
               <div className="md:hidden">
                 <FaCircleNotch size={15} className={`
-                  ml-3
+                  ml-3 
                   mt-6
-                  dark:fill-gray-300 
                   fill-gray-700 
-                  ${transitioningPage ? "animate-spin dark:fill-gray-300 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
+                  ${transitioningPage ? "animate-spin dark:fill-gray-200 fill-blue-500" : "fill-white dark:fill-slate-800"}`}
                   />
               </div>
             </div>

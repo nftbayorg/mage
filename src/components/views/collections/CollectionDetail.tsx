@@ -1,84 +1,24 @@
 import { DateAsMonthYearAsWords } from "../../../utils/date";
-import Image from "../../forms/controls/Image";
 import NftSetSummary from "../nfts/nftSetSummary";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
-import { DropDown, DropDownItem } from "../../forms/controls/DropDown";
-import { FaEllipsisH, FaPlus } from "react-icons/fa";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import { MdVerified } from "react-icons/md";
+import { MdFilterList } from "react-icons/md";
+import { VerifiedBadge } from "../../icons/VerifiedBadge";
+import { useState } from "react";
+import { CollectionHeader } from "./CollectionHeader";
+import { CollectionMenu } from "./CollectionMenu";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
-type CollectionHeaderProps = {
-  bannerImageUrl?: string | undefined | null;
-  collectionId: string | undefined;
-  isLoading: boolean;
-  logoImageUrl?: string;
-  owner: string | undefined;
-};
-
-const CollectionHeader = ({
-  bannerImageUrl,
-  collectionId,
-  isLoading,
-  logoImageUrl,
-  owner,
-}: CollectionHeaderProps) => {
-  const router = useRouter();
-  const { data: session } = useSession();
-
-  return (
-    <div className="flex-col w-full h-full mb-14 md:mt-3 md:mb-24">
-      {logoImageUrl && !isLoading ? (
-        <div className="h-48 md:h-96 w-full relative">
-          <Image
-            src={bannerImageUrl || logoImageUrl}
-            alt="image"
-            className="w-full overflow-hidden object-contain"
-          />
-          <div className="w-24 h-24 md:w-48 md:h-48 bg-white dark:bg-slate-800 absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg shadow-md p-0.5 md:p-1">
-            <div className="w-full h-full p-1 relative rounded-xl">
-              <Image
-                className="rounded-lg"
-                src={logoImageUrl}
-                alt="image"
-              />
-            </div>
-          </div>
-          {(session && session.user?.id === owner) &&
-            <div className="absolute right-16 -bottom-10 md:-bottom-16">
-              <DropDown
-                icon={<FaEllipsisH size={25} className="fill-gray-700 dark:fill-gray-300"/>}
-                position="left"
-              >
-                <DropDownItem 
-                  icon={<FaPlus size={20} className="fill-gray-700 dark:fill-gray-300"/>}
-                  caption="Add Item" 
-                  onClick={() => router.push(`/nfts/create?collectionId=${collectionId}`)}
-                />
-              </DropDown>
-            </div>
-          }
-        </div>
-      ) : (
-        <div className="h-48 md:h-96 w-full relative">
-          <div className="flex w-full h-full empty:bg-gray-100 animate-pulse" />
-          <div className="w-24 h-24 md:w-48 md:h-48 bg-white absolute -bottom-10 left-5 md:-bottom-24 md:left-10 z-20 rounded-lg p-1 md:p-2 shadow-md">
-            <div className="w-full h-full bg-gray-100 rounded-lg animate-pulse" />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 type ComponentProps = {
   collection: Collection | undefined;
+  collectionProperties: CollectionNftSetProperties | null;
 };
 
-const CollectionDetail = ({ collection }: ComponentProps) => {
+const CollectionDetail = ({ collection, collectionProperties }: ComponentProps) => {
+
+  const [menuHidden, setMenuHidden] = useState(false);
+
   const {
     bannerImageUrl,
     logoImageUrl,
@@ -105,7 +45,7 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
   }
 
   return (
-    <section className="flex flex-col gap-y-5 w-full text-lg font-normal dark:text-gray-300 text-gray-700">
+    <section className="flex flex-col gap-y-5 w-full text-lg font-normal dark:text-gray-200 text-gray-700">
       <CollectionHeader
         bannerImageUrl={bannerImageUrl}
         collectionId={collection?.id}
@@ -113,56 +53,59 @@ const CollectionDetail = ({ collection }: ComponentProps) => {
         logoImageUrl={logoImageUrl}
         owner={collection?.userId}
       />
-      <section className="px-4 md:px-0">
-        <section className="flex flex-col mb-10 md:px-10">
-          <div className="flex items-center gap-2">
-            <div className="text-2xl md:text-3xl font-semibold">
-              {name}
+        <section className="px-4 md:px-0">
+          <section className="flex flex-col mb-10 md:px-10">
+            <div className="flex items-center gap-2">
+              <div className="text-2xl md:text-3xl font-semibold">
+                {name}
+              </div>
+              {verified && <VerifiedBadge/>}
             </div>
-            {verified && 
-              <span className="verified_icon">
-                  <MdVerified size={20}/>
-                  <div className="verified_icon_bg">
-                    <MdVerified size={20} className=""/>
-                  </div>
-              </span>
-            }
-          </div>
 
-          <div className="flex gap-3 font-gray-500 my-5">
-            <div className="flex gap-2">
-              <div className="font-bold">{`${nftSets.length}`}</div>
-              <div className="">{`${pluralize("Item", nftSets.length)}`}</div>
-            </div>
-            <div className="">-</div>
-            {createdAt && (
+            <div className="flex gap-3 font-gray-500 my-5">
               <div className="flex gap-2">
-                <div className="">Created</div>
-                <div className="font-bold">{`${DateAsMonthYearAsWords(
-                  createdAt
-                )}`}</div>
+                <div className="font-bold">{`${nftSets.length}`}</div>
+                <div className="">{`${pluralize("Item", nftSets.length)}`}</div>
               </div>
-            )}
-          </div>
-          <div>
-            {description ||
-              `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
-          </div>
-        </section>
-        <section className="flex flex-col w-full md:p-10">
-          <div className="w-fit border-b-2 border-gray-700 pb-3 font-medium">
-            Items
-          </div>
-          <hr className="border border-gray-200" />
-          <div className="py-4 md:mt-4 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-2 md:gap-4">
-            {collection?.nftSets.map((nftSet) => (
-              <div key={nftSet.id}>
-                <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
+              <div className="">-</div>
+              {createdAt && (
+                <div className="flex gap-2">
+                  <div className="">Created</div>
+                  <div className="font-bold">{`${DateAsMonthYearAsWords(
+                    createdAt
+                  )}`}</div>
+                </div>
+              )}
+            </div>
+            <div>
+              {description ||
+                `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
+            </div>
+          </section>
+          <section className="flex flex-col w-full gap-1 py-5 md:p-10">
+            <div className="flex flex-col w-full bg-white dark:bg-slate-800">
+              <div className="w-fit border-b-2 border-gray-700 pb-3 font-medium">
+                Items
               </div>
-            ))}
-          </div>
+              <hr className="border border-gray-200" />
+            </div>
+            <div className="hidden md:flex flex-col w-full md:p-5 sticky top-[73px] z-[50000] bg-white dark:bg-slate-800">
+              <button onClick={() => setMenuHidden(prev => !prev)}>
+                <MdFilterList size={30}/>
+              </button>
+            </div>
+            <section className="flex w-full">
+                <CollectionMenu collapsed={menuHidden} collectionProperties={collectionProperties}/>
+                <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 md:grid-cols-2 ${menuHidden ? 'lg:grid-cols-8' : 'lg:grid-cols-5'} gap-2 md:gap-4 w-full md:h-screen md:overflow-scroll`}>
+                {collection?.nftSets.map((nftSet) => (
+                  <div key={nftSet.id}>
+                    <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </section>
         </section>
-      </section>
     </section>
   );
 };

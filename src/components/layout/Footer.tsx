@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const Footer = () => (
-  <div className="relative container mx-auto p-6 border-t border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300">
+  <div className="relative container mx-auto p-6 border-t border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200">
     <div className="flex-col justify-between">
       <div className="flex justify-between">
         <Link href="/" passHref>

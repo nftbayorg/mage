@@ -3,6 +3,7 @@ import { FaAsterisk } from "react-icons/fa";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   caption?: string;
+  classesOverride?: string;
   name: string;
   label?: string;
   register: any
