@@ -96,7 +96,7 @@ const CollectionDetail = ({ collection, collectionProperties }: ComponentProps) 
             </div>
             <section className="flex w-full">
                 <CollectionMenu collapsed={menuHidden} collectionProperties={collectionProperties}/>
-                <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 md:grid-cols-2 ${menuHidden ? 'lg:grid-cols-8' : 'lg:grid-cols-5'} gap-2 md:gap-4 w-full md:h-screen md:overflow-scroll`}>
+                <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? 'md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8' : 'md:grid-cols-2 lg:grid-cols-4 xl-grid-cols-5'} gap-2 md:gap-4 w-full md:h-screen md:overflow-scroll`}>
                 {collection?.nftSets.map((nftSet) => (
                   <div key={nftSet.id}>
                     <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>

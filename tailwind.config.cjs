@@ -12,9 +12,9 @@ module.exports = {
     },
     screens: {
       'sm': '500px',
-      'md': '660px',
-      'lg': '1100px',
-      'xl': '1400px',
+      'md': '750px',
+      'lg': '1200px',
+      'xl': '1600px',
       '2xl': '2500px',
     }
   },
