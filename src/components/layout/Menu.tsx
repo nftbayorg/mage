@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 type MenuProps = {
@@ -20,13 +20,18 @@ type MenuGroupProps = {
 type MenuItemProps = {
   children: React.ReactElement;
   className?: string;
-  onClick?: () => void;
+  onClick?: (event: React.SyntheticEvent) => void;
 }
 
 export const MenuItem = ({ children, className, onClick }: MenuItemProps) => {
 
+  const handleClick = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    onClick && onClick(event); 
+  }
+
   return (
-    <li className={`flex items-center justify-start w-full font-light ${className}`} onClick={onClick}>
+    <li className={`flex items-center justify-start w-full font-light hover:bg-gray-200 dark:hover:bg-gray-700 p-3 rounded-lg ${className}`} onClick={handleClick}>
       {children}
     </li>
   );
@@ -42,28 +47,30 @@ export const MenuGroup = ({ children, className, collapsible, defaultState, labe
       className={`${collapsible && "cursor-pointer"} 
         flex flex-col items-center justify-start 
         text-gray-700 dark:text-gray-100 
-        w-full p-2
+        w-full
       `}
     >
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 p-3 rounded-lg">
         {label}
         {collapsible && 
           <div className="ml-auto">
-            {collapsed && <FaChevronDown size={20} className="fill-gray-700 dark:fill-gray-200 font-light" />}
-            {!collapsed && <FaChevronUp size={20} className="fill-gray-700 dark:fill-gray-200 font-light" />}
+            {collapsed && <FaChevronDown size={15} className="fill-gray-700 dark:fill-gray-200 font-light" />}
+            {!collapsed && <FaChevronUp size={15} className="fill-gray-700 dark:fill-gray-200 font-light" />}
           </div>
         }
       </div>
       <div className={`
-        ${collapsed ? "h-0 max-h-0 border-0" : "h-fit max-h-fit p-5 md:px-3 "} 
-        transition-[height] ease-in-out delay-100 
+        ${collapsed ? "max-h-0 border-0" : "max-h-96"}  
+        transition-all ease-in-out duration-500 
         flex flex-col items-center justify-start
-        overflow-scroll
         w-full
+        overflow-scroll
         ${className}
         `
       }>
-        {children}
+        <div className="p-2 w-full">
+          {children}
+        </div>
       </div>
     </ul>
   );

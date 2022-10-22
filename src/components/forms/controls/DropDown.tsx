@@ -36,7 +36,7 @@ export const DropDownItem = ({ caption, icon, onClick }: DropDownItemProps) => (
       dark:hover:text-white
       dark:hover:fill-white
         last:border-0
-      text-gray-700 dark:text-gray-200
+      text-gray-700 dark:text-gray-700
       font-bold
     " 
     onClick={onClick}

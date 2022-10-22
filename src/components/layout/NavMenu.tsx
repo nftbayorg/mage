@@ -60,7 +60,7 @@ export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) =
   }
 
   return (
-    <div className="h-full w-full relative z-[1000]" ref={ref}>
+    <div className="h-full w-full relative z-[90000]" ref={ref}>
       <div className="w-14 h-14 absolute -left-4 -top-4 cursor-pointer" onClick={toggle} >
         <div className="absolute top-0 left-3">
           {!activeIcon && icon && React.cloneElement(icon, { 
@@ -83,6 +83,7 @@ export const NavMenu = ({ caption, children, icon, activeIcon }: NavMenuProps) =
             absolute md:relative top-9 -left-60 
             rounded-lg shadow-lg 
             overflow-hidden
+            z-[60000]
           `}
         >
           {children}
