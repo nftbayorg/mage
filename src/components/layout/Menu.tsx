@@ -31,7 +31,7 @@ export const MenuItem = ({ children, className, onClick }: MenuItemProps) => {
   }
 
   return (
-    <li className={`flex items-center justify-start w-full font-light hover:bg-gray-200 dark:hover:bg-gray-700 p-3 rounded-lg ${className}`} onClick={handleClick}>
+    <li className={`flex items-center justify-start w-full font-light hover:bg-gray-200 dark:hover:bg-gray-700 p-3 pr-1 rounded-lg ${className}`} onClick={handleClick}>
       {children}
     </li>
   );

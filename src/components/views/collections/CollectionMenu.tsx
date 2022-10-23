@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Checkbox } from "../../forms/controls/Checkbox";
 import { Menu, MenuGroup, MenuItem } from "../../layout/Menu"
 
 type CollectionMenuProps = {
@@ -38,7 +39,8 @@ export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMe
                     <MenuItem key={value.name}>
                       <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
                         <div>{value.name}</div>
-                        <div className="ml-auto pl-1 text-sm text-gray-700 dark:text-gray-500">{value._count}</div>
+                        <div className="ml-auto px-3 text-sm text-gray-700 dark:text-gray-500">{value._count}</div>
+                        <Checkbox />
                       </div>
                     </MenuItem>
                   )
