@@ -27,3 +27,10 @@
   @apply h-3 w-3 ml-[0.44rem] mt-[0.44rem] 
   text-white bg-white;
 }
+
+input:checked + div {  
+  @apply border-blue-500;  
+}  
+input:checked + div svg {  
+  @apply block;  
+}

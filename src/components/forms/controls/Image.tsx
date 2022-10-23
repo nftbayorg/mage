@@ -79,11 +79,11 @@ export default function ImageFallback({ alt, className, src, fallbackImage, hide
         }
         {loadingError &&
           <div 
-            className="flex flex-col gap-5 w-full items-center justify-center"
-            style={{ height: `${height}px`, width: `100%` }} 
+            className="flex flex-col gap-5 w-max max-w-max items-center justify-center overflow-hidden"
+            style={{ height: `${height}px`, width: `${width}px` }} 
           >
-            <MdImageNotSupported size={40} className="fill-gray-700"/>
-            <div>Error loading image</div>
+            <MdImageNotSupported className="fill-gray-700"/>
+            <div className="text-sm overflow-hidden text-ellipsis whitespace-nowrap w-full">Error loading image</div>
           </div>
         }
       </div>
