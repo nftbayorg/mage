@@ -17,6 +17,25 @@ export const collectionRouter = t.router({
         },
       });
     }),
+  getFiltered: t.procedure
+    .input(z.object({ 
+      id: z.string().nullish(),
+      filters: z.array(z.object({
+        name: z.string(),
+        type: z.string()
+      })).optional()
+    }).nullish())
+    .query(({ input, ctx }) => {
+      return ctx.prisma.collection.findFirst({
+        where: {
+          id: input?.id || "",
+          visible: true
+        },
+        include: {
+          nftSets: true
+        }
+      });
+    }),
   getByUser: t.procedure
     .input(
       z.object({
