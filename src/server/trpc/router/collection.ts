@@ -20,10 +20,7 @@ export const collectionRouter = t.router({
   getFiltered: t.procedure
     .input(z.object({ 
       id: z.string().nullish(),
-      filters: z.array(z.object({
-        name: z.string(),
-        type: z.string()
-      })).optional()
+      filters: z.array(z.string()).optional()
     }).nullish())
     .query(({ input, ctx }) => {
       return ctx.prisma.collection.findFirst({
@@ -32,7 +29,15 @@ export const collectionRouter = t.router({
           visible: true
         },
         include: {
-          nftSets: true
+          nftSets: {
+            include: {
+              properties: {
+                where: {
+                  id: { in: input?.filters }
+                }
+              }
+            }
+          }
         }
       });
     }),
