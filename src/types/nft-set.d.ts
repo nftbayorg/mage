@@ -13,6 +13,7 @@ type NftSetWithViewLikeCount<T> = T & {
 type CollectionNftSetProperty = {
   [type: string]: [{
     _count: number;
+    id: string;
     type: string;
     name: string;
   }]

@@ -1,10 +1,19 @@
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import { prisma } from "../../server/db/client";
+
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
 import { CollectionWithNftSets } from '../../utils/computed-properties';
+import { useCollectionStore } from "../../hooks/useCollecitonProperties";
+import { useCallback, useEffect } from "react";
 
 const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log("Collection Props", collectionProperties)
+
+  const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []))
+
+  useEffect(() => {
+    console.log('SelectedPropertyIds', selectedPropertyIds);
+  }, [selectedPropertyIds])
+
   return (
     <div className="flex items-center justify-center w-full">
       <CollectionDetail collection={collection} collectionProperties={collectionProperties} />
@@ -35,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
 
   if (collection) {
     const properties = await prisma.nFTSetProperties.groupBy({
-      by: ['type', 'name'],
+      by: ['type', 'name', 'id'],
       where: {
          nftSetId: {
            in: collection?.nftSets.map(set => set.id)
@@ -43,11 +52,13 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
       },
       _count: {
         name: true,
-      }
+      },
     })
 
-    const resolveTypeValues = (typeValue: { _count: { name: number}, name: string; type:string }) => {
-      return { _count: typeValue._count.name, name: typeValue.name, type: typeValue.type }
+    console.log("properties", properties);
+
+    const resolveTypeValues = (typeValue: { _count: { name: number}, name: string; type:string, id: string }) => {
+      return { _count: typeValue._count.name, name: typeValue.name, type: typeValue.type, id: typeValue.id }
     }
 
     collectionProperties = {
