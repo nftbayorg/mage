@@ -10,10 +10,6 @@ const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServ
 
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []))
 
-  useEffect(() => {
-    console.log('SelectedPropertyIds', selectedPropertyIds);
-  }, [selectedPropertyIds])
-
   return (
     <div className="flex items-center justify-center w-full">
       <CollectionDetail collection={collection} collectionProperties={collectionProperties} />
@@ -55,18 +51,24 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
       },
     })
 
-    console.log("properties", properties);
+    const resolveTypeValues = (
+      typeValue: { _count: { name: number; }, name: string; type:string; id: string; }, 
+      prevValue: { _count: number; variants: [{ name: string;  ids: string; }] }
+    ) => {
+      prevValue = prevValue || { _count: 0, variants: {} };
 
-    const resolveTypeValues = (typeValue: { _count: { name: number}, name: string; type:string, id: string }) => {
-      return { _count: typeValue._count.name, name: typeValue.name, type: typeValue.type, id: typeValue.id }
+      return { 
+        _count: prevValue._count + typeValue._count.name, 
+        variants: {...prevValue.variants, [typeValue.name]: [...prevValue.variants[typeValue.name] || '', typeValue.id] }
+      }
     }
 
     collectionProperties = {
       nftSetsInCollection: collection.nftSets.length,
       propertyCounts: properties.reduce((prev, current) => {
-        return {...prev, [current.type]: prev[current.type] ? [...prev[current.type], resolveTypeValues(current)] : [resolveTypeValues(current)]}
+        return {...prev, [current.type]: resolveTypeValues(current, prev[current.type])}
       }, {})
-    }   
+    }    
   }
 
   return {

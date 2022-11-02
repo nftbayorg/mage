@@ -2,16 +2,24 @@ import create from "zustand";
 
 type CollectionStore = {
   selectedPropertyIds: Set<string>;
-  toggleSelectedPropertyId: (id: string) => void;
+  toggleSelectedPropertyIds: (id: string[] | undefined) => void;
 }
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
     selectedPropertyIds: new Set(),
-    toggleSelectedPropertyId: (id: string) => set(({ selectedPropertyIds }) => {
+    toggleSelectedPropertyIds: (ids: string[] | undefined) => set(({ selectedPropertyIds }) => {
 
       const updatedSet = new Set(selectedPropertyIds);
-      const propertyInStore = selectedPropertyIds.has(id);
-      propertyInStore ? selectedPropertyIds.delete(id) : selectedPropertyIds.add(id);
+      
+      ids?.forEach(id => {
+        const propertyInStore = updatedSet.has(id);
+
+        if (propertyInStore) {
+          updatedSet.delete(id);
+        } else {
+          updatedSet.add(id);
+        }
+      });
 
       return { selectedPropertyIds: updatedSet };
     }),

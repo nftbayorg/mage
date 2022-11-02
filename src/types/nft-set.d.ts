@@ -10,7 +10,7 @@ type NftSetWithViewLikeCount<T> = T & {
   liked: boolean;
 }
 
-type CollectionNftSetProperty = {
+type NftSetPropertyTypes = {
   [type: string]: [{
     _count: number;
     id: string;
@@ -19,7 +19,21 @@ type CollectionNftSetProperty = {
   }]
 }
 
+type CollectionNftSetProperty = {
+  [type: string]: {
+    _count: number;
+    variants: {
+      [name: string]: string[];
+    }
+  }
+}
+
 type CollectionNftSetProperties = {
   nftSetsInCollection: number;
   propertyCounts: CollectionNftSetProperty;
+}
+
+type NftSetDetailCollectionProperties = {
+  nftSetsInCollection: number;
+  propertyCounts: NftSetPropertyTypes;
 }

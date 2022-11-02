@@ -12,21 +12,24 @@ type CollectionMenuProps = {
 
 export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMenuProps) => {
   const [properties, setProperties] = useState(collectionProperties);
-  const toggleSelectedPropertyId = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyId, []));
+  const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
 
-  const handleClick = useCallback((propertyId: string) => {
-    console.log(propertyId);
-    toggleSelectedPropertyId(propertyId);
-  }, [toggleSelectedPropertyId]);
+  const handleClick = useCallback((propertyIds: string[] | undefined) => {
+    toggleSelectedPropertyIds(propertyIds);
+  }, [toggleSelectedPropertyIds]);
 
-  const determineCheckedState = useCallback(selectedPropertyId => {
-    if (selectedPropertyIds.has(selectedPropertyId)) {
-      return true;
-    }
+  const determineCheckedState = useCallback((clickedPropertyIds: string[] | undefined) => {
+    let returnValue = false;
 
-    return false;
-  }, [selectedPropertyIds])
+    clickedPropertyIds?.forEach(id => {
+      if (selectedPropertyIds.has(id)) {
+        returnValue = true;
+      }
+    });
+
+    return returnValue;
+  }, [selectedPropertyIds]);
 
   return (
     <Menu classesName={`
@@ -41,21 +44,21 @@ export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMe
             label={
               <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
                 <div>{propertyKey}</div>
-                <div className="ml-auto px-4 text-sm text-gray-700 dark:text-gray-500">{properties.propertyCounts[propertyKey]?.length}</div>
+                <div className="ml-auto px-4 text-sm text-gray-700 dark:text-gray-500">{properties.propertyCounts[propertyKey]?._count}</div>
               </div>
             }
             collapsible={true}
             defaultState="collapsed"
           >
             <>
-              {properties.propertyCounts && properties.propertyCounts[propertyKey]?.map(value => {
-                if (value) {
+              {properties.propertyCounts && Object.keys(properties.propertyCounts[propertyKey]?.variants || {}).map((nameKey, idx) => {
+                if (properties.propertyCounts[propertyKey]?.variants[nameKey]) {
                   return (
-                    <MenuItem key={value.id} onClick={() => handleClick(value.id)}>
+                    <MenuItem key={idx} onClick={() => handleClick(properties.propertyCounts[propertyKey]?.variants[nameKey])}>
                       <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
-                        <div>{value.name}</div>
-                        <div className="ml-auto px-3 text-sm text-gray-700 dark:text-gray-500">{value._count}</div>
-                        <Checkbox initialValue={determineCheckedState(value)}/>
+                        <div>{nameKey}</div>
+                        <div className="ml-auto px-3 text-sm text-gray-700 dark:text-gray-500">{properties.propertyCounts[propertyKey]?.variants[nameKey]?.length}</div>
+                        <Checkbox initialValue={determineCheckedState(properties.propertyCounts[propertyKey]?.variants[nameKey])}/>
                       </div>
                     </MenuItem>
                   )

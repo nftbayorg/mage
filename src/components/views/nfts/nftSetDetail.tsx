@@ -179,7 +179,7 @@ const NftSetHeader = ({
 
 type ComponentProps = {
   nftSet: NFTSetWithMeta | undefined;
-  collectionProperties: CollectionNftSetProperties | null;
+  collectionProperties: NftSetDetailCollectionProperties | null;
   onLike: () => void;
   onUnLike: () => void;
 };
@@ -195,6 +195,7 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
   }, [nftSet])
 
   const calcTraitPercentage = useCallback((property: NFTSetProperties) => {
+
     if (collectionProperties) {
       const { nftSetsInCollection, propertyCounts } = collectionProperties;
   
