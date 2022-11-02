@@ -47,7 +47,7 @@ const NftSetDetailPage = ({ nftSet, collectionProperties }: InferGetServerSidePr
 
 type NftPageProps = {
   nftSet: NFTSetWithMeta;
-  collectionProperties: CollectionNftSetProperties | null;
+  collectionProperties: NftSetDetailCollectionProperties | null;
 }
 
 export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
@@ -135,7 +135,7 @@ export const getServerSideProps: GetServerSideProps<NftPageProps> = async (
     });
   }
 
-  let collectionProperties: CollectionNftSetProperties | null = null;
+  let collectionProperties: NftSetDetailCollectionProperties | null = null;
   let nftSetsInCollection = Array();
 
   if (nftSet?.collection) {
