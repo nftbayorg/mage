@@ -13,8 +13,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
 
       if (!ids) return {};
 
-      const previousCombinations = selectedCombinations[propertyKey] || [];
-      const idsToStore = new Set(ids);
+      const idsToStore = new Set([...ids, ...selectedCombinations[propertyKey] || []]);
       const updatedSet = new Set(selectedPropertyIds);
       
       ids?.forEach(id => {
@@ -28,10 +27,15 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
         }
       });
 
+      
+      console.log("idsToStore", idsToStore, ids);
+
       const updatedCombinations = {
         ...selectedCombinations,
-        [propertyKey]: [...previousCombinations, ...Array.from(idsToStore)]
+        [propertyKey]: Array.from(idsToStore)
       };
+
+      console.log('UpdatedCombinations', updatedCombinations);
 
       return { selectedPropertyIds: updatedSet, selectedCombinations: updatedCombinations };
     }),

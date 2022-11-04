@@ -29,6 +29,11 @@ export const collectionRouter = t.router({
 
       if (filters) {
         andClauses = Object.keys(filters).reduce((prev, groupKey) => {
+
+          if (!filters[groupKey] || !filters[groupKey]?.length) {
+            return [...prev]
+          }          
+
           return [
             ...prev,
             { properties: { some: { OR: filters[groupKey]?.map(id => ({ id }))}}}
