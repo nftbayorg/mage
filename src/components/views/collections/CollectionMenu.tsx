@@ -1,6 +1,7 @@
 import { NFTSetProperties } from "prisma/prisma-client";
 import { useCallback, useEffect, useState } from "react";
-import { useCollectionStore } from "../../../hooks/useCollecitonProperties";
+import { string } from "zod";
+import { useCollectionStore } from "../../../hooks/useCollectionProperties";
 import { Checkbox } from "../../forms/controls/Checkbox";
 import { Menu, MenuGroup, MenuItem } from "../../layout/Menu"
 
@@ -15,8 +16,8 @@ export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMe
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
 
-  const handleClick = useCallback((propertyIds: string[] | undefined) => {
-    toggleSelectedPropertyIds(propertyIds);
+  const handleClick = useCallback((propertyKey: string, nameKey: string, propertyIds: string[] | undefined) => {
+    toggleSelectedPropertyIds(propertyKey, propertyIds);
   }, [toggleSelectedPropertyIds]);
 
   const determineCheckedState = useCallback((clickedPropertyIds: string[] | undefined) => {
@@ -54,7 +55,7 @@ export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMe
               {properties.propertyCounts && Object.keys(properties.propertyCounts[propertyKey]?.variants || {}).map((nameKey, idx) => {
                 if (properties.propertyCounts[propertyKey]?.variants[nameKey]) {
                   return (
-                    <MenuItem key={idx} onClick={() => handleClick(properties.propertyCounts[propertyKey]?.variants[nameKey])}>
+                    <MenuItem key={idx} onClick={() => handleClick(propertyKey, nameKey, properties.propertyCounts[propertyKey]?.variants[nameKey])}>
                       <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
                         <div>{nameKey}</div>
                         <div className="ml-auto px-3 text-sm text-gray-700 dark:text-gray-500">{properties.propertyCounts[propertyKey]?.variants[nameKey]?.length}</div>

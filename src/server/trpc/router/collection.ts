@@ -20,22 +20,31 @@ export const collectionRouter = t.router({
   getFiltered: t.procedure
     .input(z.object({ 
       id: z.string().nullish(),
-      filters: z.array(z.string()).optional()
+      filters: z.record(z.array(z.string())).optional()
     }).nullish())
     .query(({ input, ctx }) => {
+      let andClauses = Array(0);
+
+      const { filters } = input || {};
+
+      if (filters) {
+        andClauses = Object.keys(filters).reduce((prev, groupKey) => {
+          return [
+            ...prev,
+            { properties: { some: { OR: filters[groupKey]?.map(id => ({ id }))}}}
+          ]
+        }, Array());
+      }
+
       return ctx.prisma.collection.findFirst({
         where: {
           id: input?.id || "",
-          visible: true
+          visible: true,
         },
         include: {
           nftSets: {
-            include: {
-              properties: {
-                where: {
-                  id: { in: input?.filters }
-                }
-              }
+            where: {
+              AND: andClauses
             }
           }
         }

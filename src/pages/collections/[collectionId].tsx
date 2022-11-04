@@ -1,18 +1,41 @@
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import { prisma } from "../../server/db/client";
+import { trpc } from "../../utils/trpc";
 
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
 import { CollectionWithNftSets } from '../../utils/computed-properties';
-import { useCollectionStore } from "../../hooks/useCollecitonProperties";
-import { useCallback, useEffect } from "react";
+import { useCollectionStore } from "../../hooks/useCollectionProperties";
+import { useCallback, useState } from "react";
 
 const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
-  const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []))
+  const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
+  const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
+  const [collecitonId] = useState(collection?.id);
+  const [data, setData] = useState(collection);  
+
+  trpc.collection.getFiltered.useQuery(
+    {
+      id: collecitonId,
+      filters: selectedCombinations
+    },
+    {
+      onSuccess: (result) => {
+        if (selectedPropertyIds.size > 1) {
+          setData(result);
+        } else {
+          setData(collection);
+        }
+      },
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+    }
+  );
 
   return (
     <div className="flex items-center justify-center w-full">
-      <CollectionDetail collection={collection} collectionProperties={collectionProperties} />
+      <CollectionDetail collection={data} collectionProperties={collectionProperties} />
     </div>
   );
 };
