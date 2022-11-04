@@ -27,15 +27,10 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
         }
       });
 
-      
-      console.log("idsToStore", idsToStore, ids);
-
       const updatedCombinations = {
         ...selectedCombinations,
         [propertyKey]: Array.from(idsToStore)
       };
-
-      console.log('UpdatedCombinations', updatedCombinations);
 
       return { selectedPropertyIds: updatedSet, selectedCombinations: updatedCombinations };
     }),
