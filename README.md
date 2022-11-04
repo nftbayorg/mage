@@ -2,6 +2,10 @@
 
 DeFi NFT Marketplace. All NFTs purchased on the platform can be staked to earn as you own, or used as collateral for a DeFi loan.
 
+Check us out at www.mage-nft.xyz
+
+<img width="1792" alt="mage-nft" src="https://user-images.githubusercontent.com/3948888/199478265-b5428a72-2b0f-4c5d-936b-e1a4676b7154.png">
+
 ## How do I deploy this?
 
 ### Vercel
