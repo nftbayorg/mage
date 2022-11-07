@@ -40,7 +40,7 @@ export const collectionRouter = t.router({
           ]
         }, Array());
       }
-
+      
       return ctx.prisma.collection.findFirst({
         where: {
           id: input?.id || "",
@@ -50,7 +50,7 @@ export const collectionRouter = t.router({
           nftSets: {
             where: {
               AND: andClauses
-            }
+            }            
           }
         }
       });

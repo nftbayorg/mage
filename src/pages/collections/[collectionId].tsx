@@ -21,7 +21,7 @@ const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServ
     },
     {
       onSuccess: (result) => {
-        if (selectedPropertyIds.size > 1) {
+        if (selectedPropertyIds.size > 0) {
           setData(result);
         } else {
           setData(collection);
