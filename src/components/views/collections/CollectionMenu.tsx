@@ -6,13 +6,12 @@ import { Checkbox } from "../../forms/controls/Checkbox";
 import { Menu, MenuGroup, MenuItem } from "../../layout/Menu"
 
 type CollectionMenuProps = {
-  collapsed: boolean;
   collectionProperties: CollectionNftSetProperties | null;
   onFilterSelection?: ({ properties }: { properties: CollectionNftSetProperty[] }) => void;
 }
 
-export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMenuProps) => {
-  const [properties, setProperties] = useState(collectionProperties);
+export const CollectionMenu = ({ collectionProperties }: CollectionMenuProps) => {
+  const [properties] = useState(collectionProperties);
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
 
@@ -33,11 +32,7 @@ export const CollectionMenu = ({ collapsed, collectionProperties }: CollectionMe
   }, [selectedPropertyIds]);
 
   return (
-    <Menu classesName={`
-      hidden md:flex flex-col
-      transform-gpu transition-all ease-in-out delay-20 
-      ${collapsed ? 'w-[0px] min-w-[0px] overflow-hidden' : 'sticky top-[150px] z-[5000] min-w-[350px] h-max'}`}
-    >
+    <Menu classesName="flex flex-col">
       <>
         {properties && Object.keys(properties.propertyCounts).map(propertyKey => (
           <MenuGroup

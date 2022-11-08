@@ -1,5 +1,5 @@
 import { ImageProps } from "next/image";
-import { ReactEventHandler, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
 import { MdImageNotSupported } from "react-icons/md";
 import { BiLoaderAlt } from 'react-icons/bi';
 
