@@ -93,6 +93,12 @@ const CollectionDetail = ({ collection, collectionProperties }: ComponentProps) 
                 {description ||
                   `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
               </div>
+              <section className="hidden md:flex pt-10">
+                <div className="flex flex-col">
+                  <div>0.0 ETH</div>
+                  <div>Floor price</div>
+                </div>
+              </section>
             </section>
             <section className="flex flex-col w-full gap-1 py-5 md:p-10">
               <div className="flex flex-col w-full bg-white dark:bg-slate-800">
