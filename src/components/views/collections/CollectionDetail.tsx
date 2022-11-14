@@ -16,9 +16,10 @@ type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 type ComponentProps = {
   collection: Collection | undefined;
   collectionProperties: CollectionNftSetProperties | null;
+  floorPrice: number;
 };
 
-const CollectionDetail = ({ collection, collectionProperties }: ComponentProps) => {
+const CollectionDetail = ({ collection, collectionProperties, floorPrice }: ComponentProps) => {
 
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
@@ -95,7 +96,7 @@ const CollectionDetail = ({ collection, collectionProperties }: ComponentProps) 
               </div>
               <section className="hidden md:flex pt-10">
                 <div className="flex flex-col">
-                  <div>0.0 ETH</div>
+                  <div>{floorPrice} ETH</div>
                   <div>Floor price</div>
                 </div>
               </section>

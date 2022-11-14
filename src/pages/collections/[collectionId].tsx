@@ -6,8 +6,9 @@ import CollectionDetail from "../../components/views/collections/CollectionDetai
 import { CollectionWithNftSets } from '../../utils/computed-properties';
 import { useCollectionStore } from "../../hooks/useCollectionProperties";
 import { useCallback, useState } from "react";
+import fetchFloorPrices from "../../server/data/fetchFloorPrices";
 
-const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
@@ -35,7 +36,7 @@ const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServ
 
   return (
     <div className="flex items-center justify-center w-full">
-      <CollectionDetail collection={data} collectionProperties={collectionProperties} />
+      <CollectionDetail collection={data} collectionProperties={collectionProperties} floorPrice={floorPrice} />
     </div>
   );
 };
@@ -43,11 +44,14 @@ const CollectionDetailPage = ({ collection, collectionProperties }: InferGetServ
 type CollectionDetailPageProps = {
   collection: CollectionWithNftSets | null;
   collectionProperties: CollectionNftSetProperties | null;
+  floorPrice: number;
 }
 
 export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> = async (
   ctx: GetServerSidePropsContext
 ) => {
+
+  let floorPrice = 0
 
   const collection = await prisma.collection.findFirst({
     where: {
@@ -62,6 +66,15 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
   let collectionProperties: CollectionNftSetProperties | null = null;
 
   if (collection) {
+    try {
+      const floorPrices = await fetchFloorPrices(collection.tokenAddress || '');
+      console.log('Floor prices', floorPrices);
+      floorPrice = floorPrices.sources[0]?.floorAskPrice || 0;
+    } catch (error) {
+      console.log('Error', error);
+      floorPrice = 0;
+    }
+  
     const properties = await prisma.nFTSetProperties.groupBy({
       by: ['type', 'name', 'id'],
       where: {
@@ -97,7 +110,8 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
   return {
     props: {
       collection,
-      collectionProperties
+      collectionProperties,
+      floorPrice
     }
   };
 };
