@@ -11,6 +11,8 @@ import CreateCollectionForm from "../../components/forms/Collection";
 
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { trpc } from "../../utils/trpc";
+import { readFiles } from "../../utils/files";
+import { determineResult } from "../../utils/promises";
 
 type PageProps = {
   session: Session;
@@ -34,42 +36,15 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
     setHasBannerImage(data.bannerImageFile ? true : false);
     setHasFearturedImage(data.featuredImageFile ? true : false);
 
-    const readFiles = async (files: Array<File | undefined>) => {
-      let promises = Array.from(files).map((file) => {
-        if (file) {
-          let reader = new FileReader();
-          return new Promise<ArrayBuffer | string | null>((resolve) => {
-            reader.onload = () => resolve(reader.result);
-            reader.readAsDataURL(file);
-          });
-        }
-      });
-
-      let res = await Promise.allSettled(promises);
-
-      return res;
-    };
-
     const fileReaderResults = await readFiles([
       data.logoImageFile,
       data.featuredImageFile,
       data.bannerImageFile,
     ]);
-    const determineResult = (
-      result:
-        | PromiseSettledResult<ArrayBuffer | string | null | undefined>
-        | undefined
-    ) => {
-      if (result && result.status === "fulfilled" && result.value) {
-        return result.value.toString();
-      }
-
-      return "";
-    };
 
     let collection = await createCollection.mutateAsync({
       description: data.description || "",
-      logoImageFile: determineResult(fileReaderResults[0]),
+      logoImageFile: determineResult<ArrayBuffer | string | null | undefined>(fileReaderResults[0])?.toString() || '',
       name: data.name,
       userId: session.user?.id || "",
     });
@@ -79,7 +54,7 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
     if (data.bannerImageFile) {
       collection = await updateImages.mutateAsync({
         id: collection.id,
-        bannerImageFile: determineResult(fileReaderResults[2]),
+        bannerImageFile: determineResult<ArrayBuffer | string | null | undefined>(fileReaderResults[2])?.toString() || '',
       });
 
       setBannerImageUploaded(true);
@@ -88,7 +63,7 @@ const CreateCollectionPage: NextPage<PageProps> = ({ session }) => {
     if (data.featuredImageFile) {
       collection = await updateImages.mutateAsync({
         id: collection.id,
-        featuredImageFile: determineResult(fileReaderResults[1]),
+        featuredImageFile: determineResult<ArrayBuffer | string | null | undefined>(fileReaderResults[1])?.toString() || '',
       });
 
       setFeaturedImageUploaded(true);
