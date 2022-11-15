@@ -4,6 +4,7 @@ export type CollectionWithNftSets = Collection & {
   nftSets: NFTSet[]
 }
 
+
 export type DetailedNFTSet = NFTSet & {
   nftEditions: (NFTEdition & {
       owner: Wallet & {
@@ -32,4 +33,9 @@ export const computeViewLikeCount = (
     likes,
     liked,
   };
+}
+
+export type MageCollection = {
+  collection: CollectionWithNftSets | null;
+  collectionProperties: CollectionNftSetProperties | null;
 }

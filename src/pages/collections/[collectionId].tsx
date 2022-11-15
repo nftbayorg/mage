@@ -1,14 +1,16 @@
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
-import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
 
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
-import { CollectionWithNftSets } from '../../utils/computed-properties';
 import { useCollectionStore } from "../../hooks/useCollectionProperties";
 import { useCallback, useState } from "react";
 import fetchFloorPrices from "../../server/data/fetchFloorPrices";
+import { MageCollection } from "../../utils/computed-properties";
+import fetchMageCollection from "../../server/data/fetchCollection";
 
-const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const CollectionDetailPage = ({ mageCollection, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+
+  const { collection, collectionProperties } = mageCollection;
 
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
@@ -42,8 +44,7 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
 };
 
 type CollectionDetailPageProps = {
-  collection: CollectionWithNftSets | null;
-  collectionProperties: CollectionNftSetProperties | null;
+  mageCollection: MageCollection,
   floorPrice: number;
 }
 
@@ -52,65 +53,21 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
 ) => {
 
   let floorPrice = 0
-
-  const collection = await prisma.collection.findFirst({
-    where: {
-      id: ctx.params?.collectionId as string || '',
-      visible: true
-    },
-    include: {
-      nftSets: true,
-    },
-  });
-
-  let collectionProperties: CollectionNftSetProperties | null = null;
+  const mageCollection = await fetchMageCollection(ctx.params?.collectionId as string || '');
+  const { collection } = mageCollection;
 
   if (collection) {
     try {
-      const floorPrices = await fetchFloorPrices(collection.tokenAddress || '');
-      console.log('Floor prices', floorPrices);
-      floorPrice = floorPrices.sources[0]?.floorAskPrice || 0;
+      const { sources } = await fetchFloorPrices(collection.tokenAddress || '');
+      floorPrice = sources[0]?.floorAskPrice || 0;
     } catch (error) {
-      console.log('Error', error);
       floorPrice = 0;
     }
-  
-    const properties = await prisma.nFTSetProperties.groupBy({
-      by: ['type', 'name', 'id'],
-      where: {
-         nftSetId: {
-           in: collection?.nftSets.map(set => set.id)
-         }
-      },
-      _count: {
-        name: true,
-      },
-    })
-
-    const resolveTypeValues = (
-      typeValue: { _count: { name: number; }, name: string; type:string; id: string; }, 
-      prevValue: { _count: number; variants: [{ name: string;  ids: string; }] }
-    ) => {
-      prevValue = prevValue || { _count: 0, variants: {} };
-
-      return { 
-        _count: prevValue._count + typeValue._count.name, 
-        variants: {...prevValue.variants, [typeValue.name]: [...prevValue.variants[typeValue.name] || '', typeValue.id] }
-      }
-    }
-
-    collectionProperties = {
-      nftSetsInCollection: collection.nftSets.length,
-      propertyCounts: properties.reduce((prev, current) => {
-        return {...prev, [current.type]: resolveTypeValues(current, prev[current.type])}
-      }, {})
-    }    
   }
 
   return {
     props: {
-      collection,
-      collectionProperties,
+      mageCollection,
       floorPrice
     }
   };

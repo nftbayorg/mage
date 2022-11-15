@@ -19,20 +19,6 @@ type NftSetPropertyTypes = {
   }]
 }
 
-type CollectionNftSetProperty = {
-  [type: string]: {
-    _count: number;
-    variants: {
-      [name: string]: string[];
-    }
-  }
-}
-
-type CollectionNftSetProperties = {
-  nftSetsInCollection: number;
-  propertyCounts: CollectionNftSetProperty;
-}
-
 type NftSetDetailCollectionProperties = {
   nftSetsInCollection: number;
   propertyCounts: NftSetPropertyTypes;
