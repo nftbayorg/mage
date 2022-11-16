@@ -5,12 +5,10 @@ import CollectionDetail from "../../components/views/collections/CollectionDetai
 import { useCollectionStore } from "../../hooks/useCollectionProperties";
 import { useCallback, useState } from "react";
 import fetchFloorPrices from "../../server/data/fetchFloorPrices";
-import { MageCollection } from "../../utils/computed-properties";
+import { CollectionWithNftSets } from "../../utils/computed-properties";
 import fetchMageCollection from "../../server/data/fetchCollection";
 
-const CollectionDetailPage = ({ mageCollection, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-
-  const { collection, collectionProperties } = mageCollection;
+const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
@@ -44,7 +42,8 @@ const CollectionDetailPage = ({ mageCollection, floorPrice }: InferGetServerSide
 };
 
 type CollectionDetailPageProps = {
-  mageCollection: MageCollection,
+  collection: CollectionWithNftSets | null;
+  collectionProperties: CollectionNftSetProperties | null;
   floorPrice: number;
 }
 
@@ -52,9 +51,8 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
   ctx: GetServerSidePropsContext
 ) => {
 
-  let floorPrice = 0
-  const mageCollection = await fetchMageCollection(ctx.params?.collectionId as string || '');
-  const { collection } = mageCollection;
+  let floorPrice = 0;
+  const { collection, collectionProperties } = await fetchMageCollection(ctx.params?.collectionId as string || '');
 
   if (collection) {
     try {
@@ -67,7 +65,8 @@ export const getServerSideProps: GetServerSideProps<CollectionDetailPageProps> =
 
   return {
     props: {
-      mageCollection,
+      collection,
+      collectionProperties,
       floorPrice
     }
   };

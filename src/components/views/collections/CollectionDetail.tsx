@@ -10,6 +10,7 @@ import { CollectionMenu } from "./CollectionMenu";
 import { OverlayPanel } from "../../forms/controls/OverlayPanel";
 import { Button } from "../../forms/controls/Button";
 import { SlidePanel } from "../../forms/controls/SlidePanel";
+import { pluralize } from "../../../utils/strings";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -43,11 +44,6 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
         description: "",
         verified: false
       };
-
-  function pluralize(word: string, value: number): string {
-    const plural = value && (value > 0 || value === 0) ? "s" : "";
-    return `${word}${plural}`;
-  }
 
   return (
     <div className="relative">

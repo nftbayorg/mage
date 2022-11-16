@@ -18,7 +18,6 @@ export default async function fetchFloorPrices(collectionAddress: string): Promi
   if (response.ok) {
     const sources = data;
 
-    console.log('Sources', data);
     if (sources) {
       return Object.assign(sources, {fetchedAt: formatDate(new Date())});
     } else {
