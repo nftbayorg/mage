@@ -19,11 +19,11 @@ const MobileNav = () => {
         icon={<FaRegUserCircle size={30} className="fill-gray-700 dark:fill-gray-400"/>}
         activeIcon={<FaTimes size={30} className="fill-gray-700 dark:fill-gray-400"/>}
       >
-        <NavMenuItem
+        {/* <NavMenuItem
           icon={<FaDollarSign size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Trade"
           onClick={() => router.push("/trade")}
-        />
+        /> */}
         <NavMenuItem
           icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Create"
@@ -76,11 +76,11 @@ const MenuItems = () => {
       dark:text-gray-200 text-gray-700 font-bold
     ">
       <div className="flex gap-x-6 w-full items-center justify-center ml-auto lg:mr-[110px] mt-2">
-        <Link href="/trade" >
+        {/* <Link href="/trade" >
           <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500 ">
             Trade
           </a>
-        </Link>
+        </Link> */}
         <Link href="/nfts/create">
           <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500">
             Create
