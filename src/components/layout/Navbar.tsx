@@ -51,14 +51,14 @@ const MobileNav = () => {
         }
         {!session && 
           <>
-            <SetTheme/>
             <NavMenuItem 
               icon={<FaWallet size={20} className="fill-gray-700 dark:fill-gray-200 "/>}
               caption="Log In" 
               onClick={() => router.push('/login')}
             />
           </>
-        }      </NavMenu>
+        }
+      </NavMenu>
     </div>
   )
 }
