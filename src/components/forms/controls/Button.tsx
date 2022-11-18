@@ -14,7 +14,7 @@ export const Button = ({ caption, icon, onClick }: ButtonProps) => {
         border
         border-gray-300
         dark:border-gray-300
-        dark:bg-white dark:bg-opacity-0
+        dark:bg-gray-800
         dark:hover:bg-opacity-10
         dark:disabled:bg-opacity-0
         text-gray-800

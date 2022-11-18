@@ -4,13 +4,15 @@ import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
 import { MdFilterList } from "react-icons/md";
 import { VerifiedBadge } from "../../icons/VerifiedBadge";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CollectionHeader } from "./CollectionHeader";
 import { CollectionMenu } from "./CollectionMenu";
 import { OverlayPanel } from "../../forms/controls/OverlayPanel";
 import { Button } from "../../forms/controls/Button";
 import { SlidePanel } from "../../forms/controls/SlidePanel";
 import { pluralize } from "../../../utils/strings";
+import { useIsInViewport } from "../../../hooks/useIsInViewport";
+import Label from "../../forms/controls/Label";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -24,7 +26,10 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
 
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
+  const filterButtonRef = useRef(null);
 
+  const isInViewport = useIsInViewport(filterButtonRef);
+  
   const {
     bannerImageUrl,
     logoImageUrl,
@@ -47,6 +52,16 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
 
   return (
     <div className="relative">
+      {!isInViewport &&
+        <div className="md:hidden fixed bottom-1 left-[50%] translate-x-[-50%] z-[1000]">
+          <Button 
+            caption="Filters"
+            icon={<MdFilterList size={30}/>}     
+            onClick={() => setMobileMenuHidden(prev => !prev)}
+          />
+        </div>
+      }
+
       <OverlayPanel 
         caption="Filters"
         visible={!mobileMenuHidden} 
@@ -63,7 +78,7 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
           owner={collection?.userId}
         />
           <section className="px-4 md:px-0">
-            <section className="flex flex-col mb-10 md:px-10">
+            <section className="flex flex-col md:mb-10 md:px-10">
               <div className="flex items-center gap-2">
                 <div className="text-2xl md:text-3xl font-semibold">
                   {name}
@@ -87,17 +102,20 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
                 )}
               </div>
               <div>
-                {description ||
-                  `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
+                <Label
+                  caption= {description || `Welcome to the home of ${name} on Mage. Discover the best items in this collection.`}
+                  collapsible={true}
+                  defaultState="collapsed"
+                />
               </div>
-              <section className="hidden md:flex pt-10">
+              <section className="hidden md:flex pt-5">
                 <div className="flex flex-col">
                   <div>{floorPrice} ETH</div>
                   <div>Floor price</div>
                 </div>
               </section>
             </section>
-            <section className="flex flex-col w-full gap-1 py-5 md:p-10">
+            <section className="flex flex-col w-full gap-1 py-5 md:p-10 md:pt-5">
               <div className="flex flex-col w-full bg-white dark:bg-slate-800">
                 <div className="w-fit border-b-2 border-gray-700 pb-3 font-medium">
                   Items
@@ -110,7 +128,7 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
                 </button>
               </div>
               <section className="flex flex-col md:flex-row w-full">
-                <div className="md:hidden">
+                <div className="md:hidden" ref={filterButtonRef}>
                   <Button 
                     caption="Filters"
                     icon={<MdFilterList size={30}/>}     
