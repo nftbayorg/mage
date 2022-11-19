@@ -53,7 +53,7 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
       };
 
   return (
-    <div className="relative">
+    <div className="relative min-w-full">
       {!isInViewport &&
         <div className="md:hidden fixed bottom-1 left-[50%] translate-x-[-50%] z-[1000]">
           <Button 
