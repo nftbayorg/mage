@@ -1,6 +1,4 @@
-import { NFTSetProperties } from "prisma/prisma-client";
 import { useCallback, useEffect, useState } from "react";
-import { string } from "zod";
 import { useCollectionStore } from "../../../hooks/useCollectionProperties";
 import { Checkbox } from "../../forms/controls/Checkbox";
 import { Menu, MenuGroup, MenuItem } from "../../layout/Menu"
@@ -11,9 +9,13 @@ type CollectionMenuProps = {
 }
 
 export const CollectionMenu = ({ collectionProperties }: CollectionMenuProps) => {
-  const [properties] = useState(collectionProperties);
+  const [properties, setProperties] = useState<CollectionNftSetProperties | null>();
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
+
+  useEffect(() => {
+    setProperties(collectionProperties);
+  }, [collectionProperties]);
 
   const handleClick = useCallback((propertyKey: string, nameKey: string, propertyIds: string[] | undefined) => {
     toggleSelectedPropertyIds(propertyKey, propertyIds);
