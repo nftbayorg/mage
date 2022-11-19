@@ -4,7 +4,7 @@ import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
 import { MdFilterList } from "react-icons/md";
 import { VerifiedBadge } from "../../icons/VerifiedBadge";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { CollectionHeader } from "./CollectionHeader";
 import { CollectionMenu } from "./CollectionMenu";
 import { OverlayPanel } from "../../forms/controls/OverlayPanel";
@@ -26,9 +26,11 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
 
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
-  const filterButtonRef = useRef(null);
 
-  const isInViewport = useIsInViewport(filterButtonRef);
+  const {
+    isInViewport,
+    observerRef
+  } = useIsInViewport({ defaultState: true });
   
   const {
     bannerImageUrl,
@@ -128,7 +130,7 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
                 </button>
               </div>
               <section className="flex flex-col md:flex-row w-full">
-                <div className="md:hidden" ref={filterButtonRef}>
+                <div className="md:hidden" ref={observerRef}>
                   <Button 
                     caption="Filters"
                     icon={<MdFilterList size={30}/>}     
