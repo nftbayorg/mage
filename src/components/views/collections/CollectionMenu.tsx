@@ -66,6 +66,33 @@ export const CollectionMenu = ({ collectionProperties }: CollectionMenuProps) =>
         </MenuGroup>
         ))}
       </>
+      <MenuGroup 
+        key={"status"}
+        label={
+          <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
+            <div>Status</div>
+          </div>
+        }
+        collapsible={true}
+        defaultState="expanded"
+      >
+        <MenuItem key={"BuytNow"} onClick={() => handleClick("BuyNow", "BuyNow", ["BuyNow"])}>
+          <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
+            <div>Buy Now</div>
+            <div className="ml-auto">
+              <Checkbox initialValue={determineCheckedState(["BuyNow"])}/>
+            </div>
+          </div>
+        </MenuItem>
+        <MenuItem key={"OnAuction"} onClick={() => handleClick("OnAuction", "OnAuction", ["OnAuction"])}>
+          <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
+            <div>On Auction</div>
+            <div className="ml-auto">
+              <Checkbox initialValue={determineCheckedState(["OnAuction"])}/>
+            </div>
+          </div>
+        </MenuItem>
+      </MenuGroup>
     </Menu>
   );
 }

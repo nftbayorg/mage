@@ -301,28 +301,30 @@ const NftSetDetail = ({ collectionProperties, nftSet, onLike, onUnLike }: Compon
               )}
             </div>
           </CollapsePanel>
-
-          <CollapsePanel
-            label="Properties"
-            classesOverride="p-6 md:p-1"
-            icon={
-              <FaTags
-                size={25}
-                className="fill-gray-700 dark:fill-gray-400 rotate-90"
-              />
-            }
-            collapsible={true}
-          >
-          <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
-            {nft.properties && nft.properties.map((property, idx) => (
-              <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative overflow-hidden" key={idx}>
-                <div className="text-blue-400 text-xs w-full text-ellipsis whitespace-nowrap text-center px-1 overflow-hidden">{property.type}</div>
-                <div className="text-gray-700 dark:text-gray-200 text-md w-full text-ellipsis overflow-hidden whitespace-nowrap text-center px-1">{property.name}</div>
-                <div className="text-gray-700 dark:text-gray-400 md:text-sm text-ellipsis w-full whitespace-nowrap overflow-hidden text-center px-1">{`${calcTraitPercentage(property)}% have this trait`}</div>
-              </div>
-            ))}
-          </div>
-          </CollapsePanel>
+          
+          {nft.properties.length > 0 && 
+            <CollapsePanel
+              label="Properties"
+              classesOverride="p-6 md:p-1"
+              icon={
+                <FaTags
+                  size={25}
+                  className="fill-gray-700 dark:fill-gray-400 rotate-90"
+                />
+              }
+              collapsible={true}
+            >
+            <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-2 flex-wrap">
+              {nft.properties && nft.properties.map((property, idx) => (
+                <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative overflow-hidden" key={idx}>
+                  <div className="text-blue-400 text-xs w-full text-ellipsis whitespace-nowrap text-center px-1 overflow-hidden">{property.type}</div>
+                  <div className="text-gray-700 dark:text-gray-200 text-md w-full text-ellipsis overflow-hidden whitespace-nowrap text-center px-1">{property.name}</div>
+                  <div className="text-gray-700 dark:text-gray-400 md:text-sm text-ellipsis w-full whitespace-nowrap overflow-hidden text-center px-1">{`${calcTraitPercentage(property)}% have this trait`}</div>
+                </div>
+              ))}
+            </div>
+            </CollapsePanel>
+          }
 
           <CollapsePanel
             label={`About ${nft.collection?.name}`}
