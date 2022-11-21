@@ -162,7 +162,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                       <div className="text-1xl md:text-5xl">No items to display</div>
                   </div>
                   :
-                  <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? 'md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8' : 'md:grid-cols-2 lg:grid-cols-4 xl-grid-cols-5'} gap-2 md:gap-4 w-full md:overflow-scroll`}>
+                  <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? 'md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8' : 'md:grid-cols-2 lg:grid-cols-4 xl-grid-cols-5'} gap-2 md:gap-4 w-full md:h-fit md:overflow-scroll`}>
                     {collection?.nftSets.map((nftSet) => (
                       <div key={nftSet.id}>
                         <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
