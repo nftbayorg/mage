@@ -29,12 +29,21 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
   const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
+  const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
 
   const {
     isInViewport,
     observerRef
   } = useIsInViewport({ defaultState: true });
   
+  const handleTagClosed = useCallback((propertyKey, ids) => {
+    const splitKey = propertyKey.split(":").filter(p => p !== undefined);
+    const keyValue = splitKey[0].replace(":", "");
+    const nameValue =  splitKey[1]?.replace(" ","");
+
+    toggleSelectedPropertyIds(keyValue, nameValue, ids);
+  }, [toggleSelectedPropertyIds]);
+
   const {
     bannerImageUrl,
     logoImageUrl,
@@ -132,7 +141,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                   <MdFilterList size={30} className="m-3"/>
                 </button>
                 {Object.keys(selectedProperties).map((key, idx) => (
-                  <Tag key={idx} caption={key} closable={false}/>
+                  <Tag key={idx} caption={key} closable={true} onClose={() => handleTagClosed(key, selectedProperties[key])}/>
                 ))}
               </div>
               <section className="flex flex-col md:flex-row w-full">
