@@ -3,22 +3,20 @@ import { useCollectionStore } from "../../../hooks/useCollectionProperties";
 import { Checkbox } from "../../forms/controls/Checkbox";
 import { Menu, MenuGroup, MenuItem } from "../../layout/Menu"
 
-type CollectionMenuProps = {
-  collectionProperties: CollectionNftSetProperties | null;
-  onFilterSelection?: ({ properties }: { properties: CollectionNftSetProperty[] }) => void;
-}
-
-export const CollectionMenu = ({ collectionProperties }: CollectionMenuProps) => {
+export const CollectionMenu = () => {
+  
   const [properties, setProperties] = useState<CollectionNftSetProperties | null>();
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
+  const collectionProperties = useCollectionStore(useCallback((state) => state.collectionProperties, []));
 
   useEffect(() => {
+  
     setProperties(collectionProperties);
   }, [collectionProperties]);
 
   const handleClick = useCallback((propertyKey: string, nameKey: string, propertyIds: string[] | undefined) => {
-    toggleSelectedPropertyIds(propertyKey, propertyIds);
+    toggleSelectedPropertyIds(propertyKey, nameKey, propertyIds);
   }, [toggleSelectedPropertyIds]);
 
   const determineCheckedState = useCallback((clickedPropertyIds: string[] | undefined) => {

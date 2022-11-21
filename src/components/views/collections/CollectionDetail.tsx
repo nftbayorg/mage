@@ -4,7 +4,7 @@ import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "../../../server/trpc/router";
 import { MdFilterList } from "react-icons/md";
 import { VerifiedBadge } from "../../icons/VerifiedBadge";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { CollectionHeader } from "./CollectionHeader";
 import { CollectionMenu } from "./CollectionMenu";
 import { OverlayPanel } from "../../forms/controls/OverlayPanel";
@@ -13,6 +13,8 @@ import { SlidePanel } from "../../forms/controls/SlidePanel";
 import { pluralize } from "../../../utils/strings";
 import { useIsInViewport } from "../../../hooks/useIsInViewport";
 import Label from "../../forms/controls/Label";
+import { useCollectionStore } from "../../../hooks/useCollectionProperties";
+import { Tag } from "../../forms/controls/Tag";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -22,10 +24,11 @@ type ComponentProps = {
   floorPrice: number;
 };
 
-const CollectionDetail = ({ collection, collectionProperties, floorPrice }: ComponentProps) => {
+const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
 
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
+  const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
 
   const {
     isInViewport,
@@ -69,7 +72,7 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
         visible={!mobileMenuHidden} 
         onClose={() => setMobileMenuHidden(true)}
       >
-        <CollectionMenu collectionProperties={collectionProperties}/>
+        <CollectionMenu/>
       </OverlayPanel>
       <section className="flex flex-col gap-y-5 w-full text-lg font-normal dark:text-gray-200 text-gray-700">
         <CollectionHeader
@@ -124,22 +127,25 @@ const CollectionDetail = ({ collection, collectionProperties, floorPrice }: Comp
                 </div>
                 <hr className="border border-gray-200" />
               </div>
-              <div className="hidden md:flex flex-col w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
+              <div className="hidden md:flex gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
                 <button onClick={() => setMenuHidden(prev => !prev)}>
-                  <MdFilterList size={30}/>
+                  <MdFilterList size={30} className="m-3"/>
                 </button>
+                {Object.keys(selectedProperties).map((key, idx) => (
+                  <Tag key={idx} caption={key} closable={false}/>
+                ))}
               </div>
               <section className="flex flex-col md:flex-row w-full">
                 <div className="md:hidden" ref={observerRef}>
                   <Button 
-                    caption="Filters"
+                    caption={`Filters ${Object.keys(selectedProperties).length ? Object.keys(selectedProperties).length : ''}`}
                     icon={<MdFilterList size={30}/>}     
                     onClick={() => setMobileMenuHidden(prev => !prev)}
                   />
                 </div>
                 <div className="hidden md:flex">
                   <SlidePanel visible={menuHidden}>
-                    <CollectionMenu collectionProperties={collectionProperties}/>
+                    <CollectionMenu/>
                   </SlidePanel>
                 </div>
                 {!collection?.nftSets.length ? 

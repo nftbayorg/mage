@@ -3,21 +3,22 @@ import { trpc } from "../../utils/trpc";
 
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
 import { useCollectionStore } from "../../hooks/useCollectionProperties";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import fetchFloorPrices from "../../server/data/fetchFloorPrices";
 import { CollectionWithNftSets } from "../../utils/computed-properties";
 import fetchMageCollection from "../../server/data/fetchCollection";
 
 const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
+  const setCollectionProperties = useCollectionStore(useCallback((state) => state.setCollectionProperties, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
-  const [collecitonId] = useState(collection?.id);
+  const [collectionId] = useState(collection?.id);
   const [data, setData] = useState(collection);  
 
   trpc.collection.getFiltered.useQuery(
     {
-      id: collecitonId,
+      id: collectionId,
       filters: selectedCombinations
     },
     {
@@ -33,6 +34,10 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
       refetchOnMount: false,
     }
   );
+
+  useEffect(() => {
+    setCollectionProperties(collectionProperties);
+  }, []);
 
   return (
     <div className="flex items-center justify-center w-full">
