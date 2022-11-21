@@ -10,6 +10,7 @@ import fetchMageCollection from "../../server/data/fetchCollection";
 
 const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
+  const setCollection = useCollectionStore(useCallback((state) => state.setCollection, []));
   const setCollectionProperties = useCollectionStore(useCallback((state) => state.setCollectionProperties, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
@@ -31,11 +32,12 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
       },
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      refetchOnMount: false,
+      refetchOnMount: true,
     }
   );
 
   useEffect(() => {
+    setCollection(collection);
     setCollectionProperties(collectionProperties);
   }, []);
 

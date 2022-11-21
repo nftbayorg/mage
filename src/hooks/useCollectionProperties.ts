@@ -1,19 +1,30 @@
 import create from "zustand";
+import { CollectionWithNftSets } from "../utils/computed-properties";
 
 type CollectionStore = {
+  collection: CollectionWithNftSets | null;
   collectionProperties: CollectionNftSetProperties | null;
   selectedPropertyIds: Set<string>;
   selectedProperties: { [key: string]: string[] },
   selectedCombinations: {},
+  setCollection: (newCollection: CollectionWithNftSets | null) => void;
   setCollectionProperties: (properties: CollectionNftSetProperties | null) => void;
   toggleSelectedPropertyIds: (propertyKey: string, variantKey: string | undefined, id: string[] | undefined) => void;
 }
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
+    collection:  null,
     collectionProperties: null,
     selectedPropertyIds: new Set(),
     selectedProperties: {},
     selectedCombinations: {},
+    setCollection: (newCollection: CollectionWithNftSets | null) => set(({ collection }) => {
+
+      return (newCollection?.id !== collection?.id) ? 
+        { collection: newCollection, selectedCombinations: {}, selectedProperties: {}, selectedPropertyIds: new Set()}
+        :
+        { collection: newCollection }
+    }),
     setCollectionProperties: (properties: CollectionNftSetProperties | null) => set({ collectionProperties: properties }),
     toggleSelectedPropertyIds: (
       propertyKey: string, 
