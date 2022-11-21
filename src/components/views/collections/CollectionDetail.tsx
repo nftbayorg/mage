@@ -136,7 +136,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                 </div>
                 <hr className="border border-gray-200" />
               </div>
-              <div className="hidden md:flex gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
+              <div className="hidden md:flex flex-wrap gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
                 <button onClick={() => setMenuHidden(prev => !prev)}>
                   <MdFilterList size={30} className="m-3"/>
                 </button>

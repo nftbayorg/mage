@@ -17,7 +17,7 @@ export const Tag = ({ caption, closable, onClose }: TagProps) => {
     <div 
       className="flex items-center justify-center gap-5 w-fit dark:bg-slate-700 rounded-lg p-3" 
     >
-      <div>{caption}</div>
+      <div className="whitespace-nowrap">{caption}</div>
       {closable && <FaTimes className="cursor-pointer" onClick={() => handleClose()}/>}
     </div>
   )
