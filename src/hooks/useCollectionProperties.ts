@@ -6,7 +6,7 @@ type CollectionStore = {
   selectedProperties: { [key: string]: string[] },
   selectedCombinations: {},
   setCollectionProperties: (properties: CollectionNftSetProperties | null) => void;
-  toggleSelectedPropertyIds: (propertyKey: string, variantKey: string, id: string[] | undefined) => void;
+  toggleSelectedPropertyIds: (propertyKey: string, variantKey: string | undefined, id: string[] | undefined) => void;
 }
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
@@ -17,7 +17,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     setCollectionProperties: (properties: CollectionNftSetProperties | null) => set({ collectionProperties: properties }),
     toggleSelectedPropertyIds: (
       propertyKey: string, 
-      variantKey: string, 
+      variantKey: string | undefined, 
       ids: string[] | undefined) => set(({ 
         selectedPropertyIds, selectedCombinations, selectedProperties 
       }) => {
@@ -34,9 +34,9 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
         if (propertyInStore) {
           idsToStore.delete(id);
           updatedSet.delete(id);
-          delete updatedSelectedProperties[`${propertyKey}: ${variantKey}`];
+          delete updatedSelectedProperties[`${propertyKey}${variantKey ? `: ${variantKey}` : ''}`];
         } else {
-          updatedSelectedProperties[`${propertyKey}: ${variantKey}`] = ids;
+          updatedSelectedProperties[`${propertyKey}${variantKey ? `: ${variantKey}` : ''}`] = ids;
           updatedSet.add(id);
         }
       });

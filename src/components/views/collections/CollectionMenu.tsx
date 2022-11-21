@@ -15,7 +15,7 @@ export const CollectionMenu = () => {
     setProperties(collectionProperties);
   }, [collectionProperties]);
 
-  const handleClick = useCallback((propertyKey: string, nameKey: string, propertyIds: string[] | undefined) => {
+  const handleClick = useCallback((propertyKey: string, nameKey: string | undefined, propertyIds: string[] | undefined) => {
     toggleSelectedPropertyIds(propertyKey, nameKey, propertyIds);
   }, [toggleSelectedPropertyIds]);
 
@@ -74,7 +74,7 @@ export const CollectionMenu = () => {
         collapsible={true}
         defaultState="expanded"
       >
-        <MenuItem key={"BuytNow"} onClick={() => handleClick("BuyNow", "BuyNow", ["BuyNow"])}>
+        <MenuItem key={"BuytNow"} onClick={() => handleClick("Buy Now", undefined, ["BuyNow"])}>
           <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
             <div>Buy Now</div>
             <div className="ml-auto">
@@ -82,7 +82,7 @@ export const CollectionMenu = () => {
             </div>
           </div>
         </MenuItem>
-        <MenuItem key={"OnAuction"} onClick={() => handleClick("OnAuction", "OnAuction", ["OnAuction"])}>
+        <MenuItem key={"OnAuction"} onClick={() => handleClick("On Auction", undefined, ["OnAuction"])}>
           <div className="flex items-center font-medium text-ellipsis whitespace-nowrap overflow-hidden w-full">
             <div>On Auction</div>
             <div className="ml-auto">
