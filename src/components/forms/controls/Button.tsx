@@ -25,6 +25,7 @@ export const Button = ({ caption, icon, onClick }: ButtonProps) => {
         text-gray-800
         dark:text-white
         dark:disabled:text-gray-900
+        whitespace-nowrap
       "
     >
       {icon}

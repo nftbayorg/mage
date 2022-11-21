@@ -60,7 +60,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
       {!isInViewport &&
         <div className="md:hidden fixed bottom-1 left-[50%] translate-x-[-50%] z-[1000]">
           <Button 
-            caption="Filters"
+            caption={`Filters ${Object.keys(selectedProperties).length ? Object.keys(selectedProperties).length : ''}`}
             icon={<MdFilterList size={30}/>}     
             onClick={() => setMobileMenuHidden(prev => !prev)}
           />
