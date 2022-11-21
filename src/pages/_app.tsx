@@ -2,11 +2,11 @@
 import "../styles/globals.css";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import type { AppType } from "next/dist/shared/lib/utils";
 import { trpc } from "../utils/trpc";
 import Layout from "../components/layout/Layout";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
+import { Analytics } from '@vercel/analytics/react';
 
 const MyApp = ({ Component, pageProps }: AppProps<{ session: Session }>) => {
 
@@ -15,6 +15,7 @@ const MyApp = ({ Component, pageProps }: AppProps<{ session: Session }>) => {
       <ThemeProvider attribute="class" defaultTheme="dark">
         <Layout>
           <Component {...pageProps} />
+          <Analytics />
         </Layout>
       </ThemeProvider>
     </SessionProvider>
