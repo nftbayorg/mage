@@ -15,6 +15,8 @@ import { useIsInViewport } from "../../../hooks/useIsInViewport";
 import Label from "../../forms/controls/Label";
 import { useCollectionStore } from "../../../hooks/useCollectionProperties";
 import { Tag } from "../../forms/controls/Tag";
+import { Radio, RadioButton } from "../../forms/controls/Radio";
+import { MdGridOn, MdGridView } from "react-icons/md";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -30,6 +32,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
   const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
+  const [gridCols, setGridCols] = useState<string | number>(5);
 
   const {
     isInViewport,
@@ -136,13 +139,25 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                 </div>
                 <hr className="border border-gray-200" />
               </div>
-              <div className="hidden md:flex flex-wrap gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
-                <button onClick={() => setMenuHidden(prev => !prev)}>
-                  <MdFilterList size={30} className="m-3"/>
-                </button>
-                {Object.keys(selectedProperties).map((key, idx) => (
-                  <Tag key={idx} caption={key} closable={true} onClose={() => handleTagClosed(key, selectedProperties[key])}/>
-                ))}
+              <div className="hidden md:flex gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
+                <div className="md:flex flex-wrap gap-5 w-full">
+                  <button onClick={() => setMenuHidden(prev => !prev)}>
+                    <MdFilterList size={30} className="m-3"/>
+                  </button>
+                  {Object.keys(selectedProperties).map((key, idx) => (
+                    <Tag key={idx} caption={key} closable={true} onClose={() => handleTagClosed(key, selectedProperties[key])}/>
+                  ))}
+                </div>
+                <div className="ml-auto">
+                  <Radio onChange={(value) => setGridCols(value)} defaultValue={5}>
+                    <RadioButton value={5} position="first">
+                      <MdGridOn size={25}/>
+                    </RadioButton>
+                    <RadioButton value={4} position="last">
+                      <MdGridView size={25}/>
+                    </RadioButton>
+                  </Radio>
+                </div>
               </div>
               <section className="flex flex-col md:flex-row w-full">
                 <div className="md:hidden" ref={observerRef}>
@@ -162,7 +177,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                       <div className="text-1xl md:text-5xl">No items to display</div>
                   </div>
                   :
-                  <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? 'md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8' : 'md:grid-cols-2 lg:grid-cols-4 xl-grid-cols-5'} gap-2 md:gap-4 w-full md:h-fit md:overflow-scroll`}>
+                  <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? `md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-${Number(gridCols) +3}` : `md:grid-cols-2 lg:grid-cols-${gridCols} xl-grid-cols-5`} gap-2 md:gap-4 w-full md:h-fit md:overflow-scroll`}>
                     {collection?.nftSets.map((nftSet) => (
                       <div key={nftSet.id}>
                         <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
