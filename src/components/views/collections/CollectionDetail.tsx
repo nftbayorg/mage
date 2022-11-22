@@ -32,6 +32,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
   const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
+  const resetSelectedProperties = useCollectionStore(useCallback((state) => state.resetSelectedProperties, []));
   const [gridCols, setGridCols] = useState<string | number>(5);
 
   const {
@@ -46,6 +47,10 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
 
     toggleSelectedPropertyIds(keyValue, nameValue, ids);
   }, [toggleSelectedPropertyIds]);
+
+  const handleResetProperties = useCallback(() => {
+    resetSelectedProperties();
+  }, [resetSelectedProperties]);
 
   const {
     bannerImageUrl,
@@ -134,10 +139,10 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
             </section>
             <section className="flex flex-col w-full gap-1 py-5 md:p-10 md:pt-5">
               <div className="flex flex-col w-full bg-white dark:bg-slate-800">
-                <div className="w-fit border-b-2 border-gray-700 pb-3 font-medium">
+                <div className="w-fit border-b-2 border-gray-800 dark:border-gray-300 pb-3 font-medium">
                   Items
                 </div>
-                <hr className="border border-gray-200" />
+                <hr className="border dark:border-gray-700" />
               </div>
               <div className="hidden md:flex gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
                 <div className="md:flex flex-wrap gap-5 w-full">
@@ -147,14 +152,20 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                   {Object.keys(selectedProperties).map((key, idx) => (
                     <Tag key={idx} caption={key} closable={true} onClose={() => handleTagClosed(key, selectedProperties[key])}/>
                   ))}
+                  {Object.keys(selectedProperties).length > 0 && (
+                    <div 
+                      onClick={handleResetProperties}
+                      className="flex h-full items-center justify-center p-0 mx-5 font-semibold cursor-pointer hover:text-gray-500"
+                    >Clear all</div>
+                  )}
                 </div>
                 <div className="ml-auto">
                   <Radio onChange={(value) => setGridCols(value)} defaultValue={5}>
                     <RadioButton value={5} position="first">
-                      <MdGridOn size={25}/>
+                      <MdGridOn size={25} className="dark:fill-gray-300"/>
                     </RadioButton>
                     <RadioButton value={4} position="last">
-                      <MdGridView size={25}/>
+                      <MdGridView size={25} className="dark:fill-gray-300"/>
                     </RadioButton>
                   </Radio>
                 </div>

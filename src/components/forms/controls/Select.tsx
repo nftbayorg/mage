@@ -3,8 +3,6 @@ import { useState } from "react";
 import { 
   FaAsterisk,
   FaChevronDown,
-  FaChevronUp
-
 } from "react-icons/fa";
 import { SelectContext } from "../../../context/selectContext";
 import { useOnClickOutside } from "../../../hooks/useOnClickOutside";

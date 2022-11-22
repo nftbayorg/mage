@@ -7,6 +7,7 @@ type CollectionStore = {
   selectedPropertyIds: Set<string>;
   selectedProperties: { [key: string]: string[] },
   selectedCombinations: {},
+  resetSelectedProperties: () => void;
   setCollection: (newCollection: CollectionWithNftSets | null) => void;
   setCollectionProperties: (properties: CollectionNftSetProperties | null) => void;
   toggleSelectedPropertyIds: (propertyKey: string, variantKey: string | undefined, id: string[] | undefined) => void;
@@ -18,6 +19,9 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     selectedPropertyIds: new Set(),
     selectedProperties: {},
     selectedCombinations: {},
+    resetSelectedProperties: () => set(() => {
+      return { selectedProperties: {}, selectedPropertyIds: new Set(), selectedCombinations: {} }
+    }),
     setCollection: (newCollection: CollectionWithNftSets | null) => set(({ collection }) => {
 
       return (newCollection?.id !== collection?.id) ? 

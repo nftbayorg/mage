@@ -40,6 +40,6 @@ export const RadioButton = ({ children, position, value }: RadioButtonType) => {
   const isSelected = selectedValue === value;
 
   return (
-    <div className={`flex flex-col items-center justify-center cursor-pointer p-3 border min-h-12 ${rounded} ${isSelected ? 'dark:bg-gray-500' : ''}`} onClick={() => changeSelectedValue(value)}>{children}</div>
+    <div className={`flex flex-col items-center justify-center cursor-pointer p-3 border border-gray-400 dark:border-gray-700 min-h-12 ${rounded} ${isSelected ? 'bg-gray-300 dark:bg-gray-600' : ''}`} onClick={() => changeSelectedValue(value)}>{children}</div>
   )
 }
