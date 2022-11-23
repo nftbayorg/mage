@@ -35,11 +35,16 @@ export const Radio = ({ children, defaultValue, onChange }: RadioType) => {
 export const RadioButton = ({ children, position, value }: RadioButtonType) => {
   const { selectedValue, changeSelectedValue } = useRadioContext();
 
-  let rounded = position === "first" ? `rounded-l-lg rounded-r-none` : 'rounded-none';
-  rounded = position === "last" ? 'rounded-l-none rounded-r-lg' : rounded;
+  let rounded = position === "first" ? `rounded-l-lg rounded-r-none border-r-[1px]` : 'rounded-none';
+  rounded = position === "last" ? 'rounded-l-none rounded-r-lg border-l-[1px]' : rounded;
   const isSelected = selectedValue === value;
 
   return (
-    <div className={`flex flex-col items-center justify-center cursor-pointer p-3 border border-gray-400 dark:border-gray-700 min-h-12 ${rounded} ${isSelected ? 'bg-gray-300 dark:bg-gray-600' : ''}`} onClick={() => changeSelectedValue(value)}>{children}</div>
+    <div className={`
+      flex flex-col items-center justify-center 
+      cursor-pointer p-3 
+      border-2 dark:border-gray-500 dark:hover:border-gray-400
+      border-gray-400 hover:border-gray-500
+      min-h-14 ${rounded} ${isSelected ? 'bg-gray-300 dark:bg-gray-600' : ''}`} onClick={() => changeSelectedValue(value)}>{children}</div>
   )
 }

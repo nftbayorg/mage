@@ -17,6 +17,7 @@ import { useCollectionStore } from "../../../hooks/useCollectionProperties";
 import { Tag } from "../../forms/controls/Tag";
 import { Radio, RadioButton } from "../../forms/controls/Radio";
 import { MdGridOn, MdGridView } from "react-icons/md";
+import { Search } from "../../forms/controls/Search";
 
 type Collection = inferProcedureOutput<AppRouter["collection"]["get"]>;
 
@@ -31,6 +32,9 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
   const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
+  const searchValues = useCollectionStore(useCallback((state) => state.searchValues, []));
+  const removeSearchValue = useCollectionStore(useCallback((state) => state.removeSearchValue, []));
+  const setSearchValue = useCollectionStore(useCallback((state) => state.setSearchValue, []));
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const resetSelectedProperties = useCollectionStore(useCallback((state) => state.resetSelectedProperties, []));
   const [gridCols, setGridCols] = useState<string | number>(4);
@@ -48,9 +52,17 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
     toggleSelectedPropertyIds(keyValue, nameValue, ids);
   }, [toggleSelectedPropertyIds]);
 
+  const handleSearchValueClosed = useCallback((searchValue) => {
+    removeSearchValue(searchValue);
+  }, [removeSearchValue]);
+
   const handleResetProperties = useCallback(() => {
     resetSelectedProperties();
   }, [resetSelectedProperties]);
+
+  const handleSearchSubmitted = useCallback((value: string) => {
+    setSearchValue(value);
+  }, [setSearchValue]);
 
   const {
     bannerImageUrl,
@@ -145,27 +157,19 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                 <hr className="border dark:border-gray-700" />
               </div>
               <div className="hidden md:flex gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
-                <div className="md:flex flex-wrap gap-5 w-full">
+                <div className="md:flex gap-5 w-full">
                   <button onClick={() => setMenuHidden(prev => !prev)}>
                     <MdFilterList size={30} className="m-3"/>
                   </button>
-                  {Object.keys(selectedProperties).map((key, idx) => (
-                    <Tag key={idx} caption={key} closable={true} onClose={() => handleTagClosed(key, selectedProperties[key])}/>
-                  ))}
-                  {Object.keys(selectedProperties).length > 0 && (
-                    <div 
-                      onClick={handleResetProperties}
-                      className="flex h-full items-center justify-center p-0 mx-5 font-semibold cursor-pointer hover:text-gray-500"
-                    >Clear all</div>
-                  )}
+                  <Search onSubmit={handleSearchSubmitted}/>
                 </div>
                 <div className="ml-auto">
                   <Radio onChange={(value) => setGridCols(value)} defaultValue={gridCols}>
                     <RadioButton value={5} position="first">
-                      <MdGridOn size={25} className="dark:fill-gray-300"/>
+                      <MdGridOn size={26} className="dark:fill-gray-300"/>
                     </RadioButton>
                     <RadioButton value={4} position="last">
-                      <MdGridView size={25} className="dark:fill-gray-300"/>
+                      <MdGridView size={26} className="dark:fill-gray-300"/>
                     </RadioButton>
                   </Radio>
                 </div>
@@ -183,19 +187,35 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                     <CollectionMenu/>
                   </SlidePanel>
                 </div>
-                {!collection?.nftSets.length ? 
-                  <div className="flex items-center justify-center w-full border rounded-lg p-10 max-h-60">
-                      <div className="text-1xl md:text-5xl">No items to display</div>
-                  </div>
-                  :
-                  <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? `md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-${Number(gridCols) +3}` : `md:grid-cols-2 lg:grid-cols-${gridCols} xl-grid-cols-5`} gap-2 md:gap-4 w-full md:h-fit md:overflow-scroll`}>
-                    {collection?.nftSets.map((nftSet) => (
-                      <div key={nftSet.id}>
-                        <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
-                      </div>
-                    ))}
-                  </div>
-                }
+                <div className="flex flex-col h-full w-full">
+                  {(Object.keys(selectedProperties).length > 0 || searchValues.size > 0) && 
+                    <div className="hidden md:flex flex-wrap h-fit gap-5 p-3 items-center pt-0">
+                      {Array.from(searchValues).map((key, idx) => (
+                        <Tag key={idx} caption={key} closable={true} onClose={() => handleSearchValueClosed(key)}/>
+                      ))}
+                      {Object.keys(selectedProperties).map((key, idx) => (
+                        <Tag key={idx} caption={key} closable={true} onClose={() => handleTagClosed(key, selectedProperties[key])}/>
+                      ))}
+                      <div 
+                        onClick={handleResetProperties}
+                        className="flex h-full items-center justify-center p-0 mx-5 font-semibold cursor-pointer hover:text-gray-500"
+                      >Clear all</div>
+                    </div>
+                  }
+                  {!collection?.nftSets.length ? 
+                    <div className="flex items-center justify-center w-full border rounded-lg p-10 max-h-60">
+                        <div className="text-1xl md:text-5xl">No items to display</div>
+                    </div>
+                    :
+                    <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? `md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-${Number(gridCols) +3}` : `md:grid-cols-2 lg:grid-cols-${gridCols} xl-grid-cols-5`} gap-2 md:gap-4 w-full md:h-fit md:overflow-scroll`}>
+                      {collection?.nftSets.map((nftSet) => (
+                        <div key={nftSet.id}>
+                          <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
+                        </div>
+                      ))}
+                    </div>
+                  }
+                </div>
               </section>
             </section>
           </section>

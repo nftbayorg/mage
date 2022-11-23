@@ -14,17 +14,21 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
   const setCollectionProperties = useCollectionStore(useCallback((state) => state.setCollectionProperties, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
+  const searchValues = useCollectionStore(useCallback((state) => state.searchValues, []));
   const [collectionId] = useState(collection?.id);
   const [data, setData] = useState(collection);  
 
   trpc.collection.getFiltered.useQuery(
     {
       id: collectionId,
-      filters: selectedCombinations
+      filters: selectedCombinations,
+      ...(searchValues.size > 0 ? {
+        names: Array.from(searchValues),
+      } : {})
     },
     {
       onSuccess: (result) => {
-        if (selectedPropertyIds.size > 0) {
+        if (selectedPropertyIds.size > 0 || searchValues.size > 0) {
           setData(result);
         } else {
           setData(collection);

@@ -7,6 +7,9 @@ type CollectionStore = {
   selectedPropertyIds: Set<string>;
   selectedProperties: { [key: string]: string[] },
   selectedCombinations: {},
+  searchValues: Set<string>;
+  setSearchValue: (value: string) => void;
+  removeSearchValue: (value: string) => void;
   resetSelectedProperties: () => void;
   setCollection: (newCollection: CollectionWithNftSets | null) => void;
   setCollectionProperties: (properties: CollectionNftSetProperties | null) => void;
@@ -19,8 +22,14 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     selectedPropertyIds: new Set(),
     selectedProperties: {},
     selectedCombinations: {},
+    searchValues: new Set(),
+    removeSearchValue: (value: string) => set(({ searchValues }) => { 
+      const updatedSet = new Set(searchValues);
+      updatedSet.delete(value);
+      return { searchValues: updatedSet }
+    }),
     resetSelectedProperties: () => set(() => {
-      return { selectedProperties: {}, selectedPropertyIds: new Set(), selectedCombinations: {} }
+      return { selectedProperties: {}, selectedPropertyIds: new Set(), selectedCombinations: {}, searchValues: new Set() }
     }),
     setCollection: (newCollection: CollectionWithNftSets | null) => set(({ collection }) => {
 
@@ -30,6 +39,11 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
         { collection: newCollection }
     }),
     setCollectionProperties: (properties: CollectionNftSetProperties | null) => set({ collectionProperties: properties }),
+    setSearchValue: (value: string) => set(({ searchValues }) => { 
+      const updatedSet = new Set(searchValues);
+      updatedSet.add(value);
+      return { searchValues: updatedSet }
+    }),
     toggleSelectedPropertyIds: (
       propertyKey: string, 
       variantKey: string | undefined, 
