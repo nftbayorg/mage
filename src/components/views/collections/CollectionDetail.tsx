@@ -156,20 +156,20 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                 </div>
                 <hr className="border dark:border-gray-700" />
               </div>
-              <div className="hidden md:flex gap-5 w-full md:p-5 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
+              <div className="hidden md:flex gap-5 w-full md:p-5 md:px-3 sticky top-[73px] z-[10000] bg-white dark:bg-slate-800">
                 <div className="md:flex gap-5 w-full">
-                  <button onClick={() => setMenuHidden(prev => !prev)}>
-                    <MdFilterList size={30} className="m-3"/>
+                  <button onClick={() => setMenuHidden(prev => !prev)} className="rounded-full p-[1px] hover:bg-gray-300 dark:hover:bg-gray-500">
+                    <MdFilterList size={30} className="m-3 dark:fill-gray-200 fill-gray-500"/>
                   </button>
                   <Search onSubmit={handleSearchSubmitted}/>
                 </div>
                 <div className="ml-auto">
                   <Radio onChange={(value) => setGridCols(value)} defaultValue={gridCols}>
                     <RadioButton value={5} position="first">
-                      <MdGridOn size={26} className="dark:fill-gray-300"/>
+                      <MdGridOn size={27} className="dark:fill-gray-300"/>
                     </RadioButton>
                     <RadioButton value={4} position="last">
-                      <MdGridView size={26} className="dark:fill-gray-300"/>
+                      <MdGridView size={27} className="dark:fill-gray-300"/>
                     </RadioButton>
                   </Radio>
                 </div>
