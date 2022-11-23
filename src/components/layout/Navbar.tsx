@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FaCircleNotch, FaDollarSign, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaRegHeart, FaWallet } from "react-icons/fa";
+import { FaCat, FaCircleNotch, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaRegHeart, FaWallet } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { NavMenu, NavMenuItem  } from "./NavMenu";
 import dynamic from "next/dynamic";
@@ -24,6 +24,11 @@ const MobileNav = () => {
           caption="Trade"
           onClick={() => router.push("/trade")}
         /> */}
+        <NavMenuItem
+          icon={<FaCat size={20} className="fill-gray-700 dark:fill-gray-200"/>}
+          caption="Explore"
+          onClick={() => router.push("/collections/explore")}
+        />
         <NavMenuItem
           icon={<FaImage   size={20} className="fill-gray-700 dark:fill-gray-200"/>}
           caption="Create"
@@ -75,14 +80,19 @@ const MenuItems = () => {
       w-full h-full
       dark:text-gray-200 text-gray-700 font-bold
     ">
-      <div className="flex gap-x-6 w-full items-center justify-center ml-auto lg:mr-[110px] mt-2">
+      <div className="flex gap-x-7 w-full items-center justify-center ml-auto lg:mr-[110px] mt-2">
         {/* <Link href="/trade" >
           <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500 ">
             Trade
           </a>
         </Link> */}
+        <Link href="/collections/explore">
+          <a className="text-2xl outline-none dark:hover:text-gray-500 hover:text-blue-500">
+            Explore
+          </a>
+        </Link>
         <Link href="/nfts/create">
-          <a className="outline-none dark:hover:text-gray-500 hover:text-blue-500">
+          <a className="text-2xl outline-none dark:hover:text-gray-500 hover:text-blue-500">
             Create
           </a>
         </Link>
