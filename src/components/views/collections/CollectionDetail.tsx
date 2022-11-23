@@ -33,7 +33,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
   const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
   const toggleSelectedPropertyIds = useCollectionStore(useCallback((state) => state.toggleSelectedPropertyIds, []));
   const resetSelectedProperties = useCollectionStore(useCallback((state) => state.resetSelectedProperties, []));
-  const [gridCols, setGridCols] = useState<string | number>(5);
+  const [gridCols, setGridCols] = useState<string | number>(4);
 
   const {
     isInViewport,
@@ -160,7 +160,7 @@ const CollectionDetail = ({ collection, floorPrice }: ComponentProps) => {
                   )}
                 </div>
                 <div className="ml-auto">
-                  <Radio onChange={(value) => setGridCols(value)} defaultValue={5}>
+                  <Radio onChange={(value) => setGridCols(value)} defaultValue={gridCols}>
                     <RadioButton value={5} position="first">
                       <MdGridOn size={25} className="dark:fill-gray-300"/>
                     </RadioButton>
