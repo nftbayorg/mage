@@ -25,7 +25,6 @@ export const collectionRouter = t.router({
     }).nullish())
     .query(({ input, ctx }) => {
       let andClauses = Array(0);
-      let nameClause = {};
 
       const { filters, names } = input || {};
 
@@ -44,17 +43,13 @@ export const collectionRouter = t.router({
       }
 
       if (names) {
-        let namesText = "";
-
         names.forEach((name, idx) => {
-          namesText = idx === 0 ? name : namesText + " |" + name;          
+          andClauses.push({
+            name: {
+              contains: name
+            }
+          })
         });
-
-        nameClause = {
-          name: {
-            search: namesText
-          }
-        }
       }
 
       return ctx.prisma.collection.findFirst({
@@ -65,7 +60,6 @@ export const collectionRouter = t.router({
         include: {
           nftSets: {
             where: {
-              ...nameClause,
               AND: andClauses
             }            
           }
