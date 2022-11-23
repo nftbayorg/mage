@@ -135,11 +135,11 @@ const NftForm = ({ onSubmit, collections, defaultCollection }: ComponentProps) =
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 w-full gap-2 flex-wrap">
             {properties && properties.map((property, idx) => (
-              <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-full h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative" key={idx}>
-                <div className="text-blue-400 text-md absolute right-1 top-1 p-1 cursor-pointer" onClick={() => removeProperty(property)}>X</div>
+              <div className="border border-blue-300 bg-blue-50 dark:bg-gray-700 w-full md:w-64 h-24 flex flex-col items-center justify-center gap-1 rounded-lg relative overflow-hidden" key={idx}>
+                <div className="text-blue-400 text-md absolute right-2 top-1 p-1 cursor-pointer hover:text-blue-600" onClick={() => removeProperty(property)}>X</div>
                 <div className="text-blue-400 text-xs w-full text-ellipsis whitespace-nowrap text-center px-1 overflow-hidden">{property.type}</div>
-                <div className="text-gray-700 dark:text-gray-200 text-md w-full text-ellipsis overflow-hidden whitespace-nowrap text-center px-1">{property.name}</div>
-              </div>            
+                <div className="text-gray-700 dark:text-gray-200 text-base w-full text-ellipsis overflow-hidden whitespace-nowrap text-center px-1">{property.name}</div>
+              </div>
             ))}
           </div>
         </div>
