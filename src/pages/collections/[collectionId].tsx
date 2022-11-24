@@ -1,4 +1,4 @@
-import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { trpc } from "../../utils/trpc";
 
 import CollectionDetail from "../../components/views/collections/CollectionDetail";
@@ -16,7 +16,6 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
   const searchValues = useCollectionStore(useCallback((state) => state.searchValues, []));
   const [collectionId] = useState(collection?.id);
-  const [data, setData] = useState(collection);  
 
   trpc.collection.getFiltered.useQuery(
     {
@@ -28,10 +27,13 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
     },
     {
       onSuccess: (result) => {
+        console.log("Result", result);
         if (selectedPropertyIds.size > 0 || searchValues.size > 0) {
-          setData(result);
+          setCollection(result as CollectionWithNftSets);
         } else {
-          setData(collection);
+          if (collection) {
+            setCollection(collection);
+          }
         }
       },
       refetchOnWindowFocus: false,
@@ -41,13 +43,15 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
   );
 
   useEffect(() => {
-    setCollection(collection);
-    setCollectionProperties(collectionProperties);
+    if (collection) {
+      setCollection(collection);
+      setCollectionProperties(collectionProperties);
+    }
   }, []);
 
   return (
     <div className="flex items-center justify-center w-full">
-      <CollectionDetail collection={data} collectionProperties={collectionProperties} floorPrice={floorPrice} />
+      <CollectionDetail floorPrice={floorPrice} />
     </div>
   );
 };

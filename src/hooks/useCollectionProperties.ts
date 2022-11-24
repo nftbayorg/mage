@@ -2,7 +2,7 @@ import create from "zustand";
 import { CollectionWithNftSets } from "../utils/computed-properties";
 
 type CollectionStore = {
-  collection: CollectionWithNftSets | null;
+  collection: CollectionWithNftSets;
   collectionProperties: CollectionNftSetProperties | null;
   selectedPropertyIds: Set<string>;
   selectedProperties: { [key: string]: string[] },
@@ -11,13 +11,33 @@ type CollectionStore = {
   setSearchValue: (value: string) => void;
   removeSearchValue: (value: string) => void;
   resetSelectedProperties: () => void;
-  setCollection: (newCollection: CollectionWithNftSets | null) => void;
+  setCollection: (newCollection: CollectionWithNftSets) => void;
   setCollectionProperties: (properties: CollectionNftSetProperties | null) => void;
   toggleSelectedPropertyIds: (propertyKey: string, variantKey: string | undefined, id: string[] | undefined) => void;
 }
 
+const defaultCollection = {
+  id: "",
+  bannerImageUrl: "",
+  blockChainId: "",
+  displayThemee: "",
+  explicitContent: false,
+  logoImageUrl: "",
+  featureImageUrl: "",
+  name: "",
+  nftSets: [],
+  createdAt: new Date(),
+  description: "",
+  tokenAddress: "",
+  verified: false,
+  published: false,
+  updatedAt: new Date(),
+  visible: true,
+  userId: ""
+};
+
 export const useCollectionStore = create<CollectionStore>((set) => ({
-    collection:  null,
+    collection:  defaultCollection,
     collectionProperties: null,
     selectedPropertyIds: new Set(),
     selectedProperties: {},
@@ -31,7 +51,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     resetSelectedProperties: () => set(() => {
       return { selectedProperties: {}, selectedPropertyIds: new Set(), selectedCombinations: {}, searchValues: new Set() }
     }),
-    setCollection: (newCollection: CollectionWithNftSets | null) => set(({ collection }) => {
+    setCollection: (newCollection: CollectionWithNftSets) => set(({ collection }) => {
 
       return (newCollection?.id !== collection?.id) ? 
         { collection: newCollection, selectedCombinations: {}, selectedProperties: {}, selectedPropertyIds: new Set()}
