@@ -32,6 +32,7 @@ model Collection {
   visible         Boolean  @default(true)
   verified        Boolean  @default(false)
   tokenAddress    String?  @default("")
+  frozen          Boolean  @default(false)
 
   nftSets NFTSet[]
   user    User     @relation(fields: [userId], references: [id])
