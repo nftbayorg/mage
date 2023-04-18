@@ -33,7 +33,8 @@ const defaultCollection = {
   published: false,
   updatedAt: new Date(),
   visible: true,
-  userId: ""
+  userId: "",
+  frozen: false,
 };
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
