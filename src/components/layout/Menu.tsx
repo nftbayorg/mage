@@ -64,7 +64,7 @@ export const MenuGroup = ({ children, className, collapsible, defaultState, labe
         transition-all ease-in-out duration-500 
         flex flex-col items-center justify-start
         w-full
-        overflow-scroll
+        overflow-auto
         ${className}
         `
       }>
