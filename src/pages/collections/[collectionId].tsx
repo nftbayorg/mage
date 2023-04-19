@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import fetchFloorPrices from "../../server/data/fetchFloorPrices";
 import { CollectionWithNftSets } from "../../utils/computed-properties";
 import fetchMageCollection from "../../server/data/fetchCollection";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
@@ -17,19 +18,22 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
   const searchValues = useCollectionStore(useCallback((state) => state.searchValues, []));
   const [collectionId] = useState(collection?.id);
 
-  trpc.collection.getFiltered.useQuery(
+  const results = trpc.collection.getInfiniteFilteredCollection.useInfiniteQuery(
     {
       id: collectionId,
       filters: selectedCombinations,
       ...(searchValues.size > 0 ? {
         names: Array.from(searchValues),
-      } : {})
+      } : {}),
+      limit: 3,
     },
     {
       onSuccess: (result) => {
         console.log("Result", result);
         if (selectedPropertyIds.size > 0 || searchValues.size > 0) {
-          setCollection(result as CollectionWithNftSets);
+          if (result.pages[0]?.items) {
+            setCollection(result.pages[0]?.items || []);
+          }
         } else {
           if (collection) {
             setCollection(collection);
@@ -40,6 +44,12 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
       refetchOnReconnect: false,
       refetchOnMount: true,
     }
+  );
+
+  const { lastItemRef } = useInfiniteScroll(
+    results.isLoading,
+    results.hasNextPage,
+    results.fetchNextPage
   );
 
   useEffect(() => {

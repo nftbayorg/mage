@@ -66,6 +66,74 @@ export const collectionRouter = t.router({
         }
       });
     }),
+  getInfiniteFilteredCollection: t.procedure
+    .input(z.object({ 
+      id: z.string().nullish(),
+      filters: z.record(z.array(z.string())).optional(),
+      names: z.array(z.string()).optional(),
+      limit: z.number().min(1).max(100).nullish(),
+      cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
+    }))
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+
+      let andClauses = Array(0);
+
+      const { filters, names } = input || {};
+
+      if (filters) {
+        andClauses = Object.keys(filters).reduce((prev, groupKey) => {
+
+          if (!filters[groupKey] || !filters[groupKey]?.length) {
+            return [...prev]
+          }          
+
+          return [
+            ...prev,
+            { properties: { some: { OR: filters[groupKey]?.map(id => ({ id }))}}}
+          ]
+        }, Array());
+      }
+
+      if (names) {
+        names.forEach((name, idx) => {
+          andClauses.push({
+            name: {
+              contains: name
+            }
+          })
+        });
+      }
+
+      const items = await ctx.prisma.collection.findFirst({
+        where: {
+          id: input?.id || "",
+          visible: true,
+        },
+        include: {
+          nftSets: {
+            take: limit + 1, // get an extra item at the end which we'll use as next cursor
+            cursor: cursor ? { id: cursor } : undefined,
+            where: {
+              AND: andClauses
+            }            
+          }
+        }
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (items?.nftSets && items.nftSets.length > limit) {
+        const nextItem = items.nftSets.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        items,
+        nextCursor,
+      };
+    }),
+
+
   getByUser: t.procedure
     .input(
       z.object({

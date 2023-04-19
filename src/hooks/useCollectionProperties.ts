@@ -1,8 +1,11 @@
 import create from "zustand";
 import { CollectionWithNftSets } from "../utils/computed-properties";
+import { Collection, NFTSet } from "prisma/prisma-client";
+
+
 
 type CollectionStore = {
-  collection: CollectionWithNftSets;
+  collection: Collection & { nftSets: NFTSet[] };
   collectionProperties: CollectionNftSetProperties | null;
   selectedPropertyIds: Set<string>;
   selectedProperties: { [key: string]: string[] },
