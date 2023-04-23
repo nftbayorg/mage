@@ -9,7 +9,9 @@ export default async function fetchMageCollection(collectionId: string): Promise
       visible: true
     },
     include: {
-      nftSets: true,
+      nftSets: {
+        take: 4
+      }
     },
   });
 

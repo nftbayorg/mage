@@ -1,3 +1,4 @@
+import { forwardRef, useEffect } from 'react';
 import NftSetSummary from "../nfts/nftSetSummary";
 import { MdFilterList } from "react-icons/md";
 import { useCallback, useState } from "react";
@@ -12,19 +13,31 @@ import { Radio, RadioButton } from "../../forms/controls/Radio";
 import { MdGridOn, MdGridView } from "react-icons/md";
 import { Search } from "../../forms/controls/Search";
 import { CollectionFilterTags } from "./CollectionFilterTags";
+import { NFTSet } from 'prisma/prisma-client';
 
 type ComponentProps = {
   floorPrice: number;
 };
 
-const CollectionDetail = ({ floorPrice }: ComponentProps) => {
+const CollectionDetail = forwardRef<HTMLDivElement, ComponentProps>(
+  ({ floorPrice }: ComponentProps, ref) => {
+  const [items, setItems] = useState<NFTSet[]>([]) 
   const [menuHidden, setMenuHidden] = useState(false);
   const [mobileMenuHidden, setMobileMenuHidden] = useState(true);
   const [gridCols, setGridCols] = useState<string | number>(4);
 
   const collection = useCollectionStore(useCallback((state) => state.collection, []));
+  const nftSets = useCollectionStore(useCallback((state) => state.nftSets, []));
   const selectedProperties = useCollectionStore(useCallback((state) => state.selectedProperties, []));
   const setSearchValue = useCollectionStore(useCallback((state) => state.setSearchValue, []));
+
+  useEffect(() => {
+    if (nftSets.length === 0 && collection) {
+      setItems(collection.nftSets);
+    } else {
+      setItems(nftSets);
+    }
+  }, [collection, nftSets]);
 
   const {
     isInViewport,
@@ -104,8 +117,8 @@ const CollectionDetail = ({ floorPrice }: ComponentProps) => {
                 </div>
                 :
                 <div className={`pt-4 md:p-2 md:pt-0 grid grid-cols-2 ${menuHidden ? `md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-${Number(gridCols) +3}` : `md:grid-cols-2 lg:grid-cols-${gridCols} xl-grid-cols-5`} gap-2 md:gap-4 w-full md:h-fit md:overflow-auto`}>
-                  {collection?.nftSets.map((nftSet) => (
-                    <div key={nftSet.id}>
+                  {items.map((nftSet) => (
+                    <div key={nftSet.id} ref={ref}>
                       <NftSetSummary nftSet={nftSet} collectionName={collection.name} verified={collection.verified}/>
                     </div>
                   ))}
@@ -117,6 +130,8 @@ const CollectionDetail = ({ floorPrice }: ComponentProps) => {
       </section>
     </div>
   );
-};
+});
+
+CollectionDetail.displayName = "LotSummary";
 
 export default CollectionDetail;

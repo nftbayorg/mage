@@ -125,6 +125,7 @@ export const collectionRouter = t.router({
       let nextCursor: typeof cursor | undefined = undefined;
       if (items?.nftSets && items.nftSets.length > limit) {
         const nextItem = items.nftSets.pop();
+        console.log('nextCursor', nextItem)
         nextCursor = nextItem!.id;
       }
       return {

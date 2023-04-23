@@ -2,11 +2,10 @@ import create from "zustand";
 import { CollectionWithNftSets } from "../utils/computed-properties";
 import { Collection, NFTSet } from "prisma/prisma-client";
 
-
-
 type CollectionStore = {
   collection: Collection & { nftSets: NFTSet[] };
   collectionProperties: CollectionNftSetProperties | null;
+  nftSets: NFTSet[];
   selectedPropertyIds: Set<string>;
   selectedProperties: { [key: string]: string[] },
   selectedCombinations: {},
@@ -16,6 +15,7 @@ type CollectionStore = {
   resetSelectedProperties: () => void;
   setCollection: (newCollection: CollectionWithNftSets) => void;
   setCollectionProperties: (properties: CollectionNftSetProperties | null) => void;
+  setNftSets: (nftSets: NFTSet[]) => void;
   toggleSelectedPropertyIds: (propertyKey: string, variantKey: string | undefined, id: string[] | undefined) => void;
 }
 
@@ -42,6 +42,7 @@ const defaultCollection = {
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
     collection:  defaultCollection,
+    nftSets: [],
     collectionProperties: null,
     selectedPropertyIds: new Set(),
     selectedProperties: {},
@@ -62,6 +63,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
         :
         { collection: newCollection }
     }),
+    setNftSets: (newNftSets: NFTSet[]) => set({ nftSets: newNftSets }),
     setCollectionProperties: (properties: CollectionNftSetProperties | null) => set({ collectionProperties: properties }),
     setSearchValue: (value: string) => set(({ searchValues }) => { 
       const updatedSet = new Set(searchValues);

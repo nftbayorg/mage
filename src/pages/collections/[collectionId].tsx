@@ -12,39 +12,39 @@ import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const setCollection = useCollectionStore(useCallback((state) => state.setCollection, []));
+  const setNftSets = useCollectionStore(useCallback((state) => state.setNftSets, []));
   const setCollectionProperties = useCollectionStore(useCallback((state) => state.setCollectionProperties, []));
   const selectedPropertyIds = useCollectionStore(useCallback((state) => state.selectedPropertyIds, []));
   const selectedCombinations = useCollectionStore(useCallback((state) => state.selectedCombinations, []));
   const searchValues = useCollectionStore(useCallback((state) => state.searchValues, []));
   const [collectionId] = useState(collection?.id);
 
-  const results = trpc.collection.getInfiniteFilteredCollection.useInfiniteQuery(
+  const results = trpc.nftSet.getInfiniteNftSets.useInfiniteQuery(
     {
-      id: collectionId,
+      collectionId: collectionId,
       filters: selectedCombinations,
       ...(searchValues.size > 0 ? {
         names: Array.from(searchValues),
       } : {}),
-      limit: 3,
+      limit: 4,
     },
     {
       onSuccess: (result) => {
-        console.log("Result", result);
-        if (selectedPropertyIds.size > 0 || searchValues.size > 0) {
-          if (result.pages[0]?.items) {
-            setCollection(result.pages[0]?.items || []);
-          }
-        } else {
-          if (collection) {
-            setCollection(collection);
-          }
+        if (result.pages) {
+          const nftSets = result.pages.map((page) => page.items).flat();
+          setNftSets(nftSets || []);
         }
       },
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: true,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+
+  useEffect(() => {
+    console.log("Results", results)
+  }, [results])
 
   const { lastItemRef } = useInfiniteScroll(
     results.isLoading,
@@ -61,7 +61,7 @@ const CollectionDetailPage = ({ collection, collectionProperties, floorPrice }: 
 
   return (
     <div className="flex items-center justify-center w-full">
-      <CollectionDetail floorPrice={floorPrice} />
+      <CollectionDetail floorPrice={floorPrice} ref={lastItemRef} />
     </div>
   );
 };
