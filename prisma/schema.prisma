@@ -140,7 +140,9 @@ model Wallet {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
+  privateKey String?
+  address String?
+  mnemonic String?
   transfersFrom NFTSetHistory[] @relation("WalletFrom")
   transfersTo   NFTSetHistory[] @relation("WalletTo")
   nftEditions   NFTEdition[]
@@ -191,6 +193,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  avatar        String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   liked         String[]  @default([])

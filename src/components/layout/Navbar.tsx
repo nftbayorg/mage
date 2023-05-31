@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FaCat, FaCircleNotch, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaRegHeart, FaWallet } from "react-icons/fa";
+import { FaCat, FaCircleNotch, FaImage, FaRegUserCircle, FaSignOutAlt, FaTh, FaTimes, FaRegHeart, FaRobot, FaWallet } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { NavMenu, NavMenuItem  } from "./NavMenu";
 import dynamic from "next/dynamic";
@@ -47,6 +47,11 @@ const MobileNav = () => {
         <SetTheme/>
         {session &&
           <>
+            <NavMenuItem 
+              icon={<FaRobot size={20} className="fill-gray-700 dark:fill-gray-200"/>}
+              caption="Profile" 
+              onClick={() => router.push('/user/profile')}
+            />
             <NavMenuItem 
               icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-200"/>}
               caption="Sign Out" 
@@ -115,6 +120,11 @@ const MenuItems = () => {
           {session && (
             <>
               <SetTheme/>
+              <NavMenuItem 
+                icon={<FaRobot size={20} className="fill-gray-700 dark:fill-gray-200"/>}
+                caption="Profile" 
+                onClick={() => router.push('/user/profile')}
+              />
               <NavMenuItem 
                 icon={<FaSignOutAlt size={20} className="fill-gray-700 dark:fill-gray-200"/>}
                 caption="Sign Out" 

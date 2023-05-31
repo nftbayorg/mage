@@ -8,6 +8,7 @@ import { nftSetRouter } from "./nftSet";
 import { nftEditionRouter } from "./nftEdition";
 import * as trpcNext from '@trpc/server/adapters/next';
 import { createContext } from "../context";
+import { userRouter } from "./user";
 
 export const appRouter = router({
   auth: authRouter,
@@ -16,6 +17,7 @@ export const appRouter = router({
   lot: lotRouter,
   nftEdition: nftEditionRouter,
   nftSet: nftSetRouter,
+  user: userRouter
 });
 
 // export type definition of API
