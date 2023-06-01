@@ -8,6 +8,7 @@ import UserProfileForm from "../../../components/forms/UserProfile";
 import { readFiles } from "../../../utils/files";
 import { determineResult } from "../../../utils/promises";
 import { trpc } from "../../../utils/trpc";
+import { UserProfileFormValues } from "../../../types/user-profile";
 
 const UserProfilePage = ({ user, wallet }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [isSubmitting, setIsSubmitting] = useState(false);

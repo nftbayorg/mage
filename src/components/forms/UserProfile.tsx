@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import FileUpload from "./controls/FileUpload";
 import { useCallback, useState } from "react";
 import { User, Wallet } from "prisma/prisma-client";
+import { UserProfileFormValues } from "../../types/user-profile";
 
 type ComponentProps = {
   user: User;
