@@ -17,7 +17,6 @@ model Collection {
   blockChainId    String?  @default("Ethereum")
   displayThemee   String?  @default("contained")
   explicitContent Boolean? @default(false)
-  contractAddress String?
   featureImageUrl String?
   logoImageUrl    String
   createdAt       DateTime @default(now())
@@ -96,7 +95,7 @@ model NFTEdition {
 }
 
 model Lot {
-  id           String     @id @unique() @default(cuid())
+  id           String     @id @unique @default(cuid())
   reservePrice Decimal
   sold         Boolean
   views        Int        @default(0)
