@@ -1,17 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
   provider = "postgresql"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading: 
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
@@ -19,13 +12,14 @@ model Collection {
   id              String   @id @default(cuid())
   name            String
   description     String?
-  logoImageUrl    String
-  featureImageUrl String?
+  userId          String
   bannerImageUrl  String?
   blockChainId    String?  @default("Ethereum")
-  explicitContent Boolean? @default(false)
   displayThemee   String?  @default("contained")
-  userId          String
+  explicitContent Boolean? @default(false)
+  contractAddress String?
+  featureImageUrl String?
+  logoImageUrl    String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   published       Boolean  @default(false)
@@ -33,31 +27,30 @@ model Collection {
   verified        Boolean  @default(false)
   tokenAddress    String?  @default("")
   frozen          Boolean  @default(false)
+  user            User     @relation(fields: [userId], references: [id])
+  nftSets         NFTSet[]
 
-  nftSets NFTSet[]
-  user    User     @relation(fields: [userId], references: [id])
-
-  @@index([visible], type: BTree)
+  @@index([visible])
 }
 
 model NFTSet {
   id           String             @id @default(cuid())
-  name         String
-  imageUrl     String
-  blockchainId String
-  link         String?
-  description  String?
   collectionId String?
+  name         String
+  blockchainId String
+  description  String?
+  imageUrl     String
+  link         String?
   creatorId    String
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
-  views        String[]           @default([])
   likes        String[]           @default([])
-  nftEditions  NFTEdition[]
-  properties   NFTSetProperties[]
-  history      NFTSetHistory[]
-  creator      User               @relation(fields: [creatorId], references: [id])
+  views        String[]           @default([])
   collection   Collection?        @relation(fields: [collectionId], references: [id])
+  creator      User               @relation(fields: [creatorId], references: [id])
+  nftEditions  NFTEdition[]
+  history      NFTSetHistory[]
+  properties   NFTSetProperties[]
 }
 
 model NFTSetProperties {
@@ -67,58 +60,52 @@ model NFTSetProperties {
   nftSetId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  nftSet NFTSet @relation(fields: [nftSetId], references: [id])
+  nftSet    NFTSet   @relation(fields: [nftSetId], references: [id])
 }
 
 model NFTSetHistory {
-  id              String     @id @default(cuid())
+  id              String   @id @default(cuid())
   eventType       String
   price           Float
   currency        String
   quantity        Int
-  nftSetId        String
-  fromAdminWallet Boolean
   walletFromId    String?
   walletToId      String
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-
-  nftSet          NFTSet     @relation(fields: [nftSetId], references: [id])
-  walletFrom      Wallet?    @relation(fields: [walletFromId], references: [id], name: "WalletFrom")
-  walletTo        Wallet     @relation(fields: [walletToId], references: [id], name: "WalletTo")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  fromAdminWallet Boolean
+  nftSetId        String
+  nftSet          NFTSet   @relation(fields: [nftSetId], references: [id])
+  walletFrom      Wallet?  @relation("WalletFrom", fields: [walletFromId], references: [id])
+  walletTo        Wallet   @relation("WalletTo", fields: [walletToId], references: [id])
 }
 
 model NFTEdition {
-  id            String   @id @default(cuid())
+  id            String       @id @default(cuid())
   minted        Boolean
-  ownerId       String
-  nftSetId      String
   tokenAddress  String?
+  nftSetId      String
+  ownerId       String
   adminWalletId String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  lots        Lot[]
-  adminWallet AdminWallet? @relation(fields: [adminWalletId], references: [id])
-  owner       Wallet       @relation(fields: [ownerId], references: [id])
-  nftSet      NFTSet       @relation(fields: [nftSetId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  adminWallet   AdminWallet? @relation(fields: [adminWalletId], references: [id])
+  nftSet        NFTSet       @relation(fields: [nftSetId], references: [id])
+  owner         Wallet       @relation(fields: [ownerId], references: [id])
+  lots          Lot[]
 }
 
 model Lot {
-  id           String   @id @default(cuid())
+  id           String     @id @unique() @default(cuid())
   reservePrice Decimal
   sold         Boolean
-  views        Int      @default(0)
+  views        Int        @default(0)
   nftEditionId String
   auctionId    String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  nftEdition NFTEdition @relation(fields: [nftEditionId], references: [id])
-  auction    Auction    @relation(fields: [auctionId], references: [id])
-
-  @@unique([id], name: "lot_constraint")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auction      Auction    @relation(fields: [auctionId], references: [id])
+  nftEdition   NFTEdition @relation(fields: [nftEditionId], references: [id])
 }
 
 model Auction {
@@ -129,50 +116,47 @@ model Auction {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  lots Lot[]
-  user User  @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  lots      Lot[]
 }
 
 model Wallet {
-  id        String   @id @default(cuid())
-  virtual   Boolean
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  privateKey String?
-  address String?
-  mnemonic String?
+  id            String          @id @default(cuid())
+  virtual       Boolean
+  userId        String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  address       String?
+  mnemonic      String?
+  privateKey    String?
+  user          User            @relation(fields: [userId], references: [id])
+  adminWallet   AdminWallet?
+  nftEditions   NFTEdition[]
   transfersFrom NFTSetHistory[] @relation("WalletFrom")
   transfersTo   NFTSetHistory[] @relation("WalletTo")
-  nftEditions   NFTEdition[]
-  adminWallet   AdminWallet?
-  user          User         @relation(fields: [userId], references: [id])
 }
 
 model AdminWallet {
-  id           String   @id @default(cuid())
-  userWalletId String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  nftEditions NFTEdition[]
-  userWallet  Wallet       @relation(fields: [userWalletId], references: [id])
+  id           String       @id @default(cuid())
+  userWalletId String       @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  userWallet   Wallet       @relation(fields: [userWalletId], references: [id])
+  nftEditions  NFTEdition[]
 }
 
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -188,22 +172,21 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  liked         String[]     @default([])
   avatar        String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  liked         String[]  @default([])
-
-  wallets     Wallet[]
-  auctions    Auction[]
-  accounts    Account[]
-  sessions    Session[]
-  collections Collection[]
-  nftSets     NFTSet[]
+  accounts      Account[]
+  auctions      Auction[]
+  collections   Collection[]
+  nftSets       NFTSet[]
+  sessions      Session[]
+  wallets       Wallet[]
 }
 
 model VerificationToken {
