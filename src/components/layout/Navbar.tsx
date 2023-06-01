@@ -92,14 +92,14 @@ const MenuItems = () => {
           </a>
         </Link> */}
         <Link href="/collections/explore">
-          <a className="text-2xl outline-none dark:hover:text-gray-500 hover:text-blue-500">
+          <div className="text-2xl outline-none dark:hover:text-gray-500 hover:text-blue-500">
             Explore
-          </a>
+          </div>
         </Link>
         <Link href="/nfts/create">
-          <a className="text-2xl outline-none dark:hover:text-gray-500 hover:text-blue-500">
+          <div className="text-2xl outline-none dark:hover:text-gray-500 hover:text-blue-500">
             Create
-          </a>
+          </div>
         </Link>
       </div>
       <div className="flex justify-end md:flex-row md:ml-auto min-w-fit h-full mr-9 mt-2">

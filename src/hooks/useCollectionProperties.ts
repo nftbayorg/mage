@@ -19,7 +19,7 @@ type CollectionStore = {
   toggleSelectedPropertyIds: (propertyKey: string, variantKey: string | undefined, id: string[] | undefined) => void;
 }
 
-const defaultCollection = {
+const defaultCollection: Collection & { nftSets: NFTSet[] } = {
   id: "",
   bannerImageUrl: "",
   blockChainId: "",

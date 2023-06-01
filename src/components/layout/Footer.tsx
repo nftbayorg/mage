@@ -14,16 +14,16 @@ const Footer = () => (
         <ul className="mx-auto">
           <li>
             <Link href="/trade">
-              <a className="hover:text-blue-500 dark:hover:text-gray-500">
+              <div className="hover:text-blue-500 dark:hover:text-gray-500">
                 Marketplace
-              </a>
+              </div>
             </Link>
           </li>
           <li>
             <Link href="#fees">
-              <a className="hover:text-blue-500 dark:hover:text-gray-500">
+              <div className="hover:text-blue-500 dark:hover:text-gray-500">
                 Staking
-              </a>
+              </div>
             </Link>
           </li>
           <li>Contact Us</li>
